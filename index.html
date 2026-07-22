@@ -16,17 +16,9 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8'
-                        }
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' }
                     }
                 }
             }
@@ -39,10 +31,10 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased">
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
 
-    <!-- HEADER -->
-    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm">
+    <!-- HEADER (Cố định sticky top-0 z-40) -->
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm flex-shrink-0">
         <div class="flex items-center space-x-6">
             <div class="flex items-center space-x-2">
                 <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-500/20">
@@ -60,13 +52,16 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="text-xs font-semibold text-slate-700" id="currentAccountBadge">Tài khoản: Live ($100,000)</span>
                 </div>
-                <button onclick="openAccountModal()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-md font-medium transition flex items-center space-x-1 border border-slate-200">
+                <button onclick="openAccountModal()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
                     <i class="fa-solid fa-plus"></i> <span>Tài khoản</span>
                 </button>
-                <button onclick="resetDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium transition flex items-center space-x-1 border border-slate-200">
+                <button onclick="openAccountManageModal()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
+                    <i class="fa-solid fa-gear"></i> <span>Quản lý</span>
+                </button>
+                <button onclick="resetDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
                     <i class="fa-solid fa-rotate-right"></i> <span>Reset Demo</span>
                 </button>
-                <button onclick="clearAllData()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-md font-medium transition flex items-center space-x-1 border border-rose-200">
+                <button onclick="clearAllData()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-rose-200">
                     <i class="fa-solid fa-trash-can"></i> <span>Xóa tất cả</span>
                 </button>
             </div>
@@ -80,22 +75,18 @@
             <!-- Auth Section -->
             <div id="authContainer" class="flex items-center space-x-3 pl-4 border-l border-slate-200">
                 <div id="loggedOutView" class="flex items-center space-x-2">
-                    <button onclick="handleGoogleLogin()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
+                    <button onclick="signInWithGoogle()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
                         <i class="fa-brands fa-google text-red-500"></i>
                         <span>Đăng nhập Google</span>
-                    </button>
-                    <button onclick="openEmailAuthModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
-                        <i class="fa-solid fa-envelope text-blue-500"></i>
-                        <span>Email</span>
                     </button>
                 </div>
                 <div id="loggedInView" class="hidden flex items-center space-x-3">
                     <div class="text-right hidden sm:block">
-                        <div class="text-xs font-bold text-slate-900" id="userName">Linh Tran</div>
-                        <div class="text-[10px] text-slate-500" id="userEmail">linhtran2026@gmail.com</div>
+                        <div class="text-xs font-bold text-slate-900" id="userName">User</div>
+                        <div class="text-[10px] text-slate-500" id="userEmail">user@gmail.com</div>
                     </div>
                     <div id="userAvatarContainer" class="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow">
-                        LT
+                        U
                     </div>
                     <button onclick="handleLogout()" title="Đăng xuất" class="text-slate-400 hover:text-rose-600 p-1.5 transition">
                         <i class="fa-solid fa-right-from-bracket text-sm"></i>
@@ -106,80 +97,63 @@
     </header>
 
     <div class="flex-1 flex overflow-hidden">
-        
-        <!-- SIDEBAR -->
-        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden lg:flex select-none">
-            <div class="py-6 px-4 space-y-8 overflow-y-auto">
+        <!-- SIDEBAR (Cố định sticky top-16 h-[calc(100vh-4rem)]) -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto z-30 flex-shrink-0 select-none hidden lg:flex">
+            <div class="py-6 px-4 space-y-8">
                 <div>
                     <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-3">General</h3>
                     <nav class="space-y-1">
                         <button onclick="switchTab('overview')" id="nav-overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-chart-pie w-5 text-center text-slate-500"></i>
-                            <span>Overview</span>
+                            <i class="fa-solid fa-chart-pie w-5 text-center text-slate-500"></i><span>Overview</span>
                         </button>
                         <button onclick="switchTab('planner')" id="nav-planner" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-calendar-days w-5 text-center text-slate-500"></i>
-                            <span>Daily Planner</span>
+                            <i class="fa-solid fa-calendar-days w-5 text-center text-slate-500"></i><span>Daily Planner</span>
                         </button>
                         <button onclick="switchTab('tradelog')" id="nav-tradelog" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-list-ul w-5 text-center text-slate-500"></i>
-                            <span>Trade Log</span>
+                            <i class="fa-solid fa-list-ul w-5 text-center text-slate-500"></i><span>Trade Log</span>
                         </button>
                         <button onclick="switchTab('winrate')" id="nav-winrate" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-percent w-5 text-center text-slate-500"></i>
-                            <span>Winrate Analysis</span>
+                            <i class="fa-solid fa-percent w-5 text-center text-slate-500"></i><span>Winrate Analysis</span>
                         </button>
                     </nav>
                 </div>
-
                 <div>
                     <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-3">Time Analysis</h3>
                     <nav class="space-y-1">
                         <button onclick="switchTab('byday')" id="nav-byday" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-calendar-week w-5 text-center text-slate-500"></i>
-                            <span>By Day Of Week</span>
+                            <i class="fa-solid fa-calendar-week w-5 text-center text-slate-500"></i><span>By Day Of Week</span>
                         </button>
                         <button onclick="switchTab('weekly')" id="nav-weekly" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-chart-column w-5 text-center text-slate-500"></i>
-                            <span>Weekly Breakdown</span>
+                            <i class="fa-solid fa-chart-column w-5 text-center text-slate-500"></i><span>Weekly Breakdown</span>
                         </button>
                         <button onclick="switchTab('monthly')" id="nav-monthly" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-calendar-alt w-5 text-center text-slate-500"></i>
-                            <span>Monthly Results</span>
+                            <i class="fa-solid fa-calendar-alt w-5 text-center text-slate-500"></i><span>Monthly Results</span>
                         </button>
                         <button onclick="switchTab('hourly')" id="nav-hourly" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-clock w-5 text-center text-slate-500"></i>
-                            <span>Hourly Performance (22 ICT Macros)</span>
+                            <i class="fa-solid fa-clock w-5 text-center text-slate-500"></i><span>Hourly Performance (22 ICT Macros)</span>
                         </button>
                     </nav>
                 </div>
             </div>
-
-            <div class="p-4 border-t border-slate-200 text-center">
-                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v2.6.5 Pro</span>
+            <div class="p-4 border-t border-slate-200 text-center bg-white flex-shrink-0">
+                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v3.0 Pro Cloud</span>
             </div>
         </aside>
 
         <!-- CONTENT VIEWPORT -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 p-6">
-            
+        <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 p-6 h-[calc(100vh-4rem)]">
             <!-- GLOBAL FILTER BAR -->
             <div class="bg-white rounded-xl border border-slate-200 p-3.5 mb-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="flex items-center space-x-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
-                        <i class="fa-solid fa-filter"></i>
-                        <span>BỘ LỌC</span>
+                        <i class="fa-solid fa-filter"></i><span>BỘ LỌC</span>
                     </div>
-                    
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-500 font-medium">Tài khoản:</span>
                         <select id="filterAccount" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
-                            <option value="all">Tất cả</option>
-                            <option value="Live">Live Account</option>
-                            <option value="Demo">Demo Account</option>
+                            <option value="all">Tất cả tài khoản</option>
                         </select>
                     </div>
-
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-500 font-medium">Setup:</span>
                         <select id="filterSetup" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
@@ -189,7 +163,6 @@
                             <option value="Breakout">Breakout</option>
                         </select>
                     </div>
-
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-500 font-medium">Tag:</span>
                         <select id="filterTag" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
@@ -199,14 +172,12 @@
                             <option value="High Impact">High Impact</option>
                         </select>
                     </div>
-
                     <div class="flex items-center space-x-2 bg-slate-50 border border-slate-300 px-2.5 py-1.5 rounded-lg text-xs">
                         <input type="date" id="filterDateFrom" onchange="applyFilters()" class="bg-transparent text-slate-700 focus:outline-none font-medium">
                         <span class="text-slate-400">đến</span>
                         <input type="date" id="filterDateTo" onchange="applyFilters()" class="bg-transparent text-slate-700 focus:outline-none font-medium">
                     </div>
                 </div>
-
                 <div class="flex items-center space-x-2 text-xs font-semibold text-slate-600">
                     <i class="fa-regular fa-calendar-days text-blue-500"></i>
                     <span id="activeMonthDisplay">Tháng đang chọn: Tháng 7 / 2026</span>
@@ -215,7 +186,6 @@
 
             <!-- OVERVIEW TAB -->
             <div id="tab-overview" class="space-y-6 tab-content">
-                
                 <!-- Month Navigator & Monthly Profit Badge Combined -->
                 <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                     <div class="flex items-center space-x-3">
@@ -241,7 +211,7 @@
 
                 <!-- Calendar Grid & Side Stats -->
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    <!-- Calendar Grid (Cols 1-8) - Monday to Sunday (International Sequence) -->
+                    <!-- Calendar Grid (Cols 1-8) - Monday to Sunday -->
                     <div class="xl:col-span-8 bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
                         <div class="grid grid-cols-8 gap-2 mb-3 text-center">
                             <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ HAI</div>
@@ -254,7 +224,7 @@
                             <div class="text-[11px] font-bold text-blue-600 uppercase bg-blue-50 rounded py-0.5">HÀNG TUẦN</div>
                         </div>
                         <div id="calendarGrid" class="grid grid-cols-8 gap-2">
-                            <!-- Populated dynamically via renderCalendarGridMatrix -->
+                            <!-- Populated dynamically -->
                         </div>
                         <div class="mt-4 pt-3 border-t border-slate-100 text-center text-[11px] text-slate-400 italic">
                             * Nhấp chuột vào bất cứ ô ngày nào để chỉnh sửa trực tiếp thông số tại <strong>DAILY PLANNER</strong>
@@ -266,8 +236,7 @@
                         <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
                             <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
                                 <h3 class="text-xs font-bold text-slate-800 flex items-center space-x-2">
-                                    <i class="fa-solid fa-chart-simple text-blue-500"></i>
-                                    <span>THỐNG KÊ TỔNG QUAN</span>
+                                    <i class="fa-solid fa-chart-simple text-blue-500"></i><span>THỐNG KÊ TỔNG QUAN</span>
                                 </h3>
                                 <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">STANDARD</span>
                             </div>
@@ -285,8 +254,7 @@
                         <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
                             <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
                                 <h3 class="text-xs font-bold text-slate-800 flex items-center space-x-2">
-                                    <i class="fa-solid fa-bullseye text-indigo-500"></i>
-                                    <span>THỐNG KÊ ĐIỂM (POINTS)</span>
+                                    <i class="fa-solid fa-bullseye text-indigo-500"></i><span>THỐNG KÊ ĐIỂM (POINTS)</span>
                                 </h3>
                                 <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">POINTS</span>
                             </div>
@@ -304,8 +272,7 @@
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                         <div>
                             <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
-                                <i class="fa-solid fa-shield-halved text-blue-600"></i>
-                                <span>ĐÁNH GIÁ HỆ THỐNG GIAO DỊCH CHUYÊN SÂU (ADVANCED METRICS EVALUATION)</span>
+                                <i class="fa-solid fa-shield-halved text-blue-600"></i><span>ĐÁNH GIÁ HỆ THỐNG GIAO DỊCH CHUYÊN SÂU (ADVANCED METRICS EVALUATION)</span>
                             </h3>
                             <p class="text-[11px] text-slate-500 mt-0.5">Phân tích chuyên sâu tích hợp biểu đồ Cumulative P&L, Profit Factor, Risk/Reward và Win Rate cùng 12 thẻ chỉ số.</p>
                         </div>
@@ -318,12 +285,9 @@
                                 <span class="text-xs font-bold text-slate-600 uppercase">CUMULATIVE P&L</span>
                                 <i class="fa-solid fa-chart-line text-blue-500"></i>
                             </div>
-                            <div class="h-32 w-full my-2">
-                                <canvas id="cumulativeChart"></canvas>
-                            </div>
+                            <div class="h-32 w-full my-2"><canvas id="cumulativeChart"></canvas></div>
                             <div class="flex justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-200">
-                                <span>Bắt đầu</span>
-                                <span id="cumulTotalEnd" class="font-bold text-slate-700">$0</span>
+                                <span id="cumulStartLbl">Bắt đầu</span><span id="cumulTotalEnd" class="font-bold text-slate-700">$0</span>
                             </div>
                         </div>
 
@@ -385,7 +349,6 @@
                                 <div class="flex justify-between"><span class="text-slate-500">Avg Win:</span><strong id="cardExpAvgWin" class="text-emerald-600">$0</strong></div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP SYMBOL</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
                             <div id="cardTopSymbolContainer" class="space-y-1 text-xs">
@@ -393,7 +356,6 @@
                                 <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP SETUP</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
                             <div id="cardTopSetupContainer" class="space-y-1 text-xs">
@@ -401,7 +363,6 @@
                                 <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP TAG</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
                             <div id="cardTopTagContainer" class="space-y-1 text-xs">
@@ -420,7 +381,6 @@
                                 <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">LEAST PROFITABLE</span><strong class="text-slate-600" id="cardLeastDuration">--</strong></div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">INTRADAY ACTIVITY</span>
                             <div class="space-y-1 pt-1 text-xs">
@@ -429,7 +389,6 @@
                                 <div class="flex justify-between"><span class="text-slate-500">Total Trades:</span><strong class="text-slate-800" id="cardTotalTradesCount">0</strong></div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">STREAK ANALYSIS</span>
                             <div class="space-y-1 pt-1 text-xs">
@@ -438,7 +397,6 @@
                                 <div class="flex justify-between"><span class="text-slate-500">Current Streak:</span><strong class="text-emerald-600" id="cardCurrentStreak">0 wins</strong></div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">CURRENT DRAWDOWN</span>
                             <div class="space-y-1 pt-1 text-xs">
@@ -455,19 +413,16 @@
                             <div class="text-2xl font-black text-slate-800 my-2" id="cardRecoveryFactor">0.00</div>
                             <div class="text-[11px] text-slate-500 flex justify-between"><span id="cardRecNet">Net: $0</span><span id="cardRecDD">DD: $0</span></div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">CONSISTENCY</span>
                             <div class="text-2xl font-black text-slate-800 my-2" id="cardConsistency">0.00</div>
                             <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full w-full" id="consistencyBar"></div></div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">SHARPE RATIO</span>
                             <div class="text-2xl font-black text-slate-800 my-2" id="cardSharpe">0.00</div>
                             <div class="text-[11px] text-slate-500" id="cardSharpeSub">Total Return: 0%</div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">SORTINO RATIO</span>
                             <div class="text-2xl font-black text-slate-800 my-2" id="cardSortino">0.00</div>
@@ -482,8 +437,7 @@
                 <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                     <div>
                         <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
-                            <i class="fa-solid fa-calendar-days text-blue-600"></i>
-                            <span>DAILY PLANNER & KẾ HOẠCH NGÀY</span>
+                            <i class="fa-solid fa-calendar-days text-blue-600"></i><span>DAILY PLANNER & KẾ HOẠCH NGÀY</span>
                         </h2>
                         <p class="text-xs text-slate-500 mt-0.5">Cân bằng tâm lý, thiết lập mục tiêu và định hình xu hướng ngày giao dịch.</p>
                     </div>
@@ -491,7 +445,7 @@
                         <button onclick="shiftPlannerWeek(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition">
                             <i class="fa-solid fa-chevron-left mr-1"></i> Tuần trước
                         </button>
-                        <div id="plannerWeekTotalProfit" class="text-xs font-bold px-3 py-1.5 rounded-lg border flex items-center space-x-1.5 transition">
+                        <div id="plannerWeekTotalProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
                             <span>TỔNG P&L TUẦN: $0</span>
                         </div>
                         <button onclick="shiftPlannerWeek(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition">
@@ -509,8 +463,7 @@
                     <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
                         <div>
                             <h3 class="text-xs font-bold text-slate-800 uppercase mb-3 flex items-center space-x-2">
-                                <i class="fa-solid fa-face-smile text-blue-600"></i>
-                                <span>ĐÁNH GIÁ PHIÊN</span>
+                                <i class="fa-solid fa-face-smile text-blue-600"></i><span>ĐÁNH GIÁ PHIÊN</span>
                             </h3>
                             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4">
                                 <span class="text-xs text-slate-500 font-medium block mb-1">P&L NGÀY ĐÃ CHỌN</span>
@@ -539,8 +492,7 @@
 
                         <div>
                             <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-2">
-                                <span>ĐÁNH GIÁ NGÀY HÔM NAY</span>
-                                <span id="ratingSliderVal" class="text-blue-600 font-black">50 / 100</span>
+                                <span>ĐÁNH GIÁ NGÀY HÔM NAY</span><span id="ratingSliderVal" class="text-blue-600 font-black">50 / 100</span>
                             </div>
                             <input type="range" id="plannerRatingRange" min="0" max="100" value="50" oninput="updateRatingSliderVal(this.value)" class="w-full accent-blue-600 cursor-pointer">
                         </div>
@@ -550,28 +502,21 @@
                         <div class="space-y-4">
                             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                                 <h3 class="text-xs font-bold text-slate-800 uppercase flex items-center space-x-2">
-                                    <i class="fa-solid fa-list-check text-blue-600"></i>
-                                    <span>MỤC TIÊU TRONG NGÀY (DAILY GOALS)</span>
+                                    <i class="fa-solid fa-list-check text-blue-600"></i><span>MỤC TIÊU TRONG NGÀY (DAILY GOALS)</span>
                                 </h3>
                                 <button onclick="addDailyGoal()" class="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center space-x-1">
                                     <i class="fa-solid fa-plus"></i> <span>Thêm mục tiêu</span>
                                 </button>
                             </div>
-
-                            <div id="dailyGoalsContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1">
-                                <!-- Populated dynamically -->
-                            </div>
-
+                            <div id="dailyGoalsContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
                             <div class="pt-2">
                                 <label class="text-xs font-bold text-slate-700 block mb-2">GHI CHÚ & PHÂN TÍCH PHIÊN (SESSION NOTES)</label>
                                 <textarea id="plannerSessionNotes" rows="6" oninput="saveSessionNotesLive(this.value)" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 text-slate-700 font-medium" placeholder="Nhập nhận định thị trường..."></textarea>
                             </div>
                         </div>
-
                         <div class="mt-6 pt-4 border-t border-slate-100">
                             <button onclick="savePlannerData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-floppy-disk"></i>
-                                <span>Lưu Kế Hoạch & Ghi Chú Ngày</span>
+                                <i class="fa-solid fa-floppy-disk"></i><span>Lưu Kế Hoạch & Ghi Chú Ngày</span>
                             </button>
                         </div>
                     </div>
@@ -583,8 +528,7 @@
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                     <div>
                         <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
-                            <i class="fa-solid fa-list-ul text-blue-600"></i>
-                            <span>DANH SÁCH NHẬT KÝ GIAO DỊCH (TRADE LOG)</span>
+                            <i class="fa-solid fa-list-ul text-blue-600"></i><span>DANH SÁCH NHẬT KÝ GIAO DỊCH (TRADE LOG)</span>
                         </h2>
                         <p class="text-xs text-slate-500 mt-0.5">Danh sách các vị thế giao dịch chi tiết đồng bộ hoàn hảo với dữ liệu lịch biểu.</p>
                     </div>
@@ -597,7 +541,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
@@ -614,14 +557,13 @@
                                     <th class="p-3.5">Duration</th>
                                     <th class="p-3.5">Setup</th>
                                     <th class="p-3.5">Tags</th>
+                                    <th class="p-3.5">Confluences</th>
                                     <th class="p-3.5">Nội dung ghi chú</th>
                                     <th class="p-3.5 text-center">Chart</th>
                                     <th class="p-3.5 text-center">Hành động</th>
                                 </tr>
                             </thead>
-                            <tbody id="tradeLogTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                                <!-- Populated dynamically -->
-                            </tbody>
+                            <tbody id="tradeLogTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
@@ -632,7 +574,6 @@
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
                     <h2 class="text-sm font-bold text-slate-900 mb-1">WINRATE & PERFORMANCE ANALYSIS</h2>
                     <p class="text-xs text-slate-500 mb-6">Thống kê chi tiết tỷ lệ thắng, lệnh thắng và lệnh thua trong hệ thống.</p>
-
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col items-center justify-center">
                             <h3 class="text-xs font-bold text-slate-600 uppercase mb-4 self-start">WIN RATE GAUGE</h3>
@@ -644,15 +585,11 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between">
                             <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">CUMULATIVE P&L CHART</h3>
-                            <div class="h-44 w-full">
-                                <canvas id="winrateCumulativeChart"></canvas>
-                            </div>
+                            <div class="h-44 w-full"><canvas id="winrateCumulativeChart"></canvas></div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-5 space-y-3">
                             <h3 class="text-xs font-bold text-emerald-700 uppercase pb-2 border-b border-emerald-200">WINS SUMMARY</h3>
@@ -663,7 +600,6 @@
                                 <div class="flex justify-between py-1"><span class="text-slate-600">Lệnh Thắng Lớn Nhất</span><strong class="text-emerald-700" id="winSumMax">$0</strong></div>
                             </div>
                         </div>
-
                         <div class="bg-rose-50/50 border border-rose-200 rounded-xl p-5 space-y-3">
                             <h3 class="text-xs font-bold text-rose-700 uppercase pb-2 border-b border-rose-200">LOSSES SUMMARY</h3>
                             <div class="space-y-2 text-xs">
@@ -691,21 +627,14 @@
                             <div class="h-64"><canvas id="dayPerfChart"></canvas></div>
                         </div>
                     </div>
-
                     <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">DAY</th>
-                                    <th class="p-3.5">NET PROFIT</th>
-                                    <th class="p-3.5">TRADES</th>
-                                    <th class="p-3.5">VOLUMES</th>
-                                    <th class="p-3.5">WIN RATE</th>
+                                    <th class="p-3.5">DAY</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
                                 </tr>
                             </thead>
-                            <tbody id="dayOfWeekTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                                <!-- Populated dynamically -->
-                            </tbody>
+                            <tbody id="dayOfWeekTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
@@ -725,21 +654,14 @@
                             <div class="h-64"><canvas id="weekPerfChart"></canvas></div>
                         </div>
                     </div>
-
                     <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">WEEK</th>
-                                    <th class="p-3.5">NET PROFIT</th>
-                                    <th class="p-3.5">TRADES</th>
-                                    <th class="p-3.5">VOLUMES</th>
-                                    <th class="p-3.5">WIN RATE</th>
+                                    <th class="p-3.5">WEEK</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
                                 </tr>
                             </thead>
-                            <tbody id="weeklyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                                <!-- Populated dynamically -->
-                            </tbody>
+                            <tbody id="weeklyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
@@ -754,7 +676,6 @@
                             <p class="text-xs text-slate-500 mt-0.5">Phân tích hiệu suất giao dịch và tần suất giao dịch phân bố theo các tháng trong năm.</p>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                             <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY MONTH</h3>
@@ -765,21 +686,14 @@
                             <div class="h-64"><canvas id="monthlyPerfChart"></canvas></div>
                         </div>
                     </div>
-
                     <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">MONTH</th>
-                                    <th class="p-3.5">NET PROFIT</th>
-                                    <th class="p-3.5">TRADES</th>
-                                    <th class="p-3.5">VOLUMES</th>
-                                    <th class="p-3.5">WIN RATE</th>
+                                    <th class="p-3.5">MONTH</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
                                 </tr>
                             </thead>
-                            <tbody id="monthlyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                                <!-- Populated dynamically -->
-                            </tbody>
+                            <tbody id="monthlyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
@@ -799,26 +713,18 @@
                             <div class="h-64"><canvas id="macroPerfChart"></canvas></div>
                         </div>
                     </div>
-
                     <div class="overflow-x-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">ICT MACRO INTERVAL</th>
-                                    <th class="p-3.5">NET PROFIT</th>
-                                    <th class="p-3.5">TRADES</th>
-                                    <th class="p-3.5">VOLUMES</th>
-                                    <th class="p-3.5">WIN RATE</th>
+                                    <th class="p-3.5">ICT MACRO INTERVAL</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
                                 </tr>
                             </thead>
-                            <tbody id="macroTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                                <!-- Populated dynamically -->
-                            </tbody>
+                            <tbody id="macroTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -830,20 +736,15 @@
                     <i class="fa-solid fa-plus-circle text-blue-500"></i>
                     <h3 class="font-bold text-sm tracking-wide" id="tradeModalTitle">+ THÊM GIAO DỊCH MỚI</h3>
                 </div>
-                <button onclick="closeTradeModal()" class="text-slate-400 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <button onclick="closeTradeModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            
             <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs">
                 <input type="hidden" id="editTradeId">
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Tài khoản ghi nhận</label>
                         <select id="modalAccount" onchange="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="Live">Live Account</option>
-                            <option value="Demo">Demo Account</option>
+                            <!-- Populated dynamically -->
                         </select>
                     </div>
                     <div>
@@ -851,7 +752,6 @@
                         <input type="date" id="modalDate" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Mã Giao Dịch (Ticker)</label>
@@ -865,18 +765,16 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Giá vào lệnh (Entry Price)</label>
+                        <label class="font-bold text-slate-700 block mb-1">Giá vào lệnh (Entry Price) *</label>
                         <input type="number" step="any" id="modalEntry" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20000">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Giá đóng lệnh (Close Price)</label>
+                        <label class="font-bold text-slate-700 block mb-1">Giá đóng lệnh (Close Price) *</label>
                         <input type="number" step="any" id="modalClose" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20100">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Số lượng giao dịch (Volume / Lots)</label>
@@ -887,7 +785,6 @@
                         <input type="number" step="any" id="modalFees" value="10" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Kết quả P&L ($)</label>
@@ -898,7 +795,6 @@
                         <input type="number" step="any" id="modalReturnPct" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1.16">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Trading Setup / Chiến lược</label>
@@ -917,7 +813,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div>
                     <label class="font-bold text-slate-700 block mb-1.5">Các yếu tố hợp lưu (SMC / ICT Concepts)</label>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -930,12 +825,10 @@
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="iFVG" class="accent-blue-600"> <span>iFVG</span></label>
                     </div>
                 </div>
-
                 <div>
                     <label class="font-bold text-slate-700 block mb-1">Nội dung ghi chú về lệnh (Trade Content / Notes)</label>
                     <textarea id="modalNotes" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Nhập lý do vào lệnh..."></textarea>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Thời lượng nắm giữ (Duration)</label>
@@ -973,33 +866,28 @@
                         </select>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="font-bold text-slate-700 block mb-1">Link biểu đồ TradingView</label>
-                        <input type="text" id="modalTvLink" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. https://www.tradingview.com/x/...">
+                <div>
+                    <label class="font-bold text-slate-700 block mb-1">Link biểu đồ TradingView</label>
+                    <input type="text" id="modalTvLink" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500 mb-3" placeholder="e.g. https://www.tradingview.com/x/...">
+                    
+                    <label class="font-bold text-slate-700 block mb-1">Ảnh chụp lệnh (Hỗ trợ từ 2 ảnh trở lên)</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="modalChartImgInput" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Dán URL ảnh hoặc chọn tệp">
+                        <button type="button" onclick="addChartImageFromInput()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2.5 rounded-lg text-xs transition">Thêm URL</button>
+                        <label class="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 font-bold px-3 py-2.5 rounded-lg text-xs transition">
+                            Chọn tệp <input type="file" id="modalFileUploader" accept="image/*" multiple class="hidden" onchange="handleMultipleFileSelect(event)">
+                        </label>
                     </div>
-                    <div>
-                        <label class="font-bold text-slate-700 block mb-1">Ảnh chụp lệnh (Dán URL hoặc chọn tệp)</label>
-                        <div class="flex items-center space-x-2">
-                            <input type="text" id="modalChartImg" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Nhập URL hoặc chọn tệp">
-                            <label class="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2.5 rounded-lg text-xs transition">
-                                Chọn tệp <input type="file" id="modalFileUploader" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
-                            </label>
-                        </div>
+                    <!-- Instant Image Previews -->
+                    <div id="imagePreviewContainer" class="hidden mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-500 block mb-2">Ảnh đã đính kèm (<span id="imageCountBadge">0</span>):</span>
+                        <div id="imagePreviewsList" class="flex flex-wrap gap-2"></div>
                     </div>
-                </div>
-
-                <!-- Instant Image Preview Box -->
-                <div id="imagePreviewContainer" class="hidden mt-2 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                    <span class="text-[11px] font-bold text-slate-500 block mb-1.5">Xem trước ảnh (Instant Preview):</span>
-                    <img id="modalImgPreview" src="" class="h-32 rounded-lg object-contain border border-slate-300 shadow-sm">
                 </div>
             </div>
-
             <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3">
-                <button onclick="closeTradeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
-                <button onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch</button>
+                <button type="button" onclick="closeTradeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
+                <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch</button>
             </div>
         </div>
     </div>
@@ -1008,43 +896,35 @@
     <div id="accountModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
-                <h3 class="font-bold text-sm tracking-wide">QUẢN LÝ TÀI KHOẢN GIAO DỊCH</h3>
+                <h3 class="font-bold text-sm tracking-wide">THÊM TÀI KHOẢN GIAO DỊCH MỚI</h3>
                 <button onclick="closeAccountModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 space-y-4 text-xs">
                 <div>
                     <label class="font-bold text-slate-700 block mb-1">Tên Tài Khoản</label>
-                    <input type="text" id="newAccountName" value="Custom Account" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700">
+                    <input type="text" id="newAccountName" value="Challenge 100K" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700">
                 </div>
                 <div>
                     <label class="font-bold text-slate-700 block mb-1">Số Vốn Khởi Tạo (Initial Balance $)</label>
-                    <input type="number" id="newAccountBalance" value="50000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700">
+                    <input type="number" id="newAccountBalance" value="100000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700">
                 </div>
                 <button onclick="addNewAccount()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow transition">Thêm Tài Khoản Tùy Chỉnh</button>
             </div>
         </div>
     </div>
 
-    <!-- EMAIL AUTH MODAL -->
-    <div id="emailAuthModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+    <!-- ACCOUNT MANAGE MODAL -->
+    <div id="accountManageModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
-                <h3 class="font-bold text-sm tracking-wide">ĐĂNG NHẬP / ĐĂNG KÝ EMAIL</h3>
-                <button onclick="closeEmailAuthModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="font-bold text-sm tracking-wide">QUẢN LÝ TÀI KHOẢN GIAO DỊCH</h3>
+                <button onclick="closeAccountManageModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div>
-                    <label class="font-bold text-slate-700 block mb-1">Email</label>
-                    <input type="email" id="authEmailInput" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700" placeholder="name@example.com">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 block mb-1">Mật khẩu (Password)</label>
-                    <input type="password" id="authPasswordInput" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700" placeholder="••••••••">
-                </div>
-                <div class="flex space-x-3 pt-2">
-                    <button onclick="handleEmailLogin()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow transition">Đăng Nhập</button>
-                    <button onclick="handleEmailRegister()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-lg shadow transition">Đăng Ký</button>
-                </div>
+            <div class="p-6 space-y-4 text-xs max-h-[70vh] overflow-y-auto" id="accountManageList">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end">
+                <button onclick="closeAccountManageModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Đóng</button>
             </div>
         </div>
     </div>
@@ -1067,32 +947,62 @@
             signInWithPopup, 
             GoogleAuthProvider, 
             signOut, 
-            onAuthStateChanged,
-            signInWithEmailAndPassword,
-            createUserWithEmailAndPassword
+            onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc, 
+            collection, 
+            getDocs, 
+            deleteDoc, 
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyAAwnd3wLLJryYJLRIQVKf2csx94oYzn8",
+            apiKey: "AIzaSyAAwnd3wLLjryYJLRIQVQkF2csx94oYzn8",
             authDomain: "jacooodevn-trading-journal.firebaseapp.com",
             projectId: "jacooodevn-trading-journal",
             storageBucket: "jacooodevn-trading-journal.firebasestorage.app",
             messagingSenderId: "69110629443",
-            appId: "1:69110629443:web:955eda8b31cc10067d00f6"
+            appId: "1:69110629443:web:955eda8b31cc10067d00f6",
+            measurementId: "G-S7KFDB3WTK"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
         window.firebaseAuth = auth;
         window.googleProvider = googleProvider;
-        window.signInWithPopup = signInWithPopup;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.signOut = signOut;
+        window.db = db;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.getDoc = getDoc;
+        window.collection = collection;
+        window.getDocs = getDocs;
+        window.deleteDoc = deleteDoc;
+        window.onSnapshot = onSnapshot;
 
-        onAuthStateChanged(auth, (user) => {
+        window.signInWithGoogle = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                window.updateLoginUI(result.user);
+                await window.syncDataFromCloud(result.user.uid);
+            } catch (error) {
+                console.error("Lỗi đăng nhập Google:", error);
+                if (error.code === 'auth/popup-blocked') {
+                    alert("Popup bị chặn. Vui lòng cho phép popup cho trang này rồi thử lại.");
+                } else if (error.code !== 'auth/popup-closed-by-user') {
+                    alert("Đăng nhập thất bại: " + error.message);
+                }
+            }
+        };
+
+        window.updateLoginUI = function(user) {
             const loggedOutView = document.getElementById('loggedOutView');
             const loggedInView = document.getElementById('loggedInView');
             if (user) {
@@ -1110,6 +1020,15 @@
                 loggedInView.classList.add('hidden');
                 loggedOutView.classList.remove('hidden');
             }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            window.updateLoginUI(user);
+            if (user) {
+                await window.syncDataFromCloud(user.uid);
+            } else {
+                window.loadLocalStateFallback();
+            }
         });
     </script>
 
@@ -1120,6 +1039,7 @@
             currentYear: realNow.getFullYear(),
             currentMonth: realNow.getMonth(), // 0-11
             plannerDate: realNow.toISOString().split('T')[0],
+            activeAccount: 'Live',
             accounts: {
                 'Live': { name: 'Live Account', balance: 100000 },
                 'Demo': { name: 'Demo Account', balance: 50000 }
@@ -1140,47 +1060,60 @@
                     setup: 'Reversal',
                     tag: 'Discipline',
                     confluences: ['SMT', 'FVG'],
-                    notes: 'Lệnh này cả ngày nó chạy nhiều rồi nhưng vẫn còn 1 cái PWL và khi mở cửa giá đi lên...',
+                    notes: 'Lệnh này cả ngày nó chạy nhiều rồi nhưng vẫn còn 1 cái PWL và khi mở cửa giá đi len sau đó tạo một cái PO3 thì sau khi nó phản ứng đóng nến giảm với cái BPR-M1 Thì entry',
                     duration: '10m',
                     hour: '09:30-09:40',
                     tvLink: 'https://www.tradingview.com/x/example',
-                    chartImg: 'https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart+NQ'
-                },
-                {
-                    id: 't-2',
-                    account: 'Live',
-                    date: '2026-07-15',
-                    symbol: 'NQ',
-                    type: 'LONG',
-                    entry: 19500,
-                    close: 19750,
-                    volume: 2,
-                    fees: 10,
-                    pnl: -2300,
-                    returnPct: -2.30,
-                    setup: 'Continuation',
-                    tag: 'Discipline',
-                    confluences: ['FVG', 'OB'],
-                    notes: 'Test stop loss zone.',
-                    duration: '30m',
-                    hour: '10:10-10:20',
-                    tvLink: '',
-                    chartImg: 'https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart+2'
+                    chartImgs: ['https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart+1']
                 }
             ],
-            planners: {
-                '2026-07-16': {
-                    mentalState: 'Neutral',
-                    marketBias: 'Neutral',
-                    rating: 50,
-                    goals: [{text: 'hold đến liquidity quan trọng nhé!!!!', completed: true}],
-                    sessionNotes: 'Phiên giao dịch thành công rực rỡ với setup Reversal M1.'
-                }
-            }
+            planners: {}
         };
 
+        window.syncDataFromCloud = async function(uid) {
+            try {
+                const userDocRef = window.doc(window.db, "users", uid, "data", "journalState");
+                const userSnap = await window.getDoc(userDocRef);
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    if (data.trades) appState.trades = data.trades;
+                    if (data.planners) appState.planners = data.planners;
+                    if (data.accounts) appState.accounts = data.accounts;
+                    if (data.activeAccount) appState.activeAccount = data.activeAccount;
+                } else {
+                    await window.setDoc(userDocRef, {
+                        trades: appState.trades,
+                        planners: appState.planners,
+                        accounts: appState.accounts,
+                        activeAccount: appState.activeAccount
+                    });
+                }
+            } catch (e) {
+                console.error("Cloud sync error:", e);
+            }
+            saveAppStateLocally();
+            switchTab(appState.currentTab);
+        };
+
+        async function saveCloudData() {
+            const user = window.firebaseAuth?.currentUser;
+            if (user) {
+                try {
+                    const userDocRef = window.doc(window.db, "users", user.uid, "data", "journalState");
+                    await window.setDoc(userDocRef, {
+                        trades: appState.trades,
+                        planners: appState.planners,
+                        accounts: appState.accounts,
+                        activeAccount: appState.activeAccount
+                    }, { merge: true });
+                } catch (e) {
+                    console.error("Error saving to cloud:", e);
+                }
+            }
+        }
+
         function loadAppState() {
-            const saved = localStorage.getItem('jacooodevn_persistent_state_v10');
+            const saved = localStorage.getItem('jacooodevn_persistent_state_v30');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -1192,53 +1125,21 @@
             document.getElementById('filterDateTo').value = todayStr;
             document.getElementById('modalDate').value = todayStr;
             document.getElementById('overviewYear').value = appState.currentYear;
+            updateAccountSelectors();
+        }
+
+        window.loadLocalStateFallback = function() {
+            loadAppState();
+            switchTab(appState.currentTab);
+        };
+
+        function saveAppStateLocally() {
+            localStorage.setItem('jacooodevn_persistent_state_v30', JSON.stringify(appState));
         }
 
         function saveAppState() {
-            localStorage.setItem('jacooodevn_persistent_state_v10', JSON.stringify(appState));
-        }
-
-        async function handleGoogleLogin() {
-            try {
-                if (window.firebaseAuth && window.googleProvider && window.signInWithPopup) {
-                    const result = await window.signInWithPopup(window.firebaseAuth, window.googleProvider);
-                    console.log("Google popup sign-in success:", result.user);
-                }
-            } catch (e) {
-                console.error("Google Auth Error Code:", e.code);
-                console.error("Google Auth Error Message:", e.message);
-                alert(`Đăng nhập Google thất bại!\nMã lỗi: ${e.code}\nChi tiết: ${e.message}\n(Hãy kiểm tra Firebase Console -> Authentication -> Sign-in method -> Google đã được Enable và Authorized domains chưa)`);
-            }
-        }
-
-        function openEmailAuthModal() {
-            document.getElementById('emailAuthModal').classList.remove('hidden');
-        }
-        function closeEmailAuthModal() {
-            document.getElementById('emailAuthModal').classList.add('hidden');
-        }
-
-        async function handleEmailLogin() {
-            const email = document.getElementById('authEmailInput').value;
-            const pass = document.getElementById('authPasswordInput').value;
-            try {
-                await window.signInWithEmailAndPassword(window.firebaseAuth, email, pass);
-                closeEmailAuthModal();
-            } catch (e) {
-                alert('Đăng nhập thất bại: ' + e.message);
-            }
-        }
-
-        async function handleEmailRegister() {
-            const email = document.getElementById('authEmailInput').value;
-            const pass = document.getElementById('authPasswordInput').value;
-            try {
-                await window.createUserWithEmailAndPassword(window.firebaseAuth, email, pass);
-                alert('Đăng ký tài khoản thành công!');
-                closeEmailAuthModal();
-            } catch (e) {
-                alert('Đăng ký thất bại: ' + e.message);
-            }
+            saveAppStateLocally();
+            saveCloudData();
         }
 
         async function handleLogout() {
@@ -1247,6 +1148,28 @@
                     await window.signOut(window.firebaseAuth);
                 }
             } catch (e) { console.error(e); }
+        }
+
+        function updateAccountSelectors() {
+            const filterAcc = document.getElementById('filterAccount');
+            const modalAcc = document.getElementById('modalAccount');
+            
+            let filterHtml = '<option value="all">Tất cả tài khoản</option>';
+            let modalHtml = '';
+
+            for (const [key, acc] of Object.entries(appState.accounts)) {
+                filterHtml += `<option value="${key}">${acc.name} ($${acc.balance.toLocaleString()})</option>`;
+                modalHtml += `<option value="${key}">${acc.name} ($${acc.balance.toLocaleString()})</option>`;
+            }
+
+            filterAcc.innerHTML = filterHtml;
+            filterAcc.value = appState.activeAccount;
+            modalAcc.innerHTML = modalHtml;
+
+            const activeAccObj = appState.accounts[appState.activeAccount] || Object.values(appState.accounts)[0];
+            if (activeAccObj) {
+                document.getElementById('currentAccountBadge').innerText = `Tài khoản: ${activeAccObj.name} ($${activeAccObj.balance.toLocaleString()})`;
+            }
         }
 
         function switchTab(tabId) {
@@ -1275,7 +1198,7 @@
 
         function resetDemoData() {
             if (confirm('Khôi phục dữ liệu mẫu Demo?')) {
-                localStorage.removeItem('jacooodevn_persistent_state_v10');
+                localStorage.removeItem('jacooodevn_persistent_state_v30');
                 location.reload();
             }
         }
@@ -1291,8 +1214,7 @@
 
         let chartInstances = {};
 
-        // Pristine Money Formatting without double signs (e.g. -$2,300)
-        function formatMoney(amount) {
+        function formatPnlString(amount) {
             const num = Number(amount) || 0;
             const absVal = Math.abs(num).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
             if (num > 0) return `+$${absVal}`;
@@ -1313,7 +1235,6 @@
             });
         }
 
-        // Fixed 8-Column Calendar Matrix with Monday-start & trailing days
         function renderOverview() {
             const year = appState.currentYear;
             const month = appState.currentMonth;
@@ -1326,11 +1247,10 @@
             grid.innerHTML = '';
 
             const filteredTrades = getFilteredTrades();
-
             const firstDayOfMonth = new Date(year, month, 1);
             const lastDayOfMonth = new Date(year, month + 1, 0);
             
-            let startDayOfWeek = firstDayOfMonth.getDay(); // 0 (Sun) to 6 (Sat)
+            let startDayOfWeek = firstDayOfMonth.getDay(); 
             startDayOfWeek = (startDayOfWeek === 0) ? 6 : startDayOfWeek - 1; // Monday start (0=Mon, 6=Sun)
 
             const totalDaysInMonth = lastDayOfMonth.getDate();
@@ -1339,7 +1259,6 @@
             let weeks = [];
             let currentWeek = [];
 
-            // Leading days from previous month
             for (let i = startDayOfWeek - 1; i >= 0; i--) {
                 const dayNum = prevMonthLastDate - i;
                 const prevMonth = month === 0 ? 11 : month - 1;
@@ -1348,7 +1267,6 @@
                 currentWeek.push({ dayNum, dateStr, isCurrentMonth: false });
             }
 
-            // Current month days
             for (let d = 1; d <= totalDaysInMonth; d++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                 currentWeek.push({ dayNum: d, dateStr, isCurrentMonth: true });
@@ -1358,7 +1276,6 @@
                 }
             }
 
-            // Trailing days from next month to complete the final row
             let nextMonthDay = 1;
             while (currentWeek.length > 0 && currentWeek.length < 7) {
                 const nextMonth = month === 11 ? 0 : month + 1;
@@ -1398,7 +1315,7 @@
                                 <span class="text-[10px] text-slate-400">${hasTrade && dayObj.isCurrentMonth ? dayTrades.length + ' gd' : ''}</span>
                             </div>
                             <div class="text-center">
-                                ${hasTrade && dayObj.isCurrentMonth ? `<span class="${pnlClass} text-xs">${formatMoney(dayPnl)}</span>` : '<span class="text-slate-300 text-[10px]">Trống</span>'}
+                                ${hasTrade && dayObj.isCurrentMonth ? `<span class="${pnlClass} text-xs">${formatPnlString(dayPnl)}</span>` : '<span class="text-slate-300 text-[10px]">Trống</span>'}
                             </div>
                         </div>
                     `;
@@ -1412,23 +1329,22 @@
                 grid.innerHTML += `
                     <div class="${weekBgClass} border rounded-xl p-2 h-24 flex flex-col justify-between items-center shadow-sm">
                         <span class="text-[10px] font-bold text-blue-600">TỔNG</span>
-                        <span class="text-xs font-black">${formatMoney(weekPnl)}</span>
+                        <span class="text-xs font-black">${formatPnlString(weekPnl)}</span>
                         <span class="text-[9px] text-slate-400">${weekTradesCount} gd</span>
                     </div>
                 `;
             });
 
-            // Dynamic Monthly Profit Badge next to month selector
+            // Dynamic Monthly Profit Badge
             const badgeEl = document.getElementById('headerMonthProfit');
             const badgeTextEl = document.getElementById('headerMonthProfitText');
-            badgeTextEl.innerText = `${monthTotalProfit >= 0 ? '+' : ''} Tháng này: ${formatMoney(monthTotalProfit)}`;
+            badgeTextEl.innerText = `${monthTotalProfit >= 0 ? '+' : ''} Tháng này: ${formatPnlString(monthTotalProfit)}`;
             if (monthTotalProfit >= 0) {
                 badgeEl.className = 'text-xs font-bold px-3.5 py-2 rounded-lg border bg-emerald-50 text-emerald-600 border-emerald-200 flex items-center space-x-1.5 transition';
             } else {
                 badgeEl.className = 'text-xs font-bold px-3.5 py-2 rounded-lg border bg-rose-50 text-rose-600 border-rose-200 flex items-center space-x-1.5 transition';
             }
 
-            // Overview Stats
             const totalTrades = filteredTrades.length;
             const winTrades = filteredTrades.filter(t => t.pnl > 0).length;
             const lossTrades = filteredTrades.filter(t => t.pnl < 0).length;
@@ -1436,7 +1352,7 @@
             const winRateStr = winRateVal.toFixed(0) + '%';
             const netProfit = filteredTrades.reduce((s, t) => s + Number(t.pnl), 0);
             
-            const activeAccKey = document.getElementById('filterAccount')?.value || 'Live';
+            const activeAccKey = document.getElementById('filterAccount')?.value || appState.activeAccount;
             const accBalance = appState.accounts[activeAccKey]?.balance || 100000;
             const returnPctVal = (netProfit / accBalance) * 100;
             const returnPctStr = (returnPctVal >= 0 ? '+' : '') + returnPctVal.toFixed(2) + '%';
@@ -1445,22 +1361,33 @@
             document.getElementById('stat-win-trades').innerText = winTrades;
             document.getElementById('stat-loss-trades').innerText = lossTrades;
             document.getElementById('stat-win-rate').innerText = winRateStr;
-            document.getElementById('stat-net-profit').innerText = formatMoney(netProfit);
+            document.getElementById('stat-net-profit').innerText = formatPnlString(netProfit);
             document.getElementById('stat-return-pct').innerText = returnPctStr;
-            document.getElementById('cumulTotalEnd').innerText = formatMoney(netProfit);
+            document.getElementById('cumulTotalEnd').innerText = formatPnlString(netProfit);
 
             document.getElementById('gaugeWinCount').innerText = winTrades;
             document.getElementById('gaugeLossCount').innerText = lossTrades;
 
-            // Points calculation adapting to net profit outcome (positive/negative)
-            const pointsMultiplier = netProfit >= 0 ? 1 : -1;
-            const avgPts = (totalTrades > 0 ? (Math.abs(netProfit) / totalTrades) / 10 : 0) * pointsMultiplier;
-            const maxPts = (totalTrades > 0 ? Math.abs(netProfit) / 10 : 0) * pointsMultiplier;
-            
-            document.getElementById('stat-avg-pts').innerText = `${avgPts.toFixed(1)} pts`;
-            document.getElementById('stat-max-win-pts').innerText = `${maxPts.toFixed(1)} pts`;
-            document.getElementById('stat-max-loss-pts').innerText = `${(maxPts * -1).toFixed(1)} pts`;
-            document.getElementById('stat-total-pts').innerText = `${(avgPts * totalTrades).toFixed(1)} pts`;
+            // Points calculation based on Price Distance (Entry vs Close)
+            let totalPoints = 0;
+            let maxWinPts = 0;
+            let maxLossPts = 0;
+            filteredTrades.forEach(t => {
+                const entry = Number(t.entry) || 0;
+                const close = Number(t.close) || 0;
+                const dist = Math.abs(close - entry);
+                const pts = Number(t.pnl) >= 0 ? dist : -dist;
+                totalPoints += pts;
+                if (pts > maxWinPts) maxWinPts = pts;
+                if (pts < maxLossPts) maxLossPts = pts;
+            });
+            const avgPts = totalTrades > 0 ? totalPoints / totalTrades : 0;
+            const isMonthNegative = netProfit < 0;
+
+            document.getElementById('stat-avg-pts').innerText = `${isMonthNegative && avgPts > 0 ? '-' : ''}${avgPts.toFixed(1)} pts`;
+            document.getElementById('stat-max-win-pts').innerText = `${maxWinPts.toFixed(1)} pts`;
+            document.getElementById('stat-max-loss-pts').innerText = `${maxLossPts.toFixed(1)} pts`;
+            document.getElementById('stat-total-pts').innerText = `${totalPoints.toFixed(1)} pts`;
 
             renderCumulativeChart();
             renderWinRateGauge(winRateVal, winTrades, lossTrades);
@@ -1492,13 +1419,18 @@
             if (chartInstances['cumul']) chartInstances['cumul'].destroy();
 
             const filteredTrades = getFilteredTrades();
+            const sorted = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
+
             let cumSum = 0;
             let labels = ['Bắt đầu'];
             let dataPoints = [0];
-            filteredTrades.forEach((t, i) => {
+            let pointColors = ['#2563eb'];
+
+            sorted.forEach((t, i) => {
                 cumSum += Number(t.pnl);
                 labels.push(`#${i+1}`);
                 dataPoints.push(cumSum);
+                pointColors.push(Number(t.pnl) >= 0 ? '#10b981' : '#f43f5e');
             });
 
             chartInstances['cumul'] = new Chart(ctx, {
@@ -1510,8 +1442,11 @@
                         borderColor: '#2563eb',
                         borderWidth: 2,
                         tension: 0.1,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#2563eb'
+                        pointRadius: 4,
+                        pointBackgroundColor: pointColors,
+                        segment: {
+                            borderColor: ctx => ctx.p1.parsed.y < ctx.p0.parsed.y ? '#f43f5e' : '#2563eb'
+                        }
                     }]
                 },
                 options: {
@@ -1561,38 +1496,67 @@
 
         function renderAdvancedCards(netProfit, wins, losses, totalTrades, balance) {
             const filteredTrades = getFilteredTrades();
-            const grossProfit = filteredTrades.filter(t => t.pnl > 0).reduce((s,t) => s + Number(t.pnl), 0);
-            const grossLoss = Math.abs(filteredTrades.filter(t => t.pnl < 0).reduce((s,t) => s + Number(t.pnl), 0));
+            
+            // 1. Validation & Filter out invalid trades with entry/close = 0 or missing
+            const validTrades = filteredTrades.filter(t => {
+                const entry = Number(t.entry);
+                const close = Number(t.close);
+                return !isNaN(entry) && !isNaN(close) && entry > 0 && close > 0;
+            });
+
+            const validWins = validTrades.filter(t => Number(t.pnl) > 0);
+            const validLosses = validTrades.filter(t => Number(t.pnl) < 0);
+
+            const grossProfit = validWins.reduce((s,t) => s + Number(t.pnl), 0);
+            const grossLoss = Math.abs(validLosses.reduce((s,t) => s + Number(t.pnl), 0));
             const pf = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '99.00' : '0.00');
 
             document.getElementById('advancedProfitFactor').innerText = pf;
             document.getElementById('advGrossProfit').innerText = `Gross Profit: $${grossProfit.toLocaleString()}`;
             document.getElementById('advGrossLoss').innerText = `Gross Loss: -$${grossLoss.toLocaleString()}`;
 
-            const avgWin = wins > 0 ? grossProfit / wins : 0;
-            const avgLoss = losses > 0 ? grossLoss / losses : 0;
+            const avgWin = validWins.length > 0 ? grossProfit / validWins.length : 0;
+            const avgLoss = validLosses.length > 0 ? grossLoss / validLosses.length : 0;
             const rr = avgLoss > 0 ? (avgWin / avgLoss).toFixed(2) : 'N/A';
             document.getElementById('advancedRR').innerText = rr;
             document.getElementById('advAvgWin').innerText = `Avg Win: $${avgWin.toFixed(0)}`;
             document.getElementById('advAvgLoss').innerText = `Avg Loss: -$${avgLoss.toFixed(0)}`;
 
             const expectancy = totalTrades > 0 ? netProfit / totalTrades : 0;
-            document.getElementById('cardExpectancy').innerText = formatMoney(expectancy);
+            document.getElementById('cardExpectancy').innerText = formatPnlString(expectancy);
             document.getElementById('cardExpWinRate').innerText = totalTrades > 0 ? ((wins/totalTrades)*100).toFixed(0) + '%' : '0%';
             document.getElementById('cardExpAvgWin').innerText = `+$${avgWin.toFixed(0)}`;
 
             if (totalTrades > 0) {
-                document.getElementById('cardTopSymbolContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>NQ</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatMoney(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopSetupContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>REVERSAL</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatMoney(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>DISCIPLINE</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatMoney(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopSymbolContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>NQ</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopSetupContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>REVERSAL</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>DISCIPLINE</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
             }
 
             document.getElementById('cardTotalTradesCount').innerText = totalTrades;
             document.getElementById('cardLongestWin').innerText = `${wins} trades`;
             document.getElementById('cardLongestLoss').innerText = `${losses} trades`;
             document.getElementById('cardCurrentStreak').innerText = `${wins} wins`;
-            document.getElementById('cardPeakVal').innerText = formatMoney(Math.max(0, netProfit));
-            document.getElementById('cardMaxDD').innerText = `$0`;
+
+            // 2. Accurate Peak-to-Trough Drawdown calculation from Cumulative P&L series
+            const sortedByDate = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
+            let peak = 0;
+            let maxDD = 0;
+            let runningSum = 0;
+            sortedByDate.forEach(t => {
+                runningSum += Number(t.pnl);
+                if (runningSum > peak) {
+                    peak = runningSum;
+                }
+                const dd = peak - runningSum;
+                if (dd > maxDD) {
+                    maxDD = dd;
+                }
+            });
+
+            document.getElementById('cardPeakVal').innerText = formatPnlString(Math.max(0, peak));
+            document.getElementById('cardMaxDD').innerText = maxDD > 0 ? `-$${maxDD.toLocaleString()}` : `$0`;
+
             document.getElementById('cardRecoveryFactor').innerText = grossLoss > 0 ? (netProfit / grossLoss).toFixed(2) : (netProfit > 0 ? '15.00' : '0.00');
             document.getElementById('cardConsistency').innerText = '1.00';
             document.getElementById('cardSharpe').innerText = '6.95';
@@ -1606,16 +1570,29 @@
             const dayPnl = dayTrades.reduce((s, t) => s + Number(t.pnl), 0);
             
             const pnlEl = document.getElementById('plannerSelectedDatePnL');
-            pnlEl.innerText = formatMoney(dayPnl);
+            pnlEl.innerText = formatPnlString(dayPnl);
             pnlEl.className = dayPnl > 0 ? 'text-xl font-black text-emerald-600' : (dayPnl < 0 ? 'text-xl font-black text-rose-600' : 'text-xl font-black text-slate-800');
 
             const planData = appState.planners[selectedDate] || {};
             document.getElementById('plannerSessionNotes').value = planData.sessionNotes || '';
 
+            document.querySelectorAll('.mental-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                if (btn.getAttribute('onclick')?.includes(planData.mentalState)) {
+                    btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+                }
+            });
+            document.querySelectorAll('.bias-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+                if (btn.getAttribute('onclick')?.includes(planData.marketBias)) {
+                    btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+                }
+            });
+
             const strip = document.getElementById('plannerWeekStrip');
             strip.innerHTML = '';
             const baseDate = new Date(selectedDate);
-            const dayOfWeek = baseDate.getDay(); // 0 is Sunday
+            const dayOfWeek = baseDate.getDay(); 
             const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
             
             const monday = new Date(baseDate);
@@ -1632,31 +1609,31 @@
                 weekProfitSum += dPnl;
 
                 const isSelected = dStr === selectedDate;
-                const borderClass = isSelected ? 'border-blue-600 bg-blue-50/30 ring-2 ring-blue-500/20' : 'border-slate-200 bg-white';
-                const dayNames = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ Nhật'];
+                const dayNames = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
                 const dPnlClass = dPnl > 0 ? 'text-emerald-600 font-bold' : (dPnl < 0 ? 'text-rose-600 font-bold' : 'text-slate-400');
+                const dayBgCard = dPnl > 0 ? 'bg-emerald-50/40 border-emerald-200' : (dPnl < 0 ? 'bg-rose-50/40 border-rose-200' : (isSelected ? 'border-blue-600 bg-blue-50/30 ring-2 ring-blue-500/20' : 'bg-white border-slate-200'));
 
                 strip.innerHTML += `
-                    <div onclick="selectPlannerDate('${dStr}')" class="${borderClass} border rounded-xl p-3 flex flex-col justify-between cursor-pointer hover:shadow transition">
+                    <div onclick="selectPlannerDate('${dStr}')" class="${dayBgCard} border rounded-xl p-3 flex flex-col justify-between cursor-pointer hover:shadow transition">
                         <div class="flex justify-between items-center text-xs">
                             <span class="font-bold text-slate-700">${dayNames[i]}</span>
                             <span class="text-[10px] text-slate-400">${d.getDate()}/${d.getMonth()+1}</span>
                         </div>
                         <div class="text-center my-2">
-                            ${dTrades.length > 0 ? `<span class="text-xs ${dPnlClass}">${formatMoney(dPnl)}</span><div class="text-[10px] text-slate-400">(${dTrades.length} gd)</div>` : '<span class="text-slate-300 text-[10px]">Trống</span>'}
+                            ${dTrades.length > 0 ? `<span class="text-xs ${dPnlClass}">${formatPnlString(dPnl)}</span><div class="text-[10px] text-slate-400">(${dTrades.length} gd)</div>` : '<span class="text-slate-300 text-[10px]">Trống</span>'}
                         </div>
                     </div>
                 `;
             }
 
             const weekTotalEl = document.getElementById('plannerWeekTotalProfit');
-            weekTotalEl.innerText = `TỔNG P&L TUẦN: ${formatMoney(weekProfitSum)}`;
+            weekTotalEl.innerText = `TỔNG P&L TUẦN: ${formatPnlString(weekProfitSum)}`;
             if (weekProfitSum > 0) {
-                weekTotalEl.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border bg-emerald-50 text-emerald-600 border-emerald-200 flex items-center space-x-1.5';
+                weekTotalEl.className = 'text-xs font-bold px-3.5 py-2 rounded-lg border bg-emerald-50 text-emerald-600 border-emerald-200 flex items-center space-x-1.5';
             } else if (weekProfitSum < 0) {
-                weekTotalEl.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border bg-rose-50 text-rose-600 border-rose-200 flex items-center space-x-1.5';
+                weekTotalEl.className = 'text-xs font-bold px-3.5 py-2 rounded-lg border bg-rose-50 text-rose-600 border-rose-200 flex items-center space-x-1.5';
             } else {
-                weekTotalEl.className = 'text-xs font-bold px-3 py-1.5 rounded-lg border bg-slate-100 text-slate-700 border-slate-200 flex items-center space-x-1.5';
+                weekTotalEl.className = 'text-xs font-bold px-3.5 py-2 rounded-lg border bg-slate-100 text-slate-700 border-slate-200 flex items-center space-x-1.5';
             }
 
             renderDailyGoals();
@@ -1678,12 +1655,14 @@
             if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = {};
             appState.planners[appState.plannerDate].mentalState = state;
             saveAppState();
+            renderPlanner();
         }
 
         function selectMarketBias(bias) {
             if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = {};
             appState.planners[appState.plannerDate].marketBias = bias;
             saveAppState();
+            renderPlanner();
         }
 
         function updateRatingSliderVal(val) {
@@ -1739,19 +1718,59 @@
             alert('Đã lưu kế hoạch và ghi chú ngày thành công!');
         }
 
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Url = e.target.result;
-                    document.getElementById('modalChartImg').value = base64Url;
-                    const previewContainer = document.getElementById('imagePreviewContainer');
-                    const imgPreview = document.getElementById('modalImgPreview');
-                    imgPreview.src = base64Url;
-                    previewContainer.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
+        let currentModalImages = [];
+
+        function handleMultipleFileSelect(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        currentModalImages.push(e.target.result);
+                        renderImagePreviews();
+                    };
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+        }
+
+        function addChartImageFromInput() {
+            const input = document.getElementById('modalChartImgInput');
+            const val = input.value.trim();
+            if (val) {
+                currentModalImages.push(val);
+                input.value = '';
+                renderImagePreviews();
+            }
+        }
+
+        function removeModalImage(index) {
+            currentModalImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
+        function renderImagePreviews() {
+            const container = document.getElementById('imagePreviewContainer');
+            const list = document.getElementById('imagePreviewsList');
+            const badge = document.getElementById('imageCountBadge');
+            
+            list.innerHTML = '';
+            badge.innerText = currentModalImages.length;
+
+            if (currentModalImages.length > 0) {
+                container.classList.remove('hidden');
+                currentModalImages.forEach((imgUrl, idx) => {
+                    list.innerHTML += `
+                        <div class="relative group">
+                            <img src="${imgUrl}" class="h-20 w-20 rounded-lg object-cover border border-slate-300 shadow-sm">
+                            <button type="button" onclick="removeModalImage(${idx})" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow hover:bg-rose-700 transition">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+            } else {
+                container.classList.add('hidden');
             }
         }
 
@@ -1788,10 +1807,32 @@
             
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach((t) => {
-                const pnlFormatted = formatMoney(t.pnl);
+                const pnlFormatted = formatPnlString(t.pnl);
                 const pnlColor = Number(t.pnl) > 0 ? 'text-emerald-600 font-bold' : (Number(t.pnl) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
                 const retColor = Number(t.returnPct) > 0 ? 'text-emerald-600 font-bold' : (Number(t.returnPct) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
                 
+                let confluencesHtml = '';
+                if (t.confluences && t.confluences.length > 0) {
+                    confluencesHtml = `<div class="flex flex-wrap gap-1 max-w-[140px]">` + t.confluences.map(c => `<span class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded text-[9px] font-bold">${c}</span>`).join('') + `</div>`;
+                } else {
+                    confluencesHtml = `<span class="text-slate-400 text-[10px]">--</span>`;
+                }
+
+                let imgs = t.chartImgs || (t.chartImg ? [t.chartImg] : []);
+                let chartThumbHtml = '';
+                if (imgs.length > 0) {
+                    chartThumbHtml = `
+                        <div class="flex items-center justify-center space-x-1 cursor-pointer" onclick="openLightbox('${imgs[0]}')">
+                            <i class="fa-regular fa-image text-emerald-600 text-sm"></i>
+                            <span class="text-[10px] font-bold text-slate-500">(${imgs.length})</span>
+                        </div>
+                    `;
+                } else {
+                    chartThumbHtml = `<span class="text-slate-300 text-[10px]">--</span>`;
+                }
+
+                const notesText = t.notes || '';
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                         <td class="p-3.5 font-bold text-slate-800">${t.symbol}</td>
@@ -1805,10 +1846,11 @@
                         <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration}</span></td>
                         <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
                         <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-semibold">${t.tag}</span></td>
-                        <td class="p-3.5 max-w-xs truncate text-slate-500" title="${t.notes}">${t.notes}</td>
-                        <td class="p-3.5 text-center">
-                            <button onclick="openLightbox('${t.chartImg}')" class="text-emerald-600 hover:text-emerald-700"><i class="fa-regular fa-image text-sm"></i></button>
+                        <td class="p-3.5">${confluencesHtml}</td>
+                        <td class="p-3.5 max-w-xs text-slate-600">
+                            <div class="whitespace-pre-wrap break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
                         </td>
+                        <td class="p-3.5 text-center">${chartThumbHtml}</td>
                         <td class="p-3.5 text-center space-x-2">
                             <button onclick="editTrade('${t.id}')" class="text-slate-400 hover:text-blue-600"><i class="fa-solid fa-pen text-xs"></i></button>
                             <button onclick="deleteTrade('${t.id}')" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash text-xs"></i></button>
@@ -1835,7 +1877,10 @@
 
         function openTradeModal(tradeId = null) {
             document.getElementById('tradeModal').classList.remove('hidden');
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            currentModalImages = [];
+            renderImagePreviews();
+            updateAccountSelectors();
+
             if (tradeId) {
                 document.getElementById('tradeModalTitle').innerText = 'SỬA GIAO DỊCH';
                 const t = appState.trades.find(x => x.id === tradeId);
@@ -1853,15 +1898,17 @@
                     document.getElementById('modalReturnPct').value = t.returnPct;
                     document.getElementById('modalSetup').value = t.setup;
                     document.getElementById('modalTag').value = t.tag;
-                    document.getElementById('modalNotes').value = t.notes;
+                    document.getElementById('modalNotes').value = t.notes || '';
                     document.getElementById('modalDuration').value = t.duration;
                     document.getElementById('modalHour').value = t.hour;
                     document.getElementById('modalTvLink').value = t.tvLink || '';
-                    document.getElementById('modalChartImg').value = t.chartImg || '';
-                    if (t.chartImg) {
-                        document.getElementById('modalImgPreview').src = t.chartImg;
-                        document.getElementById('imagePreviewContainer').classList.remove('hidden');
-                    }
+
+                    document.querySelectorAll('input[name="smcConfluence"]').forEach(cb => {
+                        cb.checked = t.confluences && t.confluences.includes(cb.value);
+                    });
+
+                    currentModalImages = t.chartImgs || (t.chartImg ? [t.chartImg] : []);
+                    renderImagePreviews();
                 }
             } else {
                 document.getElementById('tradeModalTitle').innerText = '+ THÊM GIAO DỊCH MỚI';
@@ -1871,56 +1918,78 @@
                 document.getElementById('modalPnl').value = '';
                 document.getElementById('modalReturnPct').value = '';
                 document.getElementById('modalNotes').value = '';
-                document.getElementById('modalChartImg').value = '';
+                document.querySelectorAll('input[name="smcConfluence"]').forEach(cb => cb.checked = false);
             }
         }
 
-        function closeTradeModal() {
-            document.getElementById('tradeModal').classList.add('hidden');
-        }
+        function closeTradeModal() { document.getElementById('tradeModal').classList.add('hidden'); }
 
-        function saveTradeRecord() {
-            const id = document.getElementById('editTradeId').value || 't-' + Date.now();
-            const account = document.getElementById('modalAccount').value;
-            const date = document.getElementById('modalDate').value;
-            const symbol = document.getElementById('modalSymbol').value;
-            const type = document.getElementById('modalType').value;
-            const entry = Number(document.getElementById('modalEntry').value);
-            const close = Number(document.getElementById('modalClose').value);
-            const volume = Number(document.getElementById('modalVolume').value);
-            const fees = Number(document.getElementById('modalFees').value);
-            const pnl = Number(document.getElementById('modalPnl').value);
-            const returnPct = Number(document.getElementById('modalReturnPct').value);
-            const setup = document.getElementById('modalSetup').value;
-            const tag = document.getElementById('modalTag').value;
-            const notes = document.getElementById('modalNotes').value;
-            const duration = document.getElementById('modalDuration').value;
-            const hour = document.getElementById('modalHour').value;
-            const tvLink = document.getElementById('modalTvLink').value;
-            const chartImg = document.getElementById('modalChartImg').value || 'https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart';
+        async function saveTradeRecord() {
+            const saveBtn = document.getElementById('saveTradeBtn');
+            try {
+                const entryVal = Number(document.getElementById('modalEntry').value);
+                const closeVal = Number(document.getElementById('modalClose').value);
+                
+                // 3. Validation: Prevent saving if Entry or Close is missing or zero
+                if (isNaN(entryVal) || isNaN(closeVal) || entryVal <= 0 || closeVal <= 0) {
+                    alert("Vui lòng nhập đầy đủ và chính xác Giá vào lệnh (Entry Price) và Giá đóng lệnh (Close Price) lớn hơn 0!");
+                    return;
+                }
 
-            const confluences = [];
-            document.querySelectorAll('input[name="smcConfluence"]:checked').forEach(cb => confluences.push(cb.value));
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.innerText = 'Đang lưu...';
+                }
 
-            const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl, returnPct, setup, tag, confluences, notes, duration, hour, tvLink, chartImg };
+                const id = document.getElementById('editTradeId').value || 't-' + Date.now();
+                const account = document.getElementById('modalAccount').value;
+                const date = document.getElementById('modalDate').value;
+                const symbol = document.getElementById('modalSymbol').value;
+                const type = document.getElementById('modalType').value;
+                const volume = Number(document.getElementById('modalVolume').value);
+                const fees = Number(document.getElementById('modalFees').value);
+                const pnl = Number(document.getElementById('modalPnl').value);
+                const returnPct = Number(document.getElementById('modalReturnPct').value);
+                const setup = document.getElementById('modalSetup').value;
+                const tag = document.getElementById('modalTag').value;
+                const notes = document.getElementById('modalNotes').value;
+                const duration = document.getElementById('modalDuration').value;
+                const hour = document.getElementById('modalHour').value;
+                const tvLink = document.getElementById('modalTvLink').value;
+                
+                const confluences = [];
+                document.querySelectorAll('input[name="smcConfluence"]:checked').forEach(cb => confluences.push(cb.value));
 
-            const existingIdx = appState.trades.findIndex(t => t.id === id);
-            if (existingIdx >= 0) {
-                appState.trades[existingIdx] = tradeObj;
-            } else {
-                appState.trades.unshift(tradeObj);
+                const chartImgs = currentModalImages.length > 0 ? currentModalImages : ['https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart'];
+
+                const tradeObj = { id, account, date, symbol, type, entry: entryVal, close: closeVal, volume, fees, pnl, returnPct, setup, tag, confluences, notes, duration, hour, tvLink, chartImgs };
+
+                const existingIdx = appState.trades.findIndex(t => t.id === id);
+                if (existingIdx >= 0) {
+                    appState.trades[existingIdx] = tradeObj;
+                } else {
+                    appState.trades.unshift(tradeObj);
+                }
+
+                await saveAppState();
+                closeTradeModal();
+                switchTab(appState.currentTab);
+            } catch (err) {
+                console.error("Lỗi khi lưu giao dịch:", err);
+                alert("Đã xảy ra lỗi khi lưu giao dịch: " + err.message);
+            } finally {
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerText = 'Lưu Giao Dịch';
+                }
             }
-
-            saveAppState();
-            closeTradeModal();
-            switchTab(appState.currentTab);
         }
 
         function editTrade(id) { openTradeModal(id); }
-        function deleteTrade(id) {
+        async function deleteTrade(id) {
             if (confirm('Bạn có chắc muốn xóa giao dịch này?')) {
                 appState.trades = appState.trades.filter(t => t.id !== id);
-                saveAppState();
+                await saveAppState();
                 switchTab(appState.currentTab);
             }
         }
@@ -1930,15 +1999,67 @@
             document.getElementById('lightboxModal').classList.remove('hidden');
         }
         function closeLightbox() { document.getElementById('lightboxModal').classList.add('hidden'); }
+
         function openAccountModal() { document.getElementById('accountModal').classList.remove('hidden'); }
         function closeAccountModal() { document.getElementById('accountModal').classList.add('hidden'); }
-        function addNewAccount() {
-            const accName = document.getElementById('newAccountName').value || 'Custom';
+
+        function openAccountManageModal() {
+            renderAccountManageList();
+            document.getElementById('accountManageModal').classList.remove('hidden');
+        }
+        function closeAccountManageModal() { document.getElementById('accountManageModal').classList.add('hidden'); }
+
+        function renderAccountManageList() {
+            const listContainer = document.getElementById('accountManageList');
+            listContainer.innerHTML = '';
+            for (const [key, acc] of Object.entries(appState.accounts)) {
+                listContainer.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">${acc.name} (${key})</div>
+                            <div class="text-[11px] text-slate-500">Số vốn: $${acc.balance.toLocaleString()}</div>
+                        </div>
+                        <div>
+                            ${Object.keys(appState.accounts).length > 1 ? `<button onclick="deleteAccount('${key}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold px-3 py-1.5 rounded-lg text-xs transition border border-rose-200"><i class="fa-solid fa-trash mr-1"></i> Xóa</button>` : '<span class="text-slate-400 text-[10px] italic">Mặc định</span>'}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function deleteAccount(accKey) {
+            if (confirm(`Bạn có chắc muốn xóa tài khoản "${accKey}"? Tất cả giao dịch của tài khoản này cũng sẽ bị xóa vĩnh viễn!`)) {
+                delete appState.accounts[accKey];
+                appState.trades = appState.trades.filter(t => t.account !== accKey);
+                if (appState.activeAccount === accKey) {
+                    appState.activeAccount = Object.keys(appState.accounts)[0] || 'Live';
+                }
+                await saveAppState();
+                updateAccountSelectors();
+                renderAccountManageList();
+                switchTab(appState.currentTab);
+            }
+        }
+
+        async function addNewAccount() {
+            const accName = document.getElementById('newAccountName').value.trim() || 'Custom';
             const accBal = Number(document.getElementById('newAccountBalance').value) || 50000;
-            appState.accounts[accName] = { name: accName, balance: accBal };
-            saveAppState();
+            const key = accName.replace(/\s+/g, '_');
+            appState.accounts[key] = { name: accName, balance: accBal };
+            appState.activeAccount = key;
+            await saveAppState();
+            updateAccountSelectors();
             alert(`Đã thêm tài khoản ${accName} ($${accBal.toLocaleString()}) thành công!`);
             closeAccountModal();
+            switchTab(appState.currentTab);
+        }
+
+        function applyFilters() {
+            const accVal = document.getElementById('filterAccount').value;
+            appState.activeAccount = accVal === 'all' ? Object.keys(appState.accounts)[0] : accVal;
+            saveAppState();
+            updateAccountSelectors();
+            switchTab(appState.currentTab);
         }
 
         function renderWinrateAnalysis() {
@@ -1975,22 +2096,23 @@
             document.getElementById('winSumTotal').innerText = wins;
             document.getElementById('winSumRate').innerText = wrVal.toFixed(0) + '%';
             const grossProfit = filteredTrades.filter(t => t.pnl > 0).reduce((s,t)=>s+Number(t.pnl),0);
-            document.getElementById('winSumAmount').innerText = formatMoney(grossProfit);
-            document.getElementById('winSumMax').innerText = wins > 0 ? formatMoney(Math.max(...filteredTrades.filter(t => t.pnl > 0).map(t=>Number(t.pnl)))) : '$0';
+            document.getElementById('winSumAmount').innerText = formatPnlString(grossProfit);
+            document.getElementById('winSumMax').innerText = wins > 0 ? formatPnlString(Math.max(...filteredTrades.filter(t => t.pnl > 0).map(t=>Number(t.pnl)))) : '$0';
 
             document.getElementById('lossSumTotal').innerText = losses;
             document.getElementById('lossSumRate').innerText = (total > 0 ? ((losses/total)*100) : 0).toFixed(0) + '%';
             const grossLoss = Math.abs(filteredTrades.filter(t => t.pnl < 0).reduce((s,t)=>s+Number(t.pnl),0));
-            document.getElementById('lossSumAmount').innerText = formatMoney(-grossLoss);
-            document.getElementById('lossSumMax').innerText = losses > 0 ? formatMoney(Math.min(...filteredTrades.filter(t => t.pnl < 0).map(t=>Number(t.pnl)))) : '$0';
+            document.getElementById('lossSumAmount').innerText = formatPnlString(-grossLoss);
+            document.getElementById('lossSumMax').innerText = losses > 0 ? formatPnlString(Math.min(...filteredTrades.filter(t => t.pnl < 0).map(t=>Number(t.pnl)))) : '$0';
 
             const ctx = document.getElementById('winrateCumulativeChart').getContext('2d');
             if (chartInstances['wrCumul']) chartInstances['wrCumul'].destroy();
             
+            const sorted = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
             let cumSum = 0;
             let labels = ['Bắt đầu'];
             let dataPoints = [0];
-            filteredTrades.forEach((t, i) => {
+            sorted.forEach((t, i) => {
                 cumSum += Number(t.pnl);
                 labels.push(`#${i+1}`);
                 dataPoints.push(cumSum);
@@ -2011,7 +2133,12 @@
             });
         }
 
-        // Time Analysis: By Day Of Week synchronized 100% with filtered trades
+        function getTimeAnalysisWinRateColorClass(wr) {
+            if (wr >= 70) return 'text-emerald-600 font-bold';
+            if (wr >= 50) return 'text-amber-600 font-bold';
+            return 'text-rose-600 font-bold';
+        }
+
         function renderByDayOfWeek() {
             const days = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
             let counts = new Array(7).fill(0);
@@ -2056,13 +2183,14 @@
                 const w = wins[idx];
                 const wr = c > 0 ? (w / c) * 100 : 0;
                 const netClass = net > 0 ? 'text-emerald-600 font-bold' : (net < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+                const wrClass = getTimeAnalysisWinRateColorClass(wr);
                 tbodyHtml += `
                     <tr>
                         <td class="p-3.5 font-bold">${dayName}</td>
-                        <td class="p-3.5 ${netClass}">${formatMoney(net)}</td>
+                        <td class="p-3.5 ${netClass}">${formatPnlString(net)}</td>
                         <td class="p-3.5">${c}</td>
                         <td class="p-3.5">${(c * 1.0).toFixed(1)}</td>
-                        <td class="p-3.5">${wr.toFixed(1)}%</td>
+                        <td class="p-3.5 ${wrClass}">${wr.toFixed(1)}%</td>
                     </tr>
                 `;
             });
@@ -2070,10 +2198,10 @@
         }
 
         function renderWeeklyBreakdown() {
-            const weeks = ['W29', 'W30'];
-            let counts = [0, 0];
-            let profits = [0, 0];
-            let wins = [0, 0];
+            const weeks = ['W29', 'W30', 'W31', 'W32'];
+            let counts = new Array(4).fill(0);
+            let profits = new Array(4).fill(0);
+            let wins = new Array(4).fill(0);
 
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach(t => {
@@ -2106,10 +2234,13 @@
             const net0 = profits[0];
             const net0Class = net0 > 0 ? 'text-emerald-600 font-bold' : (net0 < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
             const wr0 = counts[0] > 0 ? (wins[0]/counts[0])*100 : 0;
+            const wr0Class = getTimeAnalysisWinRateColorClass(wr0);
 
             document.getElementById('weeklyTableBody').innerHTML = `
-                <tr><td class="p-3.5 font-bold">W29</td><td class="p-3.5 ${net0Class}">${formatMoney(net0)}</td><td class="p-3.5">${counts[0]}</td><td class="p-3.5">${(counts[0]*1.0).toFixed(1)}</td><td class="p-3.5">${wr0.toFixed(1)}%</td></tr>
-                <tr><td class="p-3.5 font-bold">W30</td><td class="p-3.5 text-slate-800">${formatMoney(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5">0.0%</td></tr>
+                <tr><td class="p-3.5 font-bold">W29</td><td class="p-3.5 ${net0Class}">${formatPnlString(net0)}</td><td class="p-3.5">${counts[0]}</td><td class="p-3.5">${(counts[0]*1.0).toFixed(1)}</td><td class="p-3.5 ${wr0Class}">${wr0.toFixed(1)}%</td></tr>
+                <tr><td class="p-3.5 font-bold">W30</td><td class="p-3.5 text-slate-800">${formatPnlString(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5 text-slate-400">0.0%</td></tr>
+                <tr><td class="p-3.5 font-bold">W31</td><td class="p-3.5 text-slate-800">${formatPnlString(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5 text-slate-400">0.0%</td></tr>
+                <tr><td class="p-3.5 font-bold">W32</td><td class="p-3.5 text-slate-800">${formatPnlString(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5 text-slate-400">0.0%</td></tr>
             `;
         }
 
@@ -2155,13 +2286,14 @@
                 const w = wins[idx];
                 const wr = c > 0 ? (w / c) * 100 : 0;
                 const netClass = net > 0 ? 'text-emerald-600 font-bold' : (net < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+                const wrClass = c > 0 ? getTimeAnalysisWinRateColorClass(wr) : 'text-slate-400';
                 monthlyTableHTML += `
                     <tr>
                         <td class="p-3.5 font-bold">${m}</td>
-                        <td class="p-3.5 ${c > 0 ? netClass : 'text-slate-800'}">${c > 0 ? formatMoney(net) : formatMoney(0)}</td>
+                        <td class="p-3.5 ${c > 0 ? netClass : 'text-slate-800'}">${c > 0 ? formatPnlString(net) : formatPnlString(0)}</td>
                         <td class="p-3.5">${c}</td>
                         <td class="p-3.5">${(c * 1.0).toFixed(1)}</td>
-                        <td class="p-3.5">${wr.toFixed(1)}%</td>
+                        <td class="p-3.5 ${wrClass}">${wr.toFixed(1)}%</td>
                     </tr>
                 `;
             });
@@ -2219,21 +2351,18 @@
                 const w = wins[i];
                 const wr = c > 0 ? (w / c) * 100 : 0;
                 const netClass = net > 0 ? 'text-emerald-600 font-bold' : (net < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+                const wrClass = c > 0 ? getTimeAnalysisWinRateColorClass(wr) : 'text-slate-400';
                 macroTableHTML += `
                     <tr>
                         <td class="p-3.5 font-bold">${mac}</td>
-                        <td class="p-3.5 ${c > 0 ? netClass : 'text-slate-800'}">${c > 0 ? formatMoney(net) : formatMoney(0)}</td>
+                        <td class="p-3.5 ${c > 0 ? netClass : 'text-slate-800'}">${c > 0 ? formatPnlString(net) : formatPnlString(0)}</td>
                         <td class="p-3.5">${c}</td>
                         <td class="p-3.5">${(c * 1.0).toFixed(1)}</td>
-                        <td class="p-3.5">${wr.toFixed(1)}%</td>
+                        <td class="p-3.5 ${wrClass}">${wr.toFixed(1)}%</td>
                     </tr>
                 `;
             });
             document.getElementById('macroTableBody').innerHTML = macroTableHTML;
-        }
-
-        function applyFilters() {
-            switchTab(appState.currentTab);
         }
 
         window.onload = function() {
