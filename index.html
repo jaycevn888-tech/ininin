@@ -33,7 +33,6 @@
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
 
-    <!-- HEADER (Cố định sticky top-0 z-40) -->
     <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm flex-shrink-0">
         <div class="flex items-center space-x-6">
             <div class="flex items-center space-x-2">
@@ -46,7 +45,6 @@
                 </div>
             </div>
 
-            <!-- Account Switcher & Actions -->
             <div class="hidden md:flex items-center space-x-3 pl-4 border-l border-slate-200">
                 <div class="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -72,7 +70,6 @@
                 <i class="fa-solid fa-plus"></i> <span>Giao dịch mới</span>
             </button>
             
-            <!-- Auth Section -->
             <div id="authContainer" class="flex items-center space-x-3 pl-4 border-l border-slate-200">
                 <div id="loggedOutView" class="flex items-center space-x-2">
                     <button onclick="signInWithGoogle()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
@@ -96,8 +93,7 @@
         </div>
     </header>
 
-    <div class="flex-1 flex overflow-hidden">
-        <!-- SIDEBAR (Cố định sticky top-16 h-[calc(100vh-4rem)]) -->
+    <div class="flex-1 flex overflow-hidden relative">
         <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto z-30 flex-shrink-0 select-none hidden lg:flex">
             <div class="py-6 px-4 space-y-8">
                 <div>
@@ -140,9 +136,7 @@
             </div>
         </aside>
 
-        <!-- CONTENT VIEWPORT -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 p-6 h-[calc(100vh-4rem)]">
-            <!-- GLOBAL FILTER BAR -->
             <div class="bg-white rounded-xl border border-slate-200 p-3.5 mb-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="flex items-center space-x-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
@@ -150,13 +144,13 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-500 font-medium">Tài khoản:</span>
-                        <select id="filterAccount" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
+                        <select id="filterAccount" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
                             <option value="all">Tất cả tài khoản</option>
                         </select>
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-500 font-medium">Setup:</span>
-                        <select id="filterSetup" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
+                        <select id="filterSetup" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
                             <option value="all">Tất cả Setup</option>
                             <option value="Continuation">Continuation</option>
                             <option value="Reversal">Reversal</option>
@@ -165,7 +159,7 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xs text-slate-500 font-medium">Tag:</span>
-                        <select id="filterTag" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
+                        <select id="filterTag" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
                             <option value="all">Tất cả Tag</option>
                             <option value="Discipline">Discipline</option>
                             <option value="FOMC">FOMC</option>
@@ -173,9 +167,10 @@
                         </select>
                     </div>
                     <div class="flex items-center space-x-2 bg-slate-50 border border-slate-300 px-2.5 py-1.5 rounded-lg text-xs">
-                        <input type="date" id="filterDateFrom" onchange="applyFilters()" class="bg-transparent text-slate-700 focus:outline-none font-medium">
+                        <input type="date" id="filterDateFrom" class="bg-transparent text-slate-700 focus:outline-none font-medium">
                         <span class="text-slate-400">đến</span>
-                        <input type="date" id="filterDateTo" onchange="applyFilters()" class="bg-transparent text-slate-700 focus:outline-none font-medium">
+                        <input type="date" id="filterDateTo" class="bg-transparent text-slate-700 focus:outline-none font-medium">
+                        <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded ml-1 transition">Áp dụng</button>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 text-xs font-semibold text-slate-600">
@@ -184,9 +179,7 @@
                 </div>
             </div>
 
-            <!-- OVERVIEW TAB -->
             <div id="tab-overview" class="space-y-6 tab-content">
-                <!-- Month Navigator & Monthly Profit Badge Combined -->
                 <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                     <div class="flex items-center space-x-3">
                         <select id="overviewYear" onchange="changeOverviewYear(this.value)" class="text-xs font-bold bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500">
@@ -201,17 +194,14 @@
                             <span id="overviewMonthTitle" class="text-xs font-bold px-3 text-slate-800">Tháng 7 năm 2026</span>
                             <button onclick="shiftMonth(1)" class="w-7 h-7 flex items-center justify-center rounded hover:bg-white text-slate-600 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                         </div>
-                    </div>
-                    <!-- Monthly Profit Badge next to month controls -->
-                    <div id="headerMonthProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                        <span id="headerMonthProfitText">+ Tháng này: +$0</span>
+                        <div id="headerMonthProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            <span id="headerMonthProfitText">+ Tháng này: +$0</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Calendar Grid & Side Stats -->
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    <!-- Calendar Grid (Cols 1-8) - Monday to Sunday -->
                     <div class="xl:col-span-8 bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
                         <div class="grid grid-cols-8 gap-2 mb-3 text-center">
                             <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ HAI</div>
@@ -223,15 +213,12 @@
                             <div class="text-[11px] font-bold text-slate-400 uppercase text-rose-500">CHỦ NHẬT</div>
                             <div class="text-[11px] font-bold text-blue-600 uppercase bg-blue-50 rounded py-0.5">HÀNG TUẦN</div>
                         </div>
-                        <div id="calendarGrid" class="grid grid-cols-8 gap-2">
-                            <!-- Populated dynamically -->
-                        </div>
+                        <div id="calendarGrid" class="grid grid-cols-8 gap-2"></div>
                         <div class="mt-4 pt-3 border-t border-slate-100 text-center text-[11px] text-slate-400 italic">
                             * Nhấp chuột vào bất cứ ô ngày nào để chỉnh sửa trực tiếp thông số tại <strong>DAILY PLANNER</strong>
                         </div>
                     </div>
 
-                    <!-- Right Stats Columns (Cols 9-12) -->
                     <div class="xl:col-span-4 space-y-6">
                         <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
                             <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
@@ -278,7 +265,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 1: 4 Main Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
                             <div class="flex justify-between items-center mb-2">
@@ -319,7 +305,6 @@
                             </div>
                         </div>
 
-                        <!-- Win Rate Card with Doughnut Chart, Center Text, and Footer Win/Loss Counts -->
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
                             <div class="w-full flex justify-between items-center mb-1">
                                 <span class="text-xs font-bold text-slate-600 uppercase">WIN RATE</span>
@@ -328,7 +313,7 @@
                             <div class="relative w-28 h-28 mx-auto my-1 flex items-center justify-center">
                                 <canvas id="winRateGaugeCanvas"></canvas>
                                 <div class="absolute inset-0 flex flex-col items-center justify-center pt-2 pointer-events-none">
-                                    <span class="text-lg font-black" id="gaugeWinRate">0%</span>
+                                    <span class="text-lg font-black text-slate-800" id="gaugeWinRate">0%</span>
                                     <span class="text-[9px] font-bold text-slate-400 uppercase">TỶ LỆ THẮNG</span>
                                 </div>
                             </div>
@@ -339,7 +324,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: Expectancy, Top Symbol, Top Setup, Top Tag -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                             <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">EXPECTANCY PER TRADE</span><span class="text-xs font-black text-emerald-600" id="cardExpectancy">$0</span></div>
@@ -372,7 +356,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 3: Duration, Intraday, Streak, Drawdown -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">DURATION ANALYSIS</span>
@@ -406,7 +389,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 4: Recovery Factor, Consistency, Sharpe, Sortino -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">RECOVERY FACTOR</span>
@@ -415,8 +397,8 @@
                         </div>
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">CONSISTENCY</span>
-                            <div class="text-2xl font-black text-slate-800 my-2" id="cardConsistency">0.00</div>
-                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full w-full" id="consistencyBar"></div></div>
+                            <div class="text-2xl font-black text-slate-800 my-2" id="cardConsistency">0.00%</div>
+                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full transition-all duration-300" id="consistencyBar" style="width: 0%"></div></div>
                         </div>
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                             <span class="text-xs font-bold text-slate-600 uppercase block">SHARPE RATIO</span>
@@ -432,7 +414,6 @@
                 </div>
             </div>
 
-            <!-- DAILY PLANNER TAB -->
             <div id="tab-planner" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                     <div>
@@ -454,10 +435,7 @@
                     </div>
                 </div>
 
-                <!-- Monday to Sunday Week Strip -->
-                <div class="grid grid-cols-1 sm:grid-cols-7 gap-3" id="plannerWeekStrip">
-                    <!-- Populated dynamically -->
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-7 gap-3" id="plannerWeekStrip"></div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
@@ -523,7 +501,6 @@
                 </div>
             </div>
 
-            <!-- TRADE LOG TAB -->
             <div id="tab-tradelog" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                     <div>
@@ -550,7 +527,7 @@
                                     <th class="p-3.5">P&L ($)</th>
                                     <th class="p-3.5">Lợi nhuận (%)</th>
                                     <th class="p-3.5">Volume</th>
-                                    <th class="p-3.5">Fees</th>
+                                    <th class="p-3.5">Entry Timeframe</th>
                                     <th class="p-3.5">Entry Price</th>
                                     <th class="p-3.5">Close Price</th>
                                     <th class="p-3.5">Giờ vào lệnh</th>
@@ -569,7 +546,6 @@
                 </div>
             </div>
 
-            <!-- WINRATE ANALYSIS TAB -->
             <div id="tab-winrate" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
                     <h2 class="text-sm font-bold text-slate-900 mb-1">WINRATE & PERFORMANCE ANALYSIS</h2>
@@ -580,7 +556,7 @@
                             <div class="relative w-40 h-40 flex items-center justify-center">
                                 <canvas id="winRateLargeGauge"></canvas>
                                 <div class="absolute inset-0 flex flex-col items-center justify-center pt-4 pointer-events-none">
-                                    <span class="text-2xl font-black" id="largeGaugeVal">0%</span>
+                                    <span class="text-2xl font-black text-slate-800" id="largeGaugeVal">0%</span>
                                     <span class="text-[10px] font-bold text-slate-400 uppercase">WINNING RATE</span>
                                 </div>
                             </div>
@@ -613,10 +589,26 @@
                 </div>
             </div>
 
-            <!-- BY DAY OF WEEK TAB -->
             <div id="tab-byday" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <h2 class="text-sm font-bold text-slate-900">BY DAY OF WEEK ANALYSIS</h2>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900">BY DAY OF WEEK ANALYSIS</h2>
+                            <p class="text-xs text-slate-500 mt-0.5" id="byDaySubtitle">Phân tích hiệu suất theo từng ngày trong tuần cụ thể.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="shiftByDayWeek(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Tuần trước</span>
+                            </button>
+                            <div id="byDayWeekTotalProfit" class="text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50">
+                                <span>TỔNG TUẦN: $0</span>
+                            </div>
+                            <button onclick="shiftByDayWeek(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                <span>Tuần sau</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
                             <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY DAY OF THE WEEK</h3>
@@ -640,17 +632,33 @@
                 </div>
             </div>
 
-            <!-- WEEKLY BREAKDOWN TAB -->
             <div id="tab-weekly" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <h2 class="text-sm font-bold text-slate-900">WEEKLY BREAKDOWN ANALYSIS</h2>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900">WEEKLY BREAKDOWN ANALYSIS</h2>
+                            <p class="text-xs text-slate-500 mt-0.5" id="weeklySubTitle">Phân tích tuần trong tháng đang chọn.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="shiftWeeklyMonth(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Tháng trước</span>
+                            </button>
+                            <div id="weeklyMonthTotalProfit" class="text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50">
+                                <span>TỔNG THÁNG: $0</span>
+                            </div>
+                            <button onclick="shiftWeeklyMonth(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                <span>Tháng sau</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY WEEK OF THE YEAR</h3>
+                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY WEEK</h3>
                             <div class="h-64"><canvas id="weekTradesChart"></canvas></div>
                         </div>
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY WEEK OF THE YEAR</h3>
+                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY WEEK</h3>
                             <div class="h-64"><canvas id="weekPerfChart"></canvas></div>
                         </div>
                     </div>
@@ -667,7 +675,6 @@
                 </div>
             </div>
 
-            <!-- MONTHLY RESULTS TAB -->
             <div id="tab-monthly" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
                     <div class="flex items-center justify-between">
@@ -699,7 +706,6 @@
                 </div>
             </div>
 
-            <!-- HOURLY PERFORMANCE TAB -->
             <div id="tab-hourly" class="space-y-6 tab-content hidden">
                 <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
                     <h2 class="text-sm font-bold text-slate-900">HOURLY PERFORMANCE (22 ICT MACROS)</h2>
@@ -728,7 +734,6 @@
         </main>
     </div>
 
-    <!-- TRADE MODAL -->
     <div id="tradeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8 animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -743,9 +748,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Tài khoản ghi nhận</label>
-                        <select id="modalAccount" onchange="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <!-- Populated dynamically -->
-                        </select>
+                        <select id="modalAccount" onchange="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500"></select>
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Ngày Giao Dịch</label>
@@ -767,11 +770,11 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Giá vào lệnh (Entry Price) *</label>
+                        <label class="font-bold text-slate-700 block mb-1">Giá vào lệnh (Entry Price)</label>
                         <input type="number" step="any" id="modalEntry" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20000">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Giá đóng lệnh (Close Price) *</label>
+                        <label class="font-bold text-slate-700 block mb-1">Giá đóng lệnh (Close Price)</label>
                         <input type="number" step="any" id="modalClose" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20100">
                     </div>
                 </div>
@@ -781,13 +784,20 @@
                         <input type="number" step="any" id="modalVolume" value="1" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Phí giao dịch (Fees)</label>
-                        <input type="number" step="any" id="modalFees" value="10" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <label class="font-bold text-slate-700 block mb-1">Khung thời gian vào lệnh (Entry Timeframe)</label>
+                        <select id="modalFees" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="30s">30 giây (30s)</option>
+                            <option value="1m">1 phút (1m)</option>
+                            <option value="5m">5 phút (5m)</option>
+                            <option value="10m">10 phút (10m)</option>
+                            <option value="30m">30 phút (30m)</option>
+                            <option value="1h+">1 giờ trở lên (1h+)</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Kết quả P&L ($)</label>
+                        <label class="font-bold text-slate-700 block mb-1">Kết quả P&L ($) *</label>
                         <input type="number" step="any" id="modalPnl" oninput="calculateReturnFromPnl()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1161.6">
                     </div>
                     <div>
@@ -827,15 +837,18 @@
                 </div>
                 <div>
                     <label class="font-bold text-slate-700 block mb-1">Nội dung ghi chú về lệnh (Trade Content / Notes)</label>
-                    <textarea id="modalNotes" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Nhập lý do vào lệnh..."></textarea>
+                    <textarea id="modalNotes" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500 whitespace-pre-wrap" placeholder="Nhập lý do vào lệnh..."></textarea>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Thời lượng nắm giữ (Duration)</label>
                         <select id="modalDuration" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="10m">Ngắn hạn (10m)</option>
-                            <option value="30m">Trung hạn (30m)</option>
-                            <option value="1h">Dài hạn (1h+)</option>
+                            <option value="30s">30s</option>
+                            <option value="1m">1m</option>
+                            <option value="5m">5m</option>
+                            <option value="10m">10m</option>
+                            <option value="30m">30m</option>
+                            <option value="1h">1h+</option>
                         </select>
                     </div>
                     <div>
@@ -878,7 +891,6 @@
                             Chọn tệp <input type="file" id="modalFileUploader" accept="image/*" multiple class="hidden" onchange="handleMultipleFileSelect(event)">
                         </label>
                     </div>
-                    <!-- Instant Image Previews -->
                     <div id="imagePreviewContainer" class="hidden mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
                         <span class="text-[11px] font-bold text-slate-500 block mb-2">Ảnh đã đính kèm (<span id="imageCountBadge">0</span>):</span>
                         <div id="imagePreviewsList" class="flex flex-wrap gap-2"></div>
@@ -892,7 +904,6 @@
         </div>
     </div>
 
-    <!-- ACCOUNT MODAL -->
     <div id="accountModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -913,23 +924,19 @@
         </div>
     </div>
 
-    <!-- ACCOUNT MANAGE MODAL -->
     <div id="accountManageModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
                 <h3 class="font-bold text-sm tracking-wide">QUẢN LÝ TÀI KHOẢN GIAO DỊCH</h3>
                 <button onclick="closeAccountManageModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-6 space-y-4 text-xs max-h-[70vh] overflow-y-auto" id="accountManageList">
-                <!-- Populated dynamically -->
-            </div>
+            <div class="p-6 space-y-4 text-xs max-h-[70vh] overflow-y-auto" id="accountManageList"></div>
             <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end">
                 <button onclick="closeAccountManageModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- LIGHTBOX MODAL -->
     <div id="lightboxModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4" onclick="closeLightbox()">
         <div class="relative max-w-4xl max-h-[90vh]">
             <img id="lightboxImage" src="" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain border border-slate-700" alt="Trade Screenshot">
@@ -939,7 +946,6 @@
         </div>
     </div>
 
-    <!-- FIREBASE & CORE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { 
@@ -953,11 +959,7 @@
             getFirestore, 
             doc, 
             setDoc, 
-            getDoc, 
-            collection, 
-            getDocs, 
-            deleteDoc, 
-            onSnapshot 
+            getDoc 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -982,10 +984,6 @@
         window.doc = doc;
         window.setDoc = setDoc;
         window.getDoc = getDoc;
-        window.collection = collection;
-        window.getDocs = getDocs;
-        window.deleteDoc = deleteDoc;
-        window.onSnapshot = onSnapshot;
 
         window.signInWithGoogle = async function() {
             try {
@@ -1037,7 +1035,7 @@
         let appState = {
             currentTab: 'overview',
             currentYear: realNow.getFullYear(),
-            currentMonth: realNow.getMonth(), // 0-11
+            currentMonth: realNow.getMonth(),
             plannerDate: realNow.toISOString().split('T')[0],
             activeAccount: 'Live',
             accounts: {
@@ -1054,13 +1052,13 @@
                     entry: 29274,
                     close: 29095,
                     volume: 1,
-                    fees: 10,
+                    fees: '10m',
                     pnl: 1161.6,
                     returnPct: 1.16,
                     setup: 'Reversal',
                     tag: 'Discipline',
                     confluences: ['SMT', 'FVG'],
-                    notes: 'Lệnh này cả ngày nó chạy nhiều rồi nhưng vẫn còn 1 cái PWL và khi mở cửa giá đi len sau đó tạo một cái PO3 thì sau khi nó phản ứng đóng nến giảm với cái BPR-M1 Thì entry',
+                    notes: 'Lệnh này cả ngày nó chạy nhiều rồi nhưng vẫn còn 1 cái PWL và khi mở cửa giá đi len sau đó tạo một cái PO3',
                     duration: '10m',
                     hour: '09:30-09:40',
                     tvLink: 'https://www.tradingview.com/x/example',
@@ -1069,6 +1067,10 @@
             ],
             planners: {}
         };
+
+        let filterApplied = false;
+        let byDayCurrentWeekStart = new Date(); // Tracks week for By Day Of Week tab
+        let weeklyMonthCurrent = { year: realNow.getFullYear(), month: realNow.getMonth() }; // Tracks month for Weekly Breakdown tab
 
         window.syncDataFromCloud = async function(uid) {
             try {
@@ -1113,7 +1115,7 @@
         }
 
         function loadAppState() {
-            const saved = localStorage.getItem('jacooodevn_persistent_state_v30');
+            const saved = localStorage.getItem('jacooodevn_persistent_state_v35');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -1121,8 +1123,13 @@
                 } catch (e) { console.error(e); }
             }
             const todayStr = realNow.toISOString().split('T')[0];
-            document.getElementById('filterDateFrom').value = todayStr;
-            document.getElementById('filterDateTo').value = todayStr;
+            if (!document.getElementById('filterDateFrom').value) {
+                document.getElementById('filterDateFrom').value = `${appState.currentYear}-${String(appState.currentMonth+1).padStart(2,'0')}-01`;
+            }
+            if (!document.getElementById('filterDateTo').value) {
+                const lastDay = new Date(appState.currentYear, appState.currentMonth + 1, 0).toISOString().split('T')[0];
+                document.getElementById('filterDateTo').value = lastDay;
+            }
             document.getElementById('modalDate').value = todayStr;
             document.getElementById('overviewYear').value = appState.currentYear;
             updateAccountSelectors();
@@ -1134,7 +1141,7 @@
         };
 
         function saveAppStateLocally() {
-            localStorage.setItem('jacooodevn_persistent_state_v30', JSON.stringify(appState));
+            localStorage.setItem('jacooodevn_persistent_state_v35', JSON.stringify(appState));
         }
 
         function saveAppState() {
@@ -1198,7 +1205,7 @@
 
         function resetDemoData() {
             if (confirm('Khôi phục dữ liệu mẫu Demo?')) {
-                localStorage.removeItem('jacooodevn_persistent_state_v30');
+                localStorage.removeItem('jacooodevn_persistent_state_v35');
                 location.reload();
             }
         }
@@ -1226,13 +1233,27 @@
             const accFilter = document.getElementById('filterAccount')?.value || 'all';
             const setupFilter = document.getElementById('filterSetup')?.value || 'all';
             const tagFilter = document.getElementById('filterTag')?.value || 'all';
+            const dateFrom = document.getElementById('filterDateFrom')?.value;
+            const dateTo = document.getElementById('filterDateTo')?.value;
 
             return appState.trades.filter(t => {
                 if (accFilter !== 'all' && t.account !== accFilter) return false;
                 if (setupFilter !== 'all' && t.setup !== setupFilter) return false;
                 if (tagFilter !== 'all' && t.tag !== tagFilter) return false;
+                if (filterApplied && dateFrom && t.date < dateFrom) return false;
+                if (filterApplied && dateTo && t.date > dateTo) return false;
                 return true;
             });
+        }
+
+        function applyFiltersLive() {
+            saveAppState();
+            switchTab(appState.currentTab);
+        }
+
+        function applyFilters() {
+            filterApplied = true;
+            switchTab(appState.currentTab);
         }
 
         function renderOverview() {
@@ -1251,7 +1272,7 @@
             const lastDayOfMonth = new Date(year, month + 1, 0);
             
             let startDayOfWeek = firstDayOfMonth.getDay(); 
-            startDayOfWeek = (startDayOfWeek === 0) ? 6 : startDayOfWeek - 1; // Monday start (0=Mon, 6=Sun)
+            startDayOfWeek = (startDayOfWeek === 0) ? 6 : startDayOfWeek - 1;
 
             const totalDaysInMonth = lastDayOfMonth.getDate();
             const prevMonthLastDate = new Date(year, month, 0).getDate();
@@ -1321,7 +1342,6 @@
                     `;
                 });
 
-                // Weekly Total Column (8th column)
                 const isWeekLoss = weekPnl < 0;
                 const isWeekWin = weekPnl > 0;
                 const weekBgClass = isWeekLoss ? 'bg-rose-50/40 border-rose-200 text-rose-600' : (isWeekWin ? 'bg-emerald-50/40 border-emerald-200 text-emerald-600' : 'bg-white border-slate-200 text-slate-700');
@@ -1335,7 +1355,6 @@
                 `;
             });
 
-            // Dynamic Monthly Profit Badge
             const badgeEl = document.getElementById('headerMonthProfit');
             const badgeTextEl = document.getElementById('headerMonthProfitText');
             badgeTextEl.innerText = `${monthTotalProfit >= 0 ? '+' : ''} Tháng này: ${formatPnlString(monthTotalProfit)}`;
@@ -1368,30 +1387,27 @@
             document.getElementById('gaugeWinCount').innerText = winTrades;
             document.getElementById('gaugeLossCount').innerText = lossTrades;
 
-            // Points calculation based on Price Distance (Entry vs Close)
             let totalPoints = 0;
             let maxWinPts = 0;
             let maxLossPts = 0;
             filteredTrades.forEach(t => {
                 const entry = Number(t.entry) || 0;
                 const close = Number(t.close) || 0;
-                const dist = Math.abs(close - entry);
-                const pts = Number(t.pnl) >= 0 ? dist : -dist;
+                const pts = Math.abs(close - entry);
                 totalPoints += pts;
                 if (pts > maxWinPts) maxWinPts = pts;
-                if (pts < maxLossPts) maxLossPts = pts;
+                if (pts > maxLossPts && Number(t.pnl) < 0) maxLossPts = pts;
             });
             const avgPts = totalTrades > 0 ? totalPoints / totalTrades : 0;
-            const isMonthNegative = netProfit < 0;
 
-            document.getElementById('stat-avg-pts').innerText = `${isMonthNegative && avgPts > 0 ? '-' : ''}${avgPts.toFixed(1)} pts`;
+            document.getElementById('stat-avg-pts').innerText = `${avgPts.toFixed(1)} pts`;
             document.getElementById('stat-max-win-pts').innerText = `${maxWinPts.toFixed(1)} pts`;
-            document.getElementById('stat-max-loss-pts').innerText = `${maxLossPts.toFixed(1)} pts`;
+            document.getElementById('stat-max-loss-pts').innerText = `-${maxLossPts.toFixed(1)} pts`;
             document.getElementById('stat-total-pts').innerText = `${totalPoints.toFixed(1)} pts`;
 
             renderCumulativeChart();
             renderWinRateGauge(winRateVal, winTrades, lossTrades);
-            renderAdvancedCards(netProfit, winTrades, lossTrades, totalTrades, accBalance);
+            renderAdvancedCards(filteredTrades, netProfit, winTrades, lossTrades, totalTrades, accBalance);
         }
 
         function shiftMonth(dir) {
@@ -1424,13 +1440,11 @@
             let cumSum = 0;
             let labels = ['Bắt đầu'];
             let dataPoints = [0];
-            let pointColors = ['#2563eb'];
 
             sorted.forEach((t, i) => {
                 cumSum += Number(t.pnl);
                 labels.push(`#${i+1}`);
                 dataPoints.push(cumSum);
-                pointColors.push(Number(t.pnl) >= 0 ? '#10b981' : '#f43f5e');
             });
 
             chartInstances['cumul'] = new Chart(ctx, {
@@ -1439,13 +1453,12 @@
                     labels: labels,
                     datasets: [{
                         data: dataPoints,
-                        borderColor: '#2563eb',
                         borderWidth: 2,
                         tension: 0.1,
                         pointRadius: 4,
-                        pointBackgroundColor: pointColors,
                         segment: {
-                            borderColor: ctx => ctx.p1.parsed.y < ctx.p0.parsed.y ? '#f43f5e' : '#2563eb'
+                            borderColor: ctx => ctx.p1.parsed.y < ctx.p0.parsed.y ? '#f43f5e' : '#2563eb',
+                            backgroundColor: ctx => ctx.p1.parsed.y < ctx.p0.parsed.y ? '#f43f5e' : '#2563eb'
                         }
                     }]
                 },
@@ -1494,21 +1507,13 @@
             }
         }
 
-        function renderAdvancedCards(netProfit, wins, losses, totalTrades, balance) {
-            const filteredTrades = getFilteredTrades();
-            
-            // 1. Validation & Filter out invalid trades with entry/close = 0 or missing
-            const validTrades = filteredTrades.filter(t => {
-                const entry = Number(t.entry);
-                const close = Number(t.close);
-                return !isNaN(entry) && !isNaN(close) && entry > 0 && close > 0;
-            });
-
-            const validWins = validTrades.filter(t => Number(t.pnl) > 0);
-            const validLosses = validTrades.filter(t => Number(t.pnl) < 0);
+        function renderAdvancedCards(filteredTrades, netProfit, wins, losses, totalTrades, balance) {
+            const validWins = filteredTrades.filter(t => Number(t.pnl) > 0);
+            const validLosses = filteredTrades.filter(t => Number(t.pnl) < 0);
 
             const grossProfit = validWins.reduce((s,t) => s + Number(t.pnl), 0);
             const grossLoss = Math.abs(validLosses.reduce((s,t) => s + Number(t.pnl), 0));
+            
             const pf = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '99.00' : '0.00');
 
             document.getElementById('advancedProfitFactor').innerText = pf;
@@ -1517,20 +1522,24 @@
 
             const avgWin = validWins.length > 0 ? grossProfit / validWins.length : 0;
             const avgLoss = validLosses.length > 0 ? grossLoss / validLosses.length : 0;
+            
             const rr = avgLoss > 0 ? (avgWin / avgLoss).toFixed(2) : 'N/A';
             document.getElementById('advancedRR').innerText = rr;
             document.getElementById('advAvgWin').innerText = `Avg Win: $${avgWin.toFixed(0)}`;
             document.getElementById('advAvgLoss').innerText = `Avg Loss: -$${avgLoss.toFixed(0)}`;
 
-            const expectancy = totalTrades > 0 ? netProfit / totalTrades : 0;
+            const winRate = totalTrades > 0 ? wins / totalTrades : 0;
+            const lossRate = totalTrades > 0 ? losses / totalTrades : 0;
+            const expectancy = (winRate * avgWin) - (lossRate * avgLoss);
+            
             document.getElementById('cardExpectancy').innerText = formatPnlString(expectancy);
-            document.getElementById('cardExpWinRate').innerText = totalTrades > 0 ? ((wins/totalTrades)*100).toFixed(0) + '%' : '0%';
+            document.getElementById('cardExpWinRate').innerText = totalTrades > 0 ? (winRate*100).toFixed(0) + '%' : '0%';
             document.getElementById('cardExpAvgWin').innerText = `+$${avgWin.toFixed(0)}`;
 
             if (totalTrades > 0) {
-                document.getElementById('cardTopSymbolContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>NQ</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopSetupContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>REVERSAL</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>DISCIPLINE</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${((wins/totalTrades)*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopSymbolContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>NQ</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopSetupContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>REVERSAL</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>DISCIPLINE</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
             }
 
             document.getElementById('cardTotalTradesCount').innerText = totalTrades;
@@ -1538,27 +1547,28 @@
             document.getElementById('cardLongestLoss').innerText = `${losses} trades`;
             document.getElementById('cardCurrentStreak').innerText = `${wins} wins`;
 
-            // 2. Accurate Peak-to-Trough Drawdown calculation from Cumulative P&L series
             const sortedByDate = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
             let peak = 0;
             let maxDD = 0;
             let runningSum = 0;
             sortedByDate.forEach(t => {
                 runningSum += Number(t.pnl);
-                if (runningSum > peak) {
-                    peak = runningSum;
-                }
+                if (runningSum > peak) peak = runningSum;
                 const dd = peak - runningSum;
-                if (dd > maxDD) {
-                    maxDD = dd;
-                }
+                if (dd > maxDD) maxDD = dd;
             });
 
             document.getElementById('cardPeakVal').innerText = formatPnlString(Math.max(0, peak));
             document.getElementById('cardMaxDD').innerText = maxDD > 0 ? `-$${maxDD.toLocaleString()}` : `$0`;
 
-            document.getElementById('cardRecoveryFactor').innerText = grossLoss > 0 ? (netProfit / grossLoss).toFixed(2) : (netProfit > 0 ? '15.00' : '0.00');
-            document.getElementById('cardConsistency').innerText = '1.00';
+            const recoveryFactor = maxDD > 0 ? (netProfit / maxDD).toFixed(2) : (netProfit > 0 ? '15.00' : '0.00');
+            document.getElementById('cardRecoveryFactor').innerText = recoveryFactor;
+
+            const maxWinTrade = validWins.length > 0 ? Math.max(...validWins.map(t => Number(t.pnl))) : 0;
+            const consistencyPct = netProfit > 0 ? Math.min(100, (maxWinTrade / netProfit) * 100) : 0;
+            document.getElementById('cardConsistency').innerText = consistencyPct.toFixed(2) + '%';
+            document.getElementById('consistencyBar').style.width = Math.min(100, Math.max(0, consistencyPct)) + '%';
+
             document.getElementById('cardSharpe').innerText = '6.95';
             document.getElementById('cardSortino').innerText = 'N/A';
         }
@@ -1782,9 +1792,9 @@
             const accKey = document.getElementById('modalAccount').value;
             const accBalance = appState.accounts[accKey]?.balance || 100000;
 
-            let diff = type === 'LONG' ? (close - entry) : (entry - close);
-            let pnl = diff * vol * 20; 
             if (entry && close) {
+                let diff = type === 'LONG' ? (close - entry) : (entry - close);
+                let pnl = diff * vol * 20; 
                 document.getElementById('modalPnl').value = pnl.toFixed(2);
                 const returnPct = (pnl / accBalance) * 100;
                 document.getElementById('modalReturnPct').value = returnPct.toFixed(2);
@@ -1806,65 +1816,86 @@
             tbody.innerHTML = '';
             
             const filteredTrades = getFilteredTrades();
-            filteredTrades.forEach((t) => {
-                const pnlFormatted = formatPnlString(t.pnl);
-                const pnlColor = Number(t.pnl) > 0 ? 'text-emerald-600 font-bold' : (Number(t.pnl) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
-                const retColor = Number(t.returnPct) > 0 ? 'text-emerald-600 font-bold' : (Number(t.returnPct) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+            
+            const grouped = {};
+            filteredTrades.forEach(t => {
+                if (!grouped[t.date]) grouped[t.date] = [];
+                grouped[t.date].push(t);
+            });
+
+            const sortedDates = Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a));
+
+            sortedDates.forEach(dateStr => {
+                const dayTrades = grouped[dateStr];
                 
-                let confluencesHtml = '';
-                if (t.confluences && t.confluences.length > 0) {
-                    confluencesHtml = `<div class="flex flex-wrap gap-1 max-w-[140px]">` + t.confluences.map(c => `<span class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded text-[9px] font-bold">${c}</span>`).join('') + `</div>`;
-                } else {
-                    confluencesHtml = `<span class="text-slate-400 text-[10px]">--</span>`;
-                }
-
-                let imgs = t.chartImgs || (t.chartImg ? [t.chartImg] : []);
-                let chartThumbHtml = '';
-                if (imgs.length > 0) {
-                    chartThumbHtml = `
-                        <div class="flex items-center justify-center space-x-1 cursor-pointer" onclick="openLightbox('${imgs[0]}')">
-                            <i class="fa-regular fa-image text-emerald-600 text-sm"></i>
-                            <span class="text-[10px] font-bold text-slate-500">(${imgs.length})</span>
-                        </div>
-                    `;
-                } else {
-                    chartThumbHtml = `<span class="text-slate-300 text-[10px]">--</span>`;
-                }
-
-                const notesText = t.notes || '';
-
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                        <td class="p-3.5 font-bold text-slate-800">${t.symbol}</td>
-                        <td class="p-3.5 ${pnlColor}">${pnlFormatted}</td>
-                        <td class="p-3.5 ${retColor}">${Number(t.returnPct)>=0?'+':''}${t.returnPct}%</td>
-                        <td class="p-3.5">${t.volume}</td>
-                        <td class="p-3.5">$${t.fees}</td>
-                        <td class="p-3.5">${t.entry}</td>
-                        <td class="p-3.5">${t.close}</td>
-                        <td class="p-3.5 text-slate-500">${t.date} ${t.hour}</td>
-                        <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration}</span></td>
-                        <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
-                        <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-semibold">${t.tag}</span></td>
-                        <td class="p-3.5">${confluencesHtml}</td>
-                        <td class="p-3.5 max-w-xs text-slate-600">
-                            <div class="whitespace-pre-wrap break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
-                        </td>
-                        <td class="p-3.5 text-center">${chartThumbHtml}</td>
-                        <td class="p-3.5 text-center space-x-2">
-                            <button onclick="editTrade('${t.id}')" class="text-slate-400 hover:text-blue-600"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="deleteTrade('${t.id}')" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash text-xs"></i></button>
+                    <tr class="bg-slate-100/80 font-bold text-slate-700">
+                        <td colspan="15" class="py-2 px-3.5 text-xs border-y border-slate-200">
+                            <i class="fa-regular fa-calendar text-blue-600 mr-1.5"></i> ${dateStr} (${dayTrades.length} lệnh)
                         </td>
                     </tr>
                 `;
+
+                dayTrades.forEach((t) => {
+                    const pnlFormatted = formatPnlString(t.pnl);
+                    const pnlColor = Number(t.pnl) > 0 ? 'text-emerald-600 font-bold' : (Number(t.pnl) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+                    const retColor = Number(t.returnPct) > 0 ? 'text-emerald-600 font-bold' : (Number(t.returnPct) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+                    
+                    let confluencesHtml = '';
+                    if (t.confluences && t.confluences.length > 0) {
+                        confluencesHtml = `<div class="flex flex-wrap gap-1 max-w-[140px]">` + t.confluences.map(c => `<span class="bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded text-[9px] font-bold">${c}</span>`).join('') + `</div>`;
+                    } else {
+                        confluencesHtml = `<span class="text-slate-400 text-[10px]">--</span>`;
+                    }
+
+                    let imgs = t.chartImgs || (t.chartImg ? [t.chartImg] : []);
+                    let chartThumbHtml = '';
+                    if (imgs.length > 0) {
+                        chartThumbHtml = `
+                            <div class="flex items-center justify-center space-x-1 cursor-pointer" onclick="openLightbox('${imgs[0]}')">
+                                <i class="fa-regular fa-image text-emerald-600 text-sm"></i>
+                                <span class="text-[10px] font-bold text-slate-500">(${imgs.length})</span>
+                            </div>
+                        `;
+                    } else {
+                        chartThumbHtml = `<span class="text-slate-300 text-[10px]">--</span>`;
+                    }
+
+                    const notesText = t.notes || '';
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                            <td class="p-3.5 font-bold text-slate-800">${t.symbol}</td>
+                            <td class="p-3.5 ${pnlColor}">${pnlFormatted}</td>
+                            <td class="p-3.5 ${retColor}">${Number(t.returnPct)>=0?'+':''}${t.returnPct}%</td>
+                            <td class="p-3.5">${t.volume}</td>
+                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono text-[11px] font-bold">${t.fees}</span></td>
+                            <td class="p-3.5">${t.entry}</td>
+                            <td class="p-3.5">${t.close}</td>
+                            <td class="p-3.5 text-slate-500">${t.hour}</td>
+                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration}</span></td>
+                            <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
+                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-semibold">${t.tag}</span></td>
+                            <td class="p-3.5">${confluencesHtml}</td>
+                            <td class="p-3.5 max-w-xs text-slate-600">
+                                <div class="whitespace-pre-wrap break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
+                            </td>
+                            <td class="p-3.5 text-center">${chartThumbHtml}</td>
+                            <td class="p-3.5 text-center space-x-2">
+                                <button onclick="editTrade('${t.id}')" class="text-slate-400 hover:text-blue-600"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="deleteTrade('${t.id}')" class="text-slate-400 hover:text-rose-600"><i class="fa-solid fa-trash text-xs"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
             });
         }
 
         function exportCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,Symbol,P%26L,Volume,Entry,Close,Date\n";
+            let csvContent = "data:text/csv;charset=utf-8,Symbol,P%26L,Volume,EntryTimeframe,Entry,Close,Date\n";
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach(t => {
-                csvContent += `${t.symbol},${t.pnl},${t.volume},${t.entry},${t.close},${t.date}\n`;
+                csvContent += `${t.symbol},${t.pnl},${t.volume},${t.fees},${t.entry},${t.close},${t.date}\n`;
             });
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
@@ -1893,7 +1924,7 @@
                     document.getElementById('modalEntry').value = t.entry;
                     document.getElementById('modalClose').value = t.close;
                     document.getElementById('modalVolume').value = t.volume;
-                    document.getElementById('modalFees').value = t.fees;
+                    document.getElementById('modalFees').value = t.fees || '10m';
                     document.getElementById('modalPnl').value = t.pnl;
                     document.getElementById('modalReturnPct').value = t.returnPct;
                     document.getElementById('modalSetup').value = t.setup;
@@ -1927,12 +1958,9 @@
         async function saveTradeRecord() {
             const saveBtn = document.getElementById('saveTradeBtn');
             try {
-                const entryVal = Number(document.getElementById('modalEntry').value);
-                const closeVal = Number(document.getElementById('modalClose').value);
-                
-                // 3. Validation: Prevent saving if Entry or Close is missing or zero
-                if (isNaN(entryVal) || isNaN(closeVal) || entryVal <= 0 || closeVal <= 0) {
-                    alert("Vui lòng nhập đầy đủ và chính xác Giá vào lệnh (Entry Price) và Giá đóng lệnh (Close Price) lớn hơn 0!");
+                const pnlVal = Number(document.getElementById('modalPnl').value);
+                if (isNaN(pnlVal)) {
+                    alert("Vui lòng nhập kết quả P&L ($) hợp lệ!");
                     return;
                 }
 
@@ -1946,9 +1974,10 @@
                 const date = document.getElementById('modalDate').value;
                 const symbol = document.getElementById('modalSymbol').value;
                 const type = document.getElementById('modalType').value;
+                const entry = Number(document.getElementById('modalEntry').value) || 0;
+                const close = Number(document.getElementById('modalClose').value) || 0;
                 const volume = Number(document.getElementById('modalVolume').value);
-                const fees = Number(document.getElementById('modalFees').value);
-                const pnl = Number(document.getElementById('modalPnl').value);
+                const fees = document.getElementById('modalFees').value;
                 const returnPct = Number(document.getElementById('modalReturnPct').value);
                 const setup = document.getElementById('modalSetup').value;
                 const tag = document.getElementById('modalTag').value;
@@ -1962,7 +1991,7 @@
 
                 const chartImgs = currentModalImages.length > 0 ? currentModalImages : ['https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart'];
 
-                const tradeObj = { id, account, date, symbol, type, entry: entryVal, close: closeVal, volume, fees, pnl, returnPct, setup, tag, confluences, notes, duration, hour, tvLink, chartImgs };
+                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, tag, confluences, notes, duration, hour, tvLink, chartImgs };
 
                 const existingIdx = appState.trades.findIndex(t => t.id === id);
                 if (existingIdx >= 0) {
@@ -1971,7 +2000,8 @@
                     appState.trades.unshift(tradeObj);
                 }
 
-                await saveAppState();
+                saveAppStateLocally();
+                await saveCloudData();
                 closeTradeModal();
                 switchTab(appState.currentTab);
             } catch (err) {
@@ -1989,7 +2019,8 @@
         async function deleteTrade(id) {
             if (confirm('Bạn có chắc muốn xóa giao dịch này?')) {
                 appState.trades = appState.trades.filter(t => t.id !== id);
-                await saveAppState();
+                saveAppStateLocally();
+                await saveCloudData();
                 switchTab(appState.currentTab);
             }
         }
@@ -2034,7 +2065,8 @@
                 if (appState.activeAccount === accKey) {
                     appState.activeAccount = Object.keys(appState.accounts)[0] || 'Live';
                 }
-                await saveAppState();
+                saveAppStateLocally();
+                await saveCloudData();
                 updateAccountSelectors();
                 renderAccountManageList();
                 switchTab(appState.currentTab);
@@ -2047,18 +2079,11 @@
             const key = accName.replace(/\s+/g, '_');
             appState.accounts[key] = { name: accName, balance: accBal };
             appState.activeAccount = key;
-            await saveAppState();
+            saveAppStateLocally();
+            await saveCloudData();
             updateAccountSelectors();
             alert(`Đã thêm tài khoản ${accName} ($${accBal.toLocaleString()}) thành công!`);
             closeAccountModal();
-            switchTab(appState.currentTab);
-        }
-
-        function applyFilters() {
-            const accVal = document.getElementById('filterAccount').value;
-            appState.activeAccount = accVal === 'all' ? Object.keys(appState.accounts)[0] : accVal;
-            saveAppState();
-            updateAccountSelectors();
             switchTab(appState.currentTab);
         }
 
@@ -2133,6 +2158,7 @@
             });
         }
 
+        // Color coding: < 50% red, 50%-69% amber, >= 70% emerald
         function getTimeAnalysisWinRateColorClass(wr) {
             if (wr >= 70) return 'text-emerald-600 font-bold';
             if (wr >= 50) return 'text-amber-600 font-bold';
@@ -2140,53 +2166,92 @@
         }
 
         function renderByDayOfWeek() {
-            const days = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
+            const daysNames = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
+            
+            // Calculate Monday of current selected week for By Day Of Week tab
+            const monday = new Date(byDayCurrentWeekStart);
+            const dayOfWeek = monday.getDay();
+            const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            monday.setDate(monday.getDate() + diffToMonday);
+
+            let weekDates = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                weekDates.push(d);
+            }
+
+            const startDateStr = weekDates[0].toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+            const endDateStr = weekDates[6].toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+            document.getElementById('byDaySubtitle').innerText = `Tuần từ ${startDateStr} đến ${endDateStr}`;
+
             let counts = new Array(7).fill(0);
             let profits = new Array(7).fill(0);
             let wins = new Array(7).fill(0);
+            let weekTotalProfit = 0;
 
             const filteredTrades = getFilteredTrades();
-            filteredTrades.forEach(t => {
-                const d = new Date(t.date);
-                let jsDay = d.getDay(); // 0 is Sunday, 1 is Monday
-                let idx = jsDay === 0 ? 6 : jsDay - 1;
-                counts[idx]++;
-                profits[idx] += Number(t.pnl);
-                if (Number(t.pnl) > 0) wins[idx]++;
+
+            let labelsWithDates = weekDates.map((d, idx) => {
+                const dStrFormatted = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+                return `${daysNames[idx]} (${dStrFormatted})`;
             });
+
+            weekDates.forEach((d, idx) => {
+                const dIso = d.toISOString().split('T')[0];
+                const dayTrades = filteredTrades.filter(t => t.date === dIso);
+                counts[idx] = dayTrades.length;
+                const dayPnl = dayTrades.reduce((s, t) => s + Number(t.pnl), 0);
+                profits[idx] = dayPnl;
+                weekTotalProfit += dayPnl;
+                const dayWins = dayTrades.filter(t => Number(t.pnl) > 0).length;
+                wins[idx] = dayWins;
+            });
+
+            const totalProfitEl = document.getElementById('byDayWeekTotalProfit');
+            totalProfitEl.innerHTML = `<span>TỔNG TUẦN: ${formatPnlString(weekTotalProfit)}</span>`;
+            if (weekTotalProfit > 0) {
+                totalProfitEl.className = 'text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-emerald-50 text-emerald-600 border-emerald-200';
+            } else if (weekTotalProfit < 0) {
+                totalProfitEl.className = 'text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-rose-50 text-rose-600 border-rose-200';
+            } else {
+                totalProfitEl.className = 'text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50 text-slate-700 border-slate-200';
+            }
 
             if (chartInstances['dayTrades']) chartInstances['dayTrades'].destroy();
             chartInstances['dayTrades'] = new Chart(document.getElementById('dayTradesChart').getContext('2d'), {
                 type: 'bar',
-                data: { labels: days, datasets: [{ data: counts, backgroundColor: '#818cf8', borderRadius: 6 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                data: { labels: labelsWithDates, datasets: [{ data: counts, backgroundColor: '#818cf8', borderRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { font: { size: 10 } } } } }
             });
 
             if (chartInstances['dayPerf']) chartInstances['dayPerf'].destroy();
             chartInstances['dayPerf'] = new Chart(document.getElementById('dayPerfChart').getContext('2d'), {
                 type: 'bar',
                 data: { 
-                    labels: days, 
+                    labels: labelsWithDates, 
                     datasets: [{ 
                         data: profits, 
                         backgroundColor: profits.map(p => p >= 0 ? '#10b981' : '#f43f5e'), 
                         borderRadius: 6 
                     }] 
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { font: { size: 10 } } } } }
             });
 
             let tbodyHtml = '';
-            days.forEach((dayName, idx) => {
+            weekDates.forEach((d, idx) => {
                 const net = profits[idx];
                 const c = counts[idx];
                 const w = wins[idx];
                 const wr = c > 0 ? (w / c) * 100 : 0;
                 const netClass = net > 0 ? 'text-emerald-600 font-bold' : (net < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
-                const wrClass = getTimeAnalysisWinRateColorClass(wr);
+                const wrClass = c > 0 ? getTimeAnalysisWinRateColorClass(wr) : 'text-slate-400';
+                const dStrFormatted = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                
                 tbodyHtml += `
                     <tr>
-                        <td class="p-3.5 font-bold">${dayName}</td>
+                        <td class="p-3.5 font-bold">${daysNames[idx]} <span class="text-[11px] font-normal text-slate-400">(${dStrFormatted})</span></td>
                         <td class="p-3.5 ${netClass}">${formatPnlString(net)}</td>
                         <td class="p-3.5">${c}</td>
                         <td class="p-3.5">${(c * 1.0).toFixed(1)}</td>
@@ -2197,23 +2262,94 @@
             document.getElementById('dayOfWeekTableBody').innerHTML = tbodyHtml;
         }
 
+        function shiftByDayWeek(dir) {
+            byDayCurrentWeekStart.setDate(byDayCurrentWeekStart.getDate() + (dir * 7));
+            renderByDayOfWeek();
+        }
+
         function renderWeeklyBreakdown() {
-            const weeks = ['W29', 'W30', 'W31', 'W32'];
-            let counts = new Array(4).fill(0);
-            let profits = new Array(4).fill(0);
-            let wins = new Array(4).fill(0);
+            const year = weeklyMonthCurrent.year;
+            const month = weeklyMonthCurrent.month;
+            const monthNames = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+            
+            document.getElementById('weeklySubTitle').innerText = `Phân tích các tuần thuộc ${monthNames[month]} năm ${year}`;
+
+            // Generate all Mondays of weeks intersecting with this month
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+
+            // Find Monday of the week containing firstDay
+            let startMon = new Date(firstDay);
+            let dayOfWeek = startMon.getDay();
+            let diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+            startMon.setDate(startMon.getDate() + diff);
+
+            let weeksList = [];
+            let currMon = new Date(startMon);
+
+            while (currMon <= lastDay) {
+                let monCopy = new Date(currMon);
+                let sunCopy = new Date(currMon);
+                sunCopy.setDate(sunCopy.getDate() + 6);
+
+                weeksList.push({ start: monCopy, end: sunCopy });
+                currMon.setDate(currMon.getDate() + 7);
+            }
 
             const filteredTrades = getFilteredTrades();
-            filteredTrades.forEach(t => {
-                counts[0]++;
-                profits[0] += Number(t.pnl);
-                if (Number(t.pnl) > 0) wins[0]++;
+            let weekLabels = [];
+            let weekCounts = [];
+            let weekProfits = [];
+            let tableHtml = '';
+            let monthTotalProfit = 0;
+
+            weeksList.forEach((w, idx) => {
+                const wName = `Tuần ${idx + 1} (${w.start.getDate()}/${w.start.getMonth()+1} - ${w.end.getDate()}/${w.end.getMonth()+1})`;
+                weekLabels.push(`Tuần ${idx + 1}`);
+
+                let wTrades = filteredTrades.filter(t => {
+                    const tDate = new Date(t.date);
+                    return tDate >= w.start && tDate <= w.end;
+                });
+
+                let wCount = wTrades.length;
+                let wPnl = wTrades.reduce((s, t) => s + Number(t.pnl), 0);
+                monthTotalProfit += wPnl;
+                let wWins = wTrades.filter(t => Number(t.pnl) > 0).length;
+                let wWr = wCount > 0 ? (wWins / wCount) * 100 : 0;
+                let wVol = wTrades.reduce((s, t) => s + Number(t.volume || 1), 0);
+
+                weekCounts.push(wCount);
+                weekProfits.push(wPnl);
+
+                const netClass = wPnl > 0 ? 'text-emerald-600 font-bold' : (wPnl < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
+                const wrClass = wCount > 0 ? getTimeAnalysisWinRateColorClass(wWr) : 'text-slate-400';
+
+                tableHtml += `
+                    <tr>
+                        <td class="p-3.5 font-bold">${wName}</td>
+                        <td class="p-3.5 ${netClass}">${formatPnlString(wPnl)}</td>
+                        <td class="p-3.5">${wCount}</td>
+                        <td class="p-3.5">${wVol.toFixed(1)}</td>
+                        <td class="p-3.5 ${wrClass}">${wWr.toFixed(1)}%</td>
+                    </tr>
+                `;
             });
+
+            const monthTotalEl = document.getElementById('weeklyMonthTotalProfit');
+            monthTotalEl.innerHTML = `<span>TỔNG THÁNG: ${formatPnlString(monthTotalProfit)}</span>`;
+            if (monthTotalProfit > 0) {
+                monthTotalEl.className = 'text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-emerald-50 text-emerald-600 border-emerald-200';
+            } else if (monthTotalProfit < 0) {
+                monthTotalEl.className = 'text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-rose-50 text-rose-600 border-rose-200';
+            } else {
+                monthTotalEl.className = 'text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50 text-slate-700 border-slate-200';
+            }
 
             if (chartInstances['weekTrades']) chartInstances['weekTrades'].destroy();
             chartInstances['weekTrades'] = new Chart(document.getElementById('weekTradesChart').getContext('2d'), {
                 type: 'bar',
-                data: { labels: weeks, datasets: [{ data: counts, backgroundColor: '#818cf8', borderRadius: 6 }] },
+                data: { labels: weekLabels, datasets: [{ data: weekCounts, backgroundColor: '#818cf8', borderRadius: 6 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
 
@@ -2221,27 +2357,24 @@
             chartInstances['weekPerf'] = new Chart(document.getElementById('weekPerfChart').getContext('2d'), {
                 type: 'bar',
                 data: { 
-                    labels: weeks, 
+                    labels: weekLabels, 
                     datasets: [{ 
-                        data: profits, 
-                        backgroundColor: profits.map(p => p >= 0 ? '#10b981' : '#f43f5e'), 
+                        data: weekProfits, 
+                        backgroundColor: weekProfits.map(p => p >= 0 ? '#10b981' : '#f43f5e'), 
                         borderRadius: 6 
                     }] 
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
 
-            const net0 = profits[0];
-            const net0Class = net0 > 0 ? 'text-emerald-600 font-bold' : (net0 < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
-            const wr0 = counts[0] > 0 ? (wins[0]/counts[0])*100 : 0;
-            const wr0Class = getTimeAnalysisWinRateColorClass(wr0);
+            document.getElementById('weeklyTableBody').innerHTML = tableHtml;
+        }
 
-            document.getElementById('weeklyTableBody').innerHTML = `
-                <tr><td class="p-3.5 font-bold">W29</td><td class="p-3.5 ${net0Class}">${formatPnlString(net0)}</td><td class="p-3.5">${counts[0]}</td><td class="p-3.5">${(counts[0]*1.0).toFixed(1)}</td><td class="p-3.5 ${wr0Class}">${wr0.toFixed(1)}%</td></tr>
-                <tr><td class="p-3.5 font-bold">W30</td><td class="p-3.5 text-slate-800">${formatPnlString(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5 text-slate-400">0.0%</td></tr>
-                <tr><td class="p-3.5 font-bold">W31</td><td class="p-3.5 text-slate-800">${formatPnlString(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5 text-slate-400">0.0%</td></tr>
-                <tr><td class="p-3.5 font-bold">W32</td><td class="p-3.5 text-slate-800">${formatPnlString(0)}</td><td class="p-3.5">0</td><td class="p-3.5">0.0</td><td class="p-3.5 text-slate-400">0.0%</td></tr>
-            `;
+        function shiftWeeklyMonth(dir) {
+            weeklyMonthCurrent.month += dir;
+            if (weeklyMonthCurrent.month > 11) { weeklyMonthCurrent.month = 0; weeklyMonthCurrent.year++; }
+            if (weeklyMonthCurrent.month < 0) { weeklyMonthCurrent.month = 11; weeklyMonthCurrent.year--; }
+            renderWeeklyBreakdown();
         }
 
         function renderMonthlyResults() {
@@ -2249,12 +2382,14 @@
             let counts = new Array(12).fill(0);
             let profits = new Array(12).fill(0);
             let wins = new Array(12).fill(0);
+            let volumes = new Array(12).fill(0);
 
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach(t => {
-                const m = new Date(t.date).getMonth(); // 0-11
+                const m = new Date(t.date).getMonth();
                 counts[m]++;
                 profits[m] += Number(t.pnl);
+                volumes[m] += Number(t.volume || 1);
                 if (Number(t.pnl) > 0) wins[m]++;
             });
 
@@ -2292,7 +2427,7 @@
                         <td class="p-3.5 font-bold">${m}</td>
                         <td class="p-3.5 ${c > 0 ? netClass : 'text-slate-800'}">${c > 0 ? formatPnlString(net) : formatPnlString(0)}</td>
                         <td class="p-3.5">${c}</td>
-                        <td class="p-3.5">${(c * 1.0).toFixed(1)}</td>
+                        <td class="p-3.5">${volumes[idx].toFixed(1)}</td>
                         <td class="p-3.5 ${wrClass}">${wr.toFixed(1)}%</td>
                     </tr>
                 `;
@@ -2312,6 +2447,7 @@
             let counts = new Array(22).fill(0);
             let profits = new Array(22).fill(0);
             let wins = new Array(22).fill(0);
+            let volumes = new Array(22).fill(0);
 
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach(t => {
@@ -2319,6 +2455,7 @@
                 if (idx >= 0) {
                     counts[idx]++;
                     profits[idx] += Number(t.pnl);
+                    volumes[idx] += Number(t.volume || 1);
                     if (Number(t.pnl) > 0) wins[idx]++;
                 }
             });
@@ -2357,7 +2494,7 @@
                         <td class="p-3.5 font-bold">${mac}</td>
                         <td class="p-3.5 ${c > 0 ? netClass : 'text-slate-800'}">${c > 0 ? formatPnlString(net) : formatPnlString(0)}</td>
                         <td class="p-3.5">${c}</td>
-                        <td class="p-3.5">${(c * 1.0).toFixed(1)}</td>
+                        <td class="p-3.5">${volumes[i].toFixed(1)}</td>
                         <td class="p-3.5 ${wrClass}">${wr.toFixed(1)}%</td>
                     </tr>
                 `;
