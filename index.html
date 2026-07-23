@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jacooodevn - Analytics Journal</title>
+    <title>jacooodevn - Analytics Journal Cloud</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -33,6 +33,7 @@
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
 
+    <!-- HEADER -->
     <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm flex-shrink-0">
         <div class="flex items-center space-x-6">
             <div class="flex items-center space-x-2">
@@ -69,6 +70,9 @@
             <button id="headerNewTradeBtn" onclick="openTradeModal()" class="hidden bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center space-x-1.5">
                 <i class="fa-solid fa-plus"></i> <span>Giao dịch mới</span>
             </button>
+            <button id="headerBatchImportBtn" onclick="openBatchModal()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow-md shadow-indigo-500/20 transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-file-arrow-up"></i> <span>Nhập hàng loạt</span>
+            </button>
             
             <div id="authContainer" class="flex items-center space-x-3 pl-4 border-l border-slate-200">
                 <div id="loggedOutView" class="flex items-center space-x-2">
@@ -93,7 +97,9 @@
         </div>
     </header>
 
+    <!-- BODY LAYOUT -->
     <div class="flex-1 flex overflow-hidden relative">
+        <!-- SIDEBAR -->
         <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto z-30 flex-shrink-0 select-none hidden lg:flex">
             <div class="py-6 px-4 space-y-8">
                 <div>
@@ -132,11 +138,13 @@
                 </div>
             </div>
             <div class="p-4 border-t border-slate-200 text-center bg-white flex-shrink-0">
-                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v3.5 Secure Cloud</span>
+                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v3.7 Secure Cloud</span>
             </div>
         </aside>
 
+        <!-- MAIN CONTENT AREA -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 p-6 h-[calc(100vh-4rem)]">
+            <!-- LOGIN REQUIRED BANNER -->
             <div id="loginRequiredBanner" class="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center my-auto max-w-lg mx-auto shadow-sm">
                 <div class="w-14 h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                     <i class="fa-solid fa-shield-halved"></i>
@@ -149,6 +157,7 @@
                 </button>
             </div>
 
+            <!-- DASHBOARD CONTAINER -->
             <div id="mainDashboardContent" class="hidden space-y-6">
                 <!-- GLOBAL FILTER BAR -->
                 <div class="bg-white rounded-xl border border-slate-200 p-3.5 shadow-sm flex flex-wrap items-center justify-between gap-4">
@@ -169,15 +178,6 @@
                                 <option value="Continuation">Continuation</option>
                                 <option value="Reversal">Reversal</option>
                                 <option value="Breakout">Breakout</option>
-                            </select>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs text-slate-500 font-medium">Tag:</span>
-                            <select id="filterTag" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
-                                <option value="all">Tất cả Tag</option>
-                                <option value="Discipline">Discipline</option>
-                                <option value="FOMC">FOMC</option>
-                                <option value="High Impact">High Impact</option>
                             </select>
                         </div>
                         <div class="flex items-center space-x-2 bg-slate-50 border border-slate-300 px-2.5 py-1.5 rounded-lg text-xs">
@@ -270,49 +270,52 @@
                         </div>
                     </div>
 
-                    <!-- NEW ADVANCED SYSTEM ANALYTICS SECTION -->
+                    <!-- UNIFIED ADVANCED SYSTEM ANALYTICS SECTION (PLACED RIGHT UNDERNEATH KPI ROW) -->
                     <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
-                        <div class="pb-3 border-b border-slate-100">
-                            <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
-                                <i class="fa-solid fa-brain text-purple-600"></i><span>ADVANCED SYSTEM ANALYTICS (EMOTIONS, ERRORS & WINRATE METRICS)</span>
-                            </h3>
-                            <p class="text-[11px] text-slate-500 mt-0.5">Top 3 frequent emotional states, top 3 error causes, and top 3 winrate indicators derived from logged trades.</p>
+                        <div class="pb-3 border-b border-slate-100 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
+                                    <i class="fa-solid fa-brain text-purple-600"></i><span>ADVANCED SYSTEM ANALYTICS (TOP 5 EMOTIONS, ERRORS & WINRATE METRICS)</span>
+                                </h3>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Top 5 frequent emotional states, top 5 error causes, and top 5 winrate indicators derived from logged trades.</p>
+                            </div>
+                            <span class="text-[10px] font-bold text-purple-600 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-lg">AI ANALYTICS</span>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Top 3 Emotional States -->
+                            <!-- Top 5 Emotional States -->
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 3 EMOTIONAL STATES</span>
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 EMOTIONAL STATES</span>
                                     <i class="fa-solid fa-face-smile text-purple-500"></i>
                                 </div>
                                 <div id="topEmotionsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa có dữ liệu</div>
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu cảm xúc</div>
                                 </div>
                             </div>
-                            <!-- Top 3 Error Causes -->
+                            <!-- Top 5 Error Causes -->
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 3 ERROR CAUSES</span>
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 ERROR CAUSES</span>
                                     <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
                                 </div>
                                 <div id="topErrorsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa có dữ liệu</div>
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu lỗi</div>
                                 </div>
                             </div>
-                            <!-- Top 3 Winrate Metrics/Indicators -->
+                            <!-- Top 5 Winrate Metrics/Indicators -->
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 3 WINRATE METRICS</span>
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 WINRATE METRICS</span>
                                     <i class="fa-solid fa-award text-emerald-500"></i>
                                 </div>
                                 <div id="topWinrateMetricsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa có dữ liệu</div>
+                                    <div class="text-slate-400 italic">Chưa đủ dữ liệu winrate</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ADVANCED METRICS -->
+                    <!-- ADVANCED METRICS EVALUATION -->
                     <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                             <div>
@@ -406,7 +409,7 @@
                                 </div>
                             </div>
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP TAG</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
+                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP METRIC</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
                                 <div id="cardTopTagContainer" class="space-y-1 text-xs">
                                     <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
                                     <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
@@ -573,6 +576,9 @@
                             <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-semibold transition flex items-center space-x-1.5 border border-slate-200">
                                 <i class="fa-solid fa-file-arrow-down"></i> <span>Xuất file CSV</span>
                             </button>
+                            <button onclick="openBatchModal()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-2 rounded-lg font-semibold transition flex items-center space-x-1.5 border border-indigo-200">
+                                <i class="fa-solid fa-file-arrow-up"></i> <span>Nhập hàng loạt</span>
+                            </button>
                             <button onclick="openTradeModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow transition flex items-center space-x-1.5">
                                 <i class="fa-solid fa-plus"></i> <span>Thêm giao dịch mới</span>
                             </button>
@@ -593,7 +599,9 @@
                                         <th class="p-3.5">Giờ vào lệnh</th>
                                         <th class="p-3.5">Duration</th>
                                         <th class="p-3.5">Setup</th>
-                                        <th class="p-3.5">Tags</th>
+                                        <th class="p-3.5">Reasons (Win/Loss)</th>
+                                        <th class="p-3.5">Hold Mgmt</th>
+                                        <th class="p-3.5">Emotional State</th>
                                         <th class="p-3.5">Confluences</th>
                                         <th class="p-3.5">Nội dung ghi chú</th>
                                         <th class="p-3.5 text-center">Chart</th>
@@ -800,6 +808,7 @@
         </main>
     </div>
 
+    <!-- MODAL: ADD / EDIT TRADE -->
     <div id="tradeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8 animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -871,7 +880,7 @@
                         <input type="number" step="any" id="modalReturnPct" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1.16">
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Trading Setup / Chiến lược</label>
                         <select id="modalSetup" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
@@ -880,17 +889,9 @@
                             <option value="Breakout">Breakout (Phá vỡ)</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="font-bold text-slate-700 block mb-1">Tags / Tâm lý kỷ luật</label>
-                        <select id="modalTag" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="Discipline">Discipline (Kỷ luật)</option>
-                            <option value="FOMC">FOMC</option>
-                            <option value="High Impact">High Impact</option>
-                        </select>
-                    </div>
                 </div>
 
-                <!-- NEW CATEGORIZED FIELDS (ENGLISH) -->
+                <!-- CATEGORIZED FIELDS (ENGLISH) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Loss Reasons (SL Categories)</label>
@@ -947,7 +948,7 @@
                 </div>
 
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                    <label class="font-bold text-slate-700 block mb-1">Emotional State (Mental Evaluation)</label>
+                    <label class="font-bold text-slate-700 block mb-1">Emotional State Evaluation (Mental)</label>
                     <select id="modalEmotionalState" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                         <option value="">-- Select Emotional State --</option>
                         <optgroup label="Positive Emotions">
@@ -1036,7 +1037,7 @@
                     <label class="font-bold text-slate-700 block mb-1">Link biểu đồ TradingView</label>
                     <input type="text" id="modalTvLink" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500 mb-3" placeholder="e.g. https://www.tradingview.com/x/...">
                     
-                    <label class="font-bold text-slate-700 block mb-1">Ảnh chụp lệnh (Hỗ trợ từ 2 ảnh trở lên)</label>
+                    <label class="font-bold text-slate-700 block mb-1">Ảnh chụp lệnh (Hỗ trợ nhiều ảnh)</label>
                     <div class="flex items-center space-x-2">
                         <input type="text" id="modalChartImgInput" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Dán URL ảnh hoặc chọn tệp">
                         <button type="button" onclick="addChartImageFromInput()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2.5 rounded-lg text-xs transition">Thêm URL</button>
@@ -1053,6 +1054,52 @@
             <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3">
                 <button type="button" onclick="closeTradeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
                 <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch Cloud</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: BATCH IMPORT (QUIZLET STYLE) -->
+    <div id="batchModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden my-8 animate-in fade-in zoom-in duration-200">
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-file-arrow-up text-indigo-400"></i>
+                    <h3 class="font-bold text-sm tracking-wide">NHẬP GIAO DỊCH HÀNG LOẠT (BATCH IMPORT)</h3>
+                </div>
+                <button onclick="closeBatchModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs">
+                <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl space-y-2 text-indigo-900">
+                    <span class="font-bold block"><i class="fa-solid fa-circle-info mr-1"></i> Hướng dẫn định dạng (Mỗi dòng 1 lệnh):</span>
+                    <p class="text-[11px] leading-relaxed font-mono bg-white p-2.5 rounded border border-indigo-100">
+                        Date, Symbol, Type, Entry, Close, Volume, PnL, Setup, LossReason, WinReason, HoldMgmt, ErrorCategory, EmotionalState<br>
+                        Ví dụ: 2026-07-22, NQ, LONG, 20000, 20100, 1, 500, Reversal, , correct bias, hold_discipline, , Confident
+                    </p>
+                </div>
+                <div>
+                    <label class="font-bold text-slate-700 block mb-1">Dán dữ liệu thô vào đây (Raw Multi-line Data):</label>
+                    <textarea id="batchTextArea" rows="6" class="w-full font-mono bg-slate-50 border border-slate-300 rounded-lg p-3 text-xs focus:outline-none focus:border-indigo-500" placeholder="2026-07-22, NQ, LONG, 20000, 20100, 1, 500, Reversal..."></textarea>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button onclick="previewBatchData()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-lg transition shadow">Xem trước (Preview)</button>
+                </div>
+                <div id="batchPreviewSection" class="hidden space-y-3 pt-3 border-t border-slate-200">
+                    <span class="font-bold text-slate-800 block">Xem trước danh sách parse thành công (<span id="batchCountBadge">0</span> lệnh):</span>
+                    <div class="overflow-x-auto max-h-48 border border-slate-200 rounded-xl">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-[10px] font-bold text-slate-600 uppercase">
+                                    <th class="p-2">Date</th><th class="p-2">Symbol</th><th class="p-2">Type</th><th class="p-2">PnL</th><th class="p-2">Setup</th><th class="p-2">Emotion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batchPreviewTableBody" class="divide-y divide-slate-100 text-[11px]"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3">
+                <button type="button" onclick="closeBatchModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
+                <button type="button" id="saveBatchBtn" onclick="saveBatchRecords()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow transition">Lưu tất cả lên Cloud</button>
             </div>
         </div>
     </div>
@@ -1092,7 +1139,7 @@
         </div>
     </div>
 
-    <!-- MODAL: GALLERY LIGHTBOX -->
+    <!-- MODAL: GALLERY LIGHTBOX (MULTI-IMAGE VIEWER) -->
     <div id="lightboxModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center hidden p-4 select-none">
         <div class="absolute top-4 right-6 flex items-center space-x-4">
             <span id="lightboxCounter" class="text-white text-xs font-bold bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">1 / 1</span>
@@ -1101,14 +1148,14 @@
             </button>
         </div>
         
-        <div class="relative max-w-5xl max-h-[75vh] flex items-center justify-center my-auto px-12">
-            <button onclick="slideLightbox(-1)" id="lightboxPrevBtn" class="absolute left-0 bg-slate-800/80 hover:bg-slate-700 text-white w-10 h-10 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10">
+        <div class="relative max-w-6xl max-h-[75vh] flex items-center justify-center my-auto px-16 w-full">
+            <button onclick="slideLightbox(-1)" id="lightboxPrevBtn" class="absolute left-2 bg-slate-800/80 hover:bg-slate-700 text-white w-12 h-12 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10 text-lg">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
             
-            <img id="lightboxImage" src="" class="max-w-full max-h-[72vh] rounded-xl shadow-2xl object-contain border border-slate-700" alt="Trade Screenshot">
+            <img id="lightboxImage" src="" class="max-w-full max-h-[72vh] rounded-xl shadow-2xl object-contain border border-slate-700 mx-auto" alt="Trade Screenshot">
             
-            <button onclick="slideLightbox(1)" id="lightboxNextBtn" class="absolute right-0 bg-slate-800/80 hover:bg-slate-700 text-white w-10 h-10 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10">
+            <button onclick="slideLightbox(1)" id="lightboxNextBtn" class="absolute right-2 bg-slate-800/80 hover:bg-slate-700 text-white w-12 h-12 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10 text-lg">
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
         </div>
@@ -1116,6 +1163,7 @@
         <div id="lightboxThumbnails" class="flex items-center space-x-2 mt-4 max-w-full overflow-x-auto py-2 px-4 bg-slate-900/60 rounded-xl border border-slate-800"></div>
     </div>
 
+    <!-- FIREBASE MODULE & CORE APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { 
@@ -1177,6 +1225,7 @@
             const mainContent = document.getElementById('mainDashboardContent');
             const authControls = document.getElementById('authDependentControls');
             const headerNewTradeBtn = document.getElementById('headerNewTradeBtn');
+            const headerBatchImportBtn = document.getElementById('headerBatchImportBtn');
 
             if (user) {
                 if (loggedOutView) loggedOutView.classList.add('hidden');
@@ -1185,6 +1234,7 @@
                 if (mainContent) mainContent.classList.remove('hidden');
                 if (authControls) authControls.classList.remove('hidden');
                 if (headerNewTradeBtn) headerNewTradeBtn.classList.remove('hidden');
+                if (headerBatchImportBtn) headerBatchImportBtn.classList.remove('hidden');
 
                 document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
                 document.getElementById('userEmail').innerText = user.email || 'user@gmail.com';
@@ -1201,6 +1251,7 @@
                 if (mainContent) mainContent.classList.add('hidden');
                 if (authControls) authControls.classList.add('hidden');
                 if (headerNewTradeBtn) headerNewTradeBtn.classList.add('hidden');
+                if (headerBatchImportBtn) headerBatchImportBtn.classList.add('hidden');
 
                 appState.trades = [];
                 appState.planners = {};
@@ -1395,18 +1446,17 @@
                         pnl: 1161.6,
                         returnPct: 1.16,
                         setup: 'Reversal',
-                        tag: 'Discipline',
+                        lossReason: '',
+                        winReason: 'correct bias',
+                        holdMgmt: 'hold_to_tp',
+                        errorCategory: '',
+                        emotionalState: 'Confident',
                         confluences: ['SMT', 'iFVG'],
                         notes: 'Lệnh mẫu demo cloud...',
                         duration: '30s',
                         hour: '09:30-09:40',
                         tvLink: '',
-                        chartImgs: [],
-                        lossReason: '',
-                        winReason: 'correct bias',
-                        holdMgmt: 'hold_to_tp',
-                        errorCategory: '',
-                        emotionalState: 'Confident'
+                        chartImgs: []
                     }
                 ];
                 saveCloudData();
@@ -1438,14 +1488,12 @@
         function getFilteredTrades() {
             const accFilter = document.getElementById('filterAccount')?.value || 'all';
             const setupFilter = document.getElementById('filterSetup')?.value || 'all';
-            const tagFilter = document.getElementById('filterTag')?.value || 'all';
             const dateFrom = document.getElementById('filterDateFrom')?.value;
             const dateTo = document.getElementById('filterDateTo')?.value;
 
             return appState.trades.filter(t => {
                 if (accFilter !== 'all' && t.account !== accFilter) return false;
                 if (setupFilter !== 'all' && t.setup !== setupFilter) return false;
-                if (tagFilter !== 'all' && t.tag !== tagFilter) return false;
                 if (filterApplied && dateFrom && t.date < dateFrom) return false;
                 if (filterApplied && dateTo && t.date > dateTo) return false;
                 return true;
@@ -1619,11 +1667,8 @@
         }
 
         function renderAdvancedSystemAnalytics(trades) {
-            // 1. Top 3 Emotional States
             const emotionCounts = {};
-            // 2. Top 3 Error Causes
             const errorCounts = {};
-            // 3. Top 3 Winrate Metrics/Indicators (using setup, tag, or confluences)
             const indicatorWins = {};
             const indicatorTotals = {};
 
@@ -1638,7 +1683,8 @@
                 const isWin = Number(t.pnl) > 0;
                 const factors = [];
                 if (t.setup) factors.push(`Setup: ${t.setup}`);
-                if (t.tag) factors.push(`Tag: ${t.tag}`);
+                if (t.winReason) factors.push(`WinReason: ${t.winReason}`);
+                if (t.holdMgmt) factors.push(`HoldMgmt: ${t.holdMgmt}`);
                 if (Array.isArray(t.confluences)) {
                     t.confluences.forEach(c => factors.push(`Confluence: ${c}`));
                 }
@@ -1652,8 +1698,8 @@
                 });
             });
 
-            // Sort Emotions
-            const sortedEmotions = Object.entries(emotionCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+            // Top 5 Emotions
+            const sortedEmotions = Object.entries(emotionCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const emoContainer = document.getElementById('topEmotionsContainer');
             if (sortedEmotions.length > 0) {
                  emoContainer.innerHTML = sortedEmotions.map(([emo, count], i) => `
@@ -1666,8 +1712,8 @@
                 emoContainer.innerHTML = `<div class="text-slate-400 italic">Chưa có dữ liệu cảm xúc</div>`;
             }
 
-            // Sort Errors
-            const sortedErrors = Object.entries(errorCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+            // Top 5 Errors
+            const sortedErrors = Object.entries(errorCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const errContainer = document.getElementById('topErrorsContainer');
             if (sortedErrors.length > 0) {
                 errContainer.innerHTML = sortedErrors.map(([err, count], i) => `
@@ -1680,13 +1726,13 @@
                 errContainer.innerHTML = `<div class="text-slate-400 italic">Chưa có dữ liệu lỗi</div>`;
             }
 
-            // Sort Winrate Metrics
+            // Top 5 Winrate Metrics
             const metricWinRates = Object.keys(indicatorTotals).map(metric => {
                 const total = indicatorTotals[metric];
                 const wins = indicatorWins[metric] || 0;
                 const wr = total > 0 ? (wins / total) * 100 : 0;
                 return { metric, wr, total };
-            }).filter(x => x.total >= 1).sort((a,b) => b.wr - a.wr).slice(0, 3);
+            }).filter(x => x.total >= 1).sort((a,b) => b.wr - a.wr).slice(0, 5);
 
             const metricContainer = document.getElementById('topWinrateMetricsContainer');
             if (metricWinRates.length > 0) {
@@ -1828,7 +1874,7 @@
             if (totalTrades > 0) {
                 document.getElementById('cardTopSymbolContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>NQ</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
                 document.getElementById('cardTopSetupContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>REVERSAL</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>DISCIPLINE</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
+                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>METRIC</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
             }
 
             document.getElementById('cardTotalTradesCount').innerText = totalTrades;
@@ -2135,7 +2181,7 @@
                 
                 tbody.innerHTML += `
                     <tr class="bg-slate-100/80 font-bold text-slate-700">
-                        <td colspan="15" class="py-2 px-3.5 text-xs border-y border-slate-200">
+                        <td colspan="17" class="py-2 px-3.5 text-xs border-y border-slate-200">
                             <i class="fa-regular fa-calendar text-blue-600 mr-1.5"></i> ${dateStr} (${dayTrades.length} lệnh)
                         </td>
                     </tr>
@@ -2168,6 +2214,9 @@
                         chartThumbHtml = `<span class="text-slate-300 text-[10px]">--</span>`;
                     }
 
+                    const reasonsDisplay = t.winReason || t.lossReason || '<span class="text-slate-300">--</span>';
+                    const holdMgmtDisplay = t.holdMgmt ? `<span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">${t.holdMgmt}</span>` : '<span class="text-slate-300">--</span>';
+                    const emotionDisplay = t.emotionalState ? `<span class="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-bold">${t.emotionalState}</span>` : '<span class="text-slate-300">--</span>';
                     const notesText = t.notes || '';
 
                     tbody.innerHTML += `
@@ -2182,7 +2231,9 @@
                             <td class="p-3.5 text-slate-500">${t.hour}</td>
                             <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration || '5m'}</span></td>
                             <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
-                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-semibold">${t.tag}</span></td>
+                            <td class="p-3.5">${reasonsDisplay}</td>
+                            <td class="p-3.5">${holdMgmtDisplay}</td>
+                            <td class="p-3.5">${emotionDisplay}</td>
                             <td class="p-3.5">${confluencesHtml}</td>
                             <td class="p-3.5 max-w-xs text-slate-600">
                                 <div class="whitespace-pre-wrap break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
@@ -2235,7 +2286,6 @@
                     document.getElementById('modalPnl').value = t.pnl;
                     document.getElementById('modalReturnPct').value = t.returnPct;
                     document.getElementById('modalSetup').value = t.setup;
-                    document.getElementById('modalTag').value = t.tag;
                     document.getElementById('modalLossReason').value = t.lossReason || '';
                     document.getElementById('modalWinReason').value = t.winReason || '';
                     document.getElementById('modalHoldMgmt').value = t.holdMgmt || '';
@@ -2301,7 +2351,6 @@
                 const fees = document.getElementById('modalFees').value || '1m';
                 const returnPct = Number(document.getElementById('modalReturnPct').value) || 0;
                 const setup = document.getElementById('modalSetup').value || 'Continuation';
-                const tag = document.getElementById('modalTag').value || 'Discipline';
                 const lossReason = document.getElementById('modalLossReason').value || '';
                 const winReason = document.getElementById('modalWinReason').value || '';
                 const holdMgmt = document.getElementById('modalHoldMgmt').value || '';
@@ -2317,7 +2366,7 @@
 
                 const chartImgs = Array.isArray(currentModalImages) ? [...currentModalImages] : [];
 
-                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, tag, lossReason, winReason, holdMgmt, errorCategory, emotionalState, confluences, notes, duration, hour, tvLink, chartImgs };
+                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, lossReason, winReason, holdMgmt, errorCategory, emotionalState, confluences, notes, duration, hour, tvLink, chartImgs };
 
                 const existingIdx = appState.trades.findIndex(t => t.id === id);
                 if (existingIdx >= 0) {
@@ -2356,6 +2405,104 @@
             }
         }
 
+        /* BATCH IMPORT LOGIC */
+        let parsedBatchTrades = [];
+
+        function openBatchModal() {
+            document.getElementById('batchModal').classList.remove('hidden');
+            document.getElementById('batchTextArea').value = '';
+            document.getElementById('batchPreviewSection').classList.add('hidden');
+            document.getElementById('saveBatchBtn').classList.add('hidden');
+            parsedBatchTrades = [];
+        }
+
+        function closeBatchModal() {
+            document.getElementById('batchModal').classList.add('hidden');
+        }
+
+        function previewBatchData() {
+            const rawText = document.getElementById('batchTextArea').value.trim();
+            if (!rawText) {
+                alert("Vui lòng dán dữ liệu thô vào ô trống.");
+                return;
+            }
+
+            const lines = rawText.split('\n');
+            parsedBatchTrades = [];
+            const tbody = document.getElementById('batchPreviewTableBody');
+            tbody.innerHTML = '';
+
+            lines.forEach((line, idx) => {
+                const parts = line.split(',').map(p => p.trim());
+                if (parts.length >= 7) {
+                    const [date, symbol, type, entry, close, volume, pnl, setup = 'Continuation', lossReason = '', winReason = '', holdMgmt = '', errorCategory = '', emotionalState = 'Confident'] = parts;
+                    const tradeObj = {
+                        id: 'batch-' + Date.now() + '-' + idx,
+                        account: appState.activeAccount,
+                        date: date || realNow.toISOString().split('T')[0],
+                        symbol: (symbol || 'NQ').toUpperCase(),
+                        type: (type || 'LONG').toUpperCase(),
+                        entry: Number(entry) || 0,
+                        close: Number(close) || 0,
+                        volume: Number(volume) || 1,
+                        fees: '1m',
+                        pnl: Number(pnl) || 0,
+                        returnPct: ((Number(pnl) || 0) / 100000) * 100,
+                        setup: setup || 'Continuation',
+                        lossReason,
+                        winReason,
+                        holdMgmt,
+                        errorCategory,
+                        emotionalState,
+                        confluences: [],
+                        notes: 'Batch Imported',
+                        duration: '5m',
+                        hour: '09:30-09:40',
+                        tvLink: '',
+                        chartImgs: []
+                    };
+                    parsedBatchTrades.push(tradeObj);
+                    tbody.innerHTML += `
+                        <tr class="border-b border-slate-100">
+                            <td class="p-2 font-bold">${tradeObj.date}</td>
+                            <td class="p-2">${tradeObj.symbol}</td>
+                            <td class="p-2">${tradeObj.type}</td>
+                            <td class="p-2 font-bold ${tradeObj.pnl >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatPnlString(tradeObj.pnl)}</td>
+                            <td class="p-2">${tradeObj.setup}</td>
+                            <td class="p-2">${tradeObj.emotionalState}</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            document.getElementById('batchCountBadge').innerText = parsedBatchTrades.length;
+            if (parsedBatchTrades.length > 0) {
+                document.getElementById('batchPreviewSection').classList.remove('hidden');
+                document.getElementById('saveBatchBtn').classList.remove('hidden');
+            } else {
+                alert("Không thể phân tích được dòng dữ liệu nào. Vui lòng kiểm tra lại định dạng!");
+            }
+        }
+
+        async function saveBatchRecords() {
+            if (parsedBatchTrades.length === 0) return;
+            const btn = document.getElementById('saveBatchBtn');
+            btn.disabled = true;
+            btn.innerText = 'Đang lưu lên Cloud...';
+
+            parsedBatchTrades.forEach(t => {
+                appState.trades.unshift(t);
+            });
+
+            await saveCloudData();
+            btn.disabled = false;
+            btn.innerText = 'Lưu tất cả lên Cloud';
+            closeBatchModal();
+            switchTab(appState.currentTab, false);
+            alert(`Đã nhập thành công ${parsedBatchTrades.length} giao dịch lên Cloud!`);
+        }
+
+        /* LIGHTBOX MULTI-IMAGE VIEWER */
         let currentLightboxImages = [];
         let currentLightboxIndex = 0;
 
@@ -2382,7 +2529,7 @@
             if (!imgEl || !counterEl || !thumbsEl) return;
 
             imgEl.src = currentLightboxImages[currentLightboxIndex];
-            counterEl.innerText = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+            counterEl.innerText = `Ảnh ${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
 
             if (currentLightboxImages.length > 1) {
                 prevBtn.classList.remove('hidden');
