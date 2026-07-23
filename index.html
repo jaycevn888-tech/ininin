@@ -41,11 +41,11 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-slate-900 tracking-tight leading-none text-base">jacooodevn</h1>
-                    <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Analytics Journal</span>
+                    <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Analytics Journal Cloud</span>
                 </div>
             </div>
 
-            <div class="hidden md:flex items-center space-x-3 pl-4 border-l border-slate-200">
+            <div id="authDependentControls" class="hidden md:flex items-center space-x-3 pl-4 border-l border-slate-200">
                 <div class="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="text-xs font-semibold text-slate-700" id="currentAccountBadge">Tài khoản: Live ($100,000)</span>
@@ -56,17 +56,17 @@
                 <button onclick="openAccountManageModal()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
                     <i class="fa-solid fa-gear"></i> <span>Quản lý</span>
                 </button>
-                <button onclick="resetDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
-                    <i class="fa-solid fa-rotate-right"></i> <span>Reset Demo</span>
+                <button onclick="resetCloudDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
+                    <i class="fa-solid fa-rotate-right"></i> <span>Khởi tạo Demo Cloud</span>
                 </button>
-                <button onclick="clearAllData()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-rose-200">
-                    <i class="fa-solid fa-trash-can"></i> <span>Xóa tất cả</span>
+                <button onclick="clearCloudAllData()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-rose-200">
+                    <i class="fa-solid fa-trash-can"></i> <span>Xóa tất cả Cloud</span>
                 </button>
             </div>
         </div>
 
         <div class="flex items-center space-x-4">
-            <button onclick="openTradeModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center space-x-1.5">
+            <button id="headerNewTradeBtn" onclick="openTradeModal()" class="hidden bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center space-x-1.5">
                 <i class="fa-solid fa-plus"></i> <span>Giao dịch mới</span>
             </button>
             
@@ -74,7 +74,7 @@
                 <div id="loggedOutView" class="flex items-center space-x-2">
                     <button onclick="signInWithGoogle()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
                         <i class="fa-brands fa-google text-red-500"></i>
-                        <span>Đăng nhập Google</span>
+                        <span>Đăng nhập Google Cloud</span>
                     </button>
                 </div>
                 <div id="loggedInView" class="hidden flex items-center space-x-3">
@@ -132,602 +132,668 @@
                 </div>
             </div>
             <div class="p-4 border-t border-slate-200 text-center bg-white flex-shrink-0">
-                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v3.0 Pro Cloud</span>
+                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v3.5 Secure Cloud</span>
             </div>
         </aside>
 
         <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 p-6 h-[calc(100vh-4rem)]">
-            <div class="bg-white rounded-xl border border-slate-200 p-3.5 mb-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex items-center space-x-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
-                        <i class="fa-solid fa-filter"></i><span>BỘ LỌC</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs text-slate-500 font-medium">Tài khoản:</span>
-                        <select id="filterAccount" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
-                            <option value="all">Tất cả tài khoản</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs text-slate-500 font-medium">Setup:</span>
-                        <select id="filterSetup" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
-                            <option value="all">Tất cả Setup</option>
-                            <option value="Continuation">Continuation</option>
-                            <option value="Reversal">Reversal</option>
-                            <option value="Breakout">Breakout</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs text-slate-500 font-medium">Tag:</span>
-                        <select id="filterTag" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
-                            <option value="all">Tất cả Tag</option>
-                            <option value="Discipline">Discipline</option>
-                            <option value="FOMC">FOMC</option>
-                            <option value="High Impact">High Impact</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center space-x-2 bg-slate-50 border border-slate-300 px-2.5 py-1.5 rounded-lg text-xs">
-                        <input type="date" id="filterDateFrom" class="bg-transparent text-slate-700 focus:outline-none font-medium">
-                        <span class="text-slate-400">đến</span>
-                        <input type="date" id="filterDateTo" class="bg-transparent text-slate-700 focus:outline-none font-medium">
-                        <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1 rounded ml-1 transition">Áp dụng</button>
-                    </div>
+            <div id="loginRequiredBanner" class="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center my-auto max-w-lg mx-auto shadow-sm">
+                <div class="w-14 h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <div class="flex items-center space-x-2 text-xs font-semibold text-slate-600">
-                    <i class="fa-regular fa-calendar-days text-blue-500"></i>
-                    <span id="activeMonthDisplay">Tháng đang chọn: Tháng 7 / 2026</span>
-                </div>
+                <h3 class="text-base font-bold text-amber-900 mb-2">Yêu cầu đăng nhập Google để truy cập Cloud Journal</h3>
+                <p class="text-xs text-amber-700 mb-6 leading-relaxed">Hệ thống lưu trữ 100% trên Cloud Server an toàn tuyệt đối, gắn liền với tài khoản Google của bạn và đồng bộ thời gian thực trên mọi thiết bị.</p>
+                <button onclick="signInWithGoogle()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-3 rounded-xl shadow transition inline-flex items-center space-x-2">
+                    <i class="fa-brands fa-google text-sm"></i>
+                    <span>Đăng nhập Google ngay</span>
+                </button>
             </div>
 
-            <div id="tab-overview" class="space-y-6 tab-content">
-                <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center space-x-3">
-                        <select id="overviewYear" onchange="changeOverviewYear(this.value)" class="text-xs font-bold bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500">
-                            <option value="2026">Năm 2026</option>
-                            <option value="2027">Năm 2027</option>
-                            <option value="2028">Năm 2028</option>
-                            <option value="2029">Năm 2029</option>
-                            <option value="2030">Năm 2030</option>
-                        </select>
-                        <div class="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 border border-slate-200">
-                            <button onclick="shiftMonth(-1)" class="w-7 h-7 flex items-center justify-center rounded hover:bg-white text-slate-600 transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <span id="overviewMonthTitle" class="text-xs font-bold px-3 text-slate-800">Tháng 7 năm 2026</span>
-                            <button onclick="shiftMonth(1)" class="w-7 h-7 flex items-center justify-center rounded hover:bg-white text-slate-600 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+            <div id="mainDashboardContent" class="hidden space-y-6">
+                <!-- GLOBAL FILTER BAR -->
+                <div class="bg-white rounded-xl border border-slate-200 p-3.5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center space-x-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
+                            <i class="fa-solid fa-filter"></i><span>BỘ LỌC</span>
                         </div>
-                        <div id="headerMonthProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                            <span id="headerMonthProfitText">+ Tháng này: +$0</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-slate-500 font-medium">Tài khoản:</span>
+                            <select id="filterAccount" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
+                                <option value="all">Tất cả tài khoản</option>
+                            </select>
                         </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-slate-500 font-medium">Setup:</span>
+                            <select id="filterSetup" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
+                                <option value="all">Tất cả Setup</option>
+                                <option value="Continuation">Continuation</option>
+                                <option value="Reversal">Reversal</option>
+                                <option value="Breakout">Breakout</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-slate-500 font-medium">Tag:</span>
+                            <select id="filterTag" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
+                                <option value="all">Tất cả Tag</option>
+                                <option value="Discipline">Discipline</option>
+                                <option value="FOMC">FOMC</option>
+                                <option value="High Impact">High Impact</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-slate-50 border border-slate-300 px-2.5 py-1.5 rounded-lg text-xs">
+                            <input type="date" id="filterDateFrom" class="bg-transparent text-slate-700 focus:outline-none font-medium">
+                            <span class="text-slate-400">đến</span>
+                            <input type="date" id="filterDateTo" class="bg-transparent text-slate-700 focus:outline-none font-medium">
+                            <button onclick="applyFilters()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1.5 rounded ml-1 transition shadow-sm">Áp dụng</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-slate-600">
+                        <i class="fa-regular fa-calendar-days text-blue-500"></i>
+                        <span id="activeMonthDisplay">Tháng đang chọn: Tháng 7 / 2026</span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    <div class="xl:col-span-8 bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-                        <div class="grid grid-cols-8 gap-2 mb-3 text-center">
-                            <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ HAI</div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ BA</div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ TƯ</div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ NĂM</div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ SÁU</div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ BẢY</div>
-                            <div class="text-[11px] font-bold text-slate-400 uppercase text-rose-500">CHỦ NHẬT</div>
-                            <div class="text-[11px] font-bold text-blue-600 uppercase bg-blue-50 rounded py-0.5">HÀNG TUẦN</div>
-                        </div>
-                        <div id="calendarGrid" class="grid grid-cols-8 gap-2"></div>
-                        <div class="mt-4 pt-3 border-t border-slate-100 text-center text-[11px] text-slate-400 italic">
-                            * Nhấp chuột vào bất cứ ô ngày nào để chỉnh sửa trực tiếp thông số tại <strong>DAILY PLANNER</strong>
-                        </div>
-                    </div>
-
-                    <div class="xl:col-span-4 space-y-6">
-                        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
-                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-                                <h3 class="text-xs font-bold text-slate-800 flex items-center space-x-2">
-                                    <i class="fa-solid fa-chart-simple text-blue-500"></i><span>THỐNG KÊ TỔNG QUAN</span>
-                                </h3>
-                                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">STANDARD</span>
+                <!-- TAB 1: OVERVIEW -->
+                <div id="tab-overview" class="space-y-6 tab-content">
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3">
+                            <select id="overviewYear" onchange="changeOverviewYear(this.value)" class="text-xs font-bold bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500">
+                                <option value="2026">Năm 2026</option>
+                                <option value="2027">Năm 2027</option>
+                                <option value="2028">Năm 2028</option>
+                                <option value="2029">Năm 2029</option>
+                                <option value="2030">Năm 2030</option>
+                            </select>
+                            <div class="flex items-center space-x-1 bg-slate-100 rounded-lg p-1 border border-slate-200">
+                                <button onclick="shiftMonth(-1)" class="w-7 h-7 flex items-center justify-center rounded hover:bg-white text-slate-600 transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                                <span id="overviewMonthTitle" class="text-xs font-bold px-3 text-slate-800">Tháng 7 năm 2026</span>
+                                <button onclick="shiftMonth(1)" class="w-7 h-7 flex items-center justify-center rounded hover:bg-white text-slate-600 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                             </div>
-                            <div class="space-y-2.5 text-xs">
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tổng số lệnh (Rec trades)</span><span id="stat-total-trades" class="font-bold text-slate-800">0</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Lệnh Thắng (Winning trades)</span><span id="stat-win-trades" class="font-bold text-emerald-600">0</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Lệnh Thua (Losing trades)</span><span id="stat-loss-trades" class="font-bold text-rose-600">0</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tỷ lệ thắng (Win Rate)</span><span id="stat-win-rate" class="font-bold text-blue-600">0%</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tổng tiền lời (Net profit)</span><span id="stat-net-profit" class="font-bold text-emerald-600">$0</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tỷ lệ lãi (%)</span><span id="stat-return-pct" class="font-bold text-emerald-600">0%</span></div>
-                                <div class="flex justify-between py-1"><span class="text-slate-500">Hệ số lợi nhuận (Profit Factor)</span><span id="stat-profit-factor" class="font-bold text-slate-800">0.00</span></div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
-                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-                                <h3 class="text-xs font-bold text-slate-800 flex items-center space-x-2">
-                                    <i class="fa-solid fa-bullseye text-indigo-500"></i><span>THỐNG KÊ ĐIỂM (POINTS)</span>
-                                </h3>
-                                <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">POINTS</span>
-                            </div>
-                            <div class="space-y-2.5 text-xs">
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Ăn điểm trung bình (Avg. Points)</span><span id="stat-avg-pts" class="font-bold text-slate-800">0.0 pts</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Số điểm thắng lớn nhất (Max Win Points)</span><span id="stat-max-win-pts" class="font-bold text-emerald-600">0.0 pts</span></div>
-                                <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Số điểm thua lớn nhất (Max Loss Points)</span><span id="stat-max-loss-pts" class="font-bold text-rose-600">0.0 pts</span></div>
-                                <div class="flex justify-between py-1"><span class="text-slate-500">Tổng số điểm tích lũy</span><span id="stat-total-pts" class="font-bold text-slate-800">0.0 pts</span></div>
+                            <div id="headerMonthProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                                <span id="headerMonthProfitText">+ Tháng này: +$0</span>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
-                        <div>
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                        <div class="xl:col-span-8 bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+                            <div class="grid grid-cols-8 gap-2 mb-3 text-center">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ HAI</div>
+                                <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ BA</div>
+                                <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ TƯ</div>
+                                <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ NĂM</div>
+                                <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ SÁU</div>
+                                <div class="text-[11px] font-bold text-slate-400 uppercase">THỨ BẢY</div>
+                                <div class="text-[11px] font-bold text-slate-400 uppercase text-rose-500">CHỦ NHẬT</div>
+                                <div class="text-[11px] font-bold text-blue-600 uppercase bg-blue-50 rounded py-0.5">HÀNG TUẦN</div>
+                            </div>
+                            <div id="calendarGrid" class="grid grid-cols-8 gap-2"></div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 text-center text-[11px] text-slate-400 italic">
+                                * Nhấp chuột vào bất cứ ô ngày nào để chỉnh sửa trực tiếp thông số tại <strong>DAILY PLANNER</strong>
+                            </div>
+                        </div>
+
+                        <div class="xl:col-span-4 space-y-6">
+                            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                                <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                                    <h3 class="text-xs font-bold text-slate-800 flex items-center space-x-2">
+                                        <i class="fa-solid fa-chart-simple text-blue-500"></i><span>THỐNG KÊ TỔNG QUAN</span>
+                                    </h3>
+                                    <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">STANDARD</span>
+                                </div>
+                                <div class="space-y-2.5 text-xs">
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tổng số lệnh (Rec trades)</span><span id="stat-total-trades" class="font-bold text-slate-800">0</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Lệnh Thắng (Winning trades)</span><span id="stat-win-trades" class="font-bold text-emerald-600">0</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Lệnh Thua (Losing trades)</span><span id="stat-loss-trades" class="font-bold text-rose-600">0</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tỷ lệ thắng (Win Rate)</span><span id="stat-win-rate" class="font-bold text-blue-600">0%</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tổng tiền lời (Net profit)</span><span id="stat-net-profit" class="font-bold text-emerald-600">$0</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Tỷ lệ lãi (%)</span><span id="stat-return-pct" class="font-bold text-emerald-600">0%</span></div>
+                                    <div class="flex justify-between py-1"><span class="text-slate-500">Hệ số lợi nhuận (Profit Factor)</span><span id="stat-profit-factor" class="font-bold text-slate-800">0.00</span></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+                                <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                                    <h3 class="text-xs font-bold text-slate-800 flex items-center space-x-2">
+                                        <i class="fa-solid fa-bullseye text-indigo-500"></i><span>THỐNG KÊ ĐIỂM (POINTS)</span>
+                                    </h3>
+                                    <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">POINTS</span>
+                                </div>
+                                <div class="space-y-2.5 text-xs">
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Ăn điểm trung bình (Avg. Points)</span><span id="stat-avg-pts" class="font-bold text-slate-800">0.0 pts</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Số điểm thắng lớn nhất (Max Win Points)</span><span id="stat-max-win-pts" class="font-bold text-emerald-600">0.0 pts</span></div>
+                                    <div class="flex justify-between py-1 border-b border-slate-50"><span class="text-slate-500">Số điểm thua lớn nhất (Max Loss Points)</span><span id="stat-max-loss-pts" class="font-bold text-rose-600">0.0 pts</span></div>
+                                    <div class="flex justify-between py-1"><span class="text-slate-500">Tổng số điểm tích lũy</span><span id="stat-total-pts" class="font-bold text-slate-800">0.0 pts</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW ADVANCED SYSTEM ANALYTICS SECTION -->
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
+                        <div class="pb-3 border-b border-slate-100">
                             <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
-                                <i class="fa-solid fa-shield-halved text-blue-600"></i><span>ĐÁNH GIÁ HỆ THỐNG GIAO DỊCH CHUYÊN SÂU (ADVANCED METRICS EVALUATION)</span>
+                                <i class="fa-solid fa-brain text-purple-600"></i><span>ADVANCED SYSTEM ANALYTICS (EMOTIONS, ERRORS & WINRATE METRICS)</span>
                             </h3>
-                            <p class="text-[11px] text-slate-500 mt-0.5">Phân tích chuyên sâu tích hợp biểu đồ Cumulative P&L, Profit Factor, Risk/Reward và Win Rate cùng 12 thẻ chỉ số.</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Top 3 frequent emotional states, top 3 error causes, and top 3 winrate indicators derived from logged trades.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Top 3 Emotional States -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 3 EMOTIONAL STATES</span>
+                                    <i class="fa-solid fa-face-smile text-purple-500"></i>
+                                </div>
+                                <div id="topEmotionsContainer" class="space-y-1 text-xs pt-1">
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu</div>
+                                </div>
+                            </div>
+                            <!-- Top 3 Error Causes -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 3 ERROR CAUSES</span>
+                                    <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
+                                </div>
+                                <div id="topErrorsContainer" class="space-y-1 text-xs pt-1">
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu</div>
+                                </div>
+                            </div>
+                            <!-- Top 3 Winrate Metrics/Indicators -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 3 WINRATE METRICS</span>
+                                    <i class="fa-solid fa-award text-emerald-500"></i>
+                                </div>
+                                <div id="topWinrateMetricsContainer" class="space-y-1 text-xs pt-1">
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold text-slate-600 uppercase">CUMULATIVE P&L</span>
-                                <i class="fa-solid fa-chart-line text-blue-500"></i>
-                            </div>
-                            <div class="h-32 w-full my-2"><canvas id="cumulativeChart"></canvas></div>
-                            <div class="flex justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-200">
-                                <span id="cumulStartLbl">Bắt đầu</span><span id="cumulTotalEnd" class="font-bold text-slate-700">$0</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                    <!-- ADVANCED METRICS -->
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                             <div>
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">PROFIT FACTOR</span>
-                                    <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded" id="pfBadge">EXCELLENT</span>
-                                </div>
-                                <div class="text-2xl font-black text-slate-800 my-4 text-center" id="advancedProfitFactor">0.00</div>
-                            </div>
-                            <div class="flex justify-between text-[11px] pt-2 border-t border-slate-200 font-medium">
-                                <span class="text-emerald-600" id="advGrossProfit">Gross Profit: $0</span>
-                                <span class="text-rose-600" id="advGrossLoss">Gross Loss: -$0</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">RISK/REWARD (R:R)</span>
-                                    <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">EXCELLENT</span>
-                                </div>
-                                <div class="text-2xl font-black text-slate-800 my-4 text-center" id="advancedRR">N/A</div>
-                            </div>
-                            <div class="flex justify-between text-[11px] pt-2 border-t border-slate-200 font-medium">
-                                <span class="text-slate-600" id="advAvgWin">Avg Win: $0</span>
-                                <span class="text-slate-600" id="advAvgLoss">Avg Loss: -$0</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
-                            <div class="w-full flex justify-between items-center mb-1">
-                                <span class="text-xs font-bold text-slate-600 uppercase">WIN RATE</span>
-                                <i class="fa-solid fa-percent text-blue-500"></i>
-                            </div>
-                            <div class="relative w-28 h-28 mx-auto my-1 flex items-center justify-center">
-                                <canvas id="winRateGaugeCanvas"></canvas>
-                                <div class="absolute inset-0 flex flex-col items-center justify-center pt-2 pointer-events-none">
-                                    <span class="text-lg font-black text-slate-800" id="gaugeWinRate">0%</span>
-                                    <span class="text-[9px] font-bold text-slate-400 uppercase">TỶ LỆ THẮNG</span>
-                                </div>
-                            </div>
-                            <div class="w-full flex justify-between text-[11px] pt-2 border-t border-slate-200 font-medium">
-                                <span class="text-emerald-600">Thắng: <strong id="gaugeWinCount">0</strong></span>
-                                <span class="text-rose-600">Thua: <strong id="gaugeLossCount">0</strong></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">EXPECTANCY PER TRADE</span><span class="text-xs font-black text-emerald-600" id="cardExpectancy">$0</span></div>
-                            <div class="text-xs"><span class="text-slate-500">Rating:</span> <strong class="text-slate-700" id="cardExpRating">Neutral</strong></div>
-                            <div class="pt-2 border-t border-slate-200 text-[11px] space-y-1">
-                                <div class="flex justify-between"><span class="text-slate-500">Win Rate:</span><strong id="cardExpWinRate">0%</strong></div>
-                                <div class="flex justify-between"><span class="text-slate-500">Avg Win:</span><strong id="cardExpAvgWin" class="text-emerald-600">$0</strong></div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP SYMBOL</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
-                            <div id="cardTopSymbolContainer" class="space-y-1 text-xs">
-                                <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
-                                <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP SETUP</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
-                            <div id="cardTopSetupContainer" class="space-y-1 text-xs">
-                                <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
-                                <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP TAG</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
-                            <div id="cardTopTagContainer" class="space-y-1 text-xs">
-                                <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
-                                <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">DURATION ANALYSIS</span>
-                            <div class="grid grid-cols-2 gap-2 pt-2 text-xs">
-                                <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">HIGHEST WIN RATE</span><strong class="text-emerald-600" id="cardHighestDuration">--</strong></div>
-                                <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">LEAST PROFITABLE</span><strong class="text-slate-600" id="cardLeastDuration">--</strong></div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">INTRADAY ACTIVITY</span>
-                            <div class="space-y-1 pt-1 text-xs">
-                                <div class="flex justify-between"><span class="text-slate-500">Best Hour:</span><strong class="text-emerald-600" id="cardBestHour">--</strong></div>
-                                <div class="flex justify-between"><span class="text-slate-500">Busiest Hour:</span><strong class="text-slate-800" id="cardBusiestHour">--</strong></div>
-                                <div class="flex justify-between"><span class="text-slate-500">Total Trades:</span><strong class="text-slate-800" id="cardTotalTradesCount">0</strong></div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">STREAK ANALYSIS</span>
-                            <div class="space-y-1 pt-1 text-xs">
-                                <div class="flex justify-between"><span class="text-slate-500">Longest Win:</span><strong class="text-emerald-600" id="cardLongestWin">0 trades</strong></div>
-                                <div class="flex justify-between"><span class="text-slate-500">Longest Loss:</span><strong class="text-rose-600" id="cardLongestLoss">0 trades</strong></div>
-                                <div class="flex justify-between"><span class="text-slate-500">Current Streak:</span><strong class="text-emerald-600" id="cardCurrentStreak">0 wins</strong></div>
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">CURRENT DRAWDOWN</span>
-                            <div class="space-y-1 pt-1 text-xs">
-                                <div class="flex justify-between"><span class="text-slate-500">Peak:</span><strong class="text-emerald-600" id="cardPeakVal">$0</strong></div>
-                                <div class="flex justify-between"><span class="text-slate-500">Max Drawdown:</span><strong class="text-rose-600" id="cardMaxDD">$0</strong></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">RECOVERY FACTOR</span>
-                            <div class="text-2xl font-black text-slate-800 my-2" id="cardRecoveryFactor">0.00</div>
-                            <div class="text-[11px] text-slate-500 flex justify-between"><span id="cardRecNet">Net: $0</span><span id="cardRecDD">DD: $0</span></div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">CONSISTENCY</span>
-                            <div class="text-2xl font-black text-slate-800 my-2" id="cardConsistency">0.00%</div>
-                            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full transition-all duration-300" id="consistencyBar" style="width: 0%"></div></div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">SHARPE RATIO</span>
-                            <div class="text-2xl font-black text-slate-800 my-2" id="cardSharpe">0.00</div>
-                            <div class="text-[11px] text-slate-500" id="cardSharpeSub">Total Return: 0%</div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                            <span class="text-xs font-bold text-slate-600 uppercase block">SORTINO RATIO</span>
-                            <div class="text-2xl font-black text-slate-800 my-2" id="cardSortino">0.00</div>
-                            <div class="text-[11px] text-slate-500">Downside Risk: 0.00%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-planner" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
-                            <i class="fa-solid fa-calendar-days text-blue-600"></i><span>DAILY PLANNER & KẾ HOẠCH NGÀY</span>
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Cân bằng tâm lý, thiết lập mục tiêu và định hình xu hướng ngày giao dịch.</p>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <button onclick="shiftPlannerWeek(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition">
-                            <i class="fa-solid fa-chevron-left mr-1"></i> Tuần trước
-                        </button>
-                        <div id="plannerWeekTotalProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
-                            <span>TỔNG P&L TUẦN: $0</span>
-                        </div>
-                        <button onclick="shiftPlannerWeek(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition">
-                            Tuần sau <i class="fa-solid fa-chevron-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-7 gap-3" id="plannerWeekStrip"></div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                        <div>
-                            <h3 class="text-xs font-bold text-slate-800 uppercase mb-3 flex items-center space-x-2">
-                                <i class="fa-solid fa-face-smile text-blue-600"></i><span>ĐÁNH GIÁ PHIÊN</span>
-                            </h3>
-                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4">
-                                <span class="text-xs text-slate-500 font-medium block mb-1">P&L NGÀY ĐÃ CHỌN</span>
-                                <div class="text-xl font-black text-slate-800" id="plannerSelectedDatePnL">$0</div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="text-xs font-bold text-slate-700 block mb-2">TRẠNG THÁI TÂM LÝ (MENTAL STATE)</label>
-                            <div class="grid grid-cols-2 gap-2" id="mentalStateGroup">
-                                <button type="button" onclick="selectMentalState('Greedy')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">😋 Hưng phấn</button>
-                                <button type="button" onclick="selectMentalState('Neutral')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">😊 Bình tĩnh</button>
-                                <button type="button" onclick="selectMentalState('Fearful')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">😨 Lo sợ</button>
-                                <button type="button" onclick="selectMentalState('Revenge')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">😡 Tức giận</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="text-xs font-bold text-slate-700 block mb-2">THIÊN HƯỚNG THỊ TRƯỜNG (MARKET BIAS)</label>
-                            <div class="grid grid-cols-3 gap-2" id="marketBiasGroup">
-                                <button type="button" onclick="selectMarketBias('Bullish')" class="bias-btn text-xs font-semibold py-2 px-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 transition text-center">🟢 TĂNG</button>
-                                <button type="button" onclick="selectMarketBias('Bearish')" class="bias-btn text-xs font-semibold py-2 px-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 transition text-center">🔴 GIẢM</button>
-                                <button type="button" onclick="selectMarketBias('Neutral')" class="bias-btn text-xs font-semibold py-2 px-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 transition text-center">🟡 ĐI NGANG</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-2">
-                                <span>ĐÁNH GIÁ NGÀY HÔM NAY</span><span id="ratingSliderVal" class="text-blue-600 font-black">50 / 100</span>
-                            </div>
-                            <input type="range" id="plannerRatingRange" min="0" max="100" value="50" oninput="updateRatingSliderVal(this.value)" class="w-full accent-blue-600 cursor-pointer">
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                                <h3 class="text-xs font-bold text-slate-800 uppercase flex items-center space-x-2">
-                                    <i class="fa-solid fa-list-check text-blue-600"></i><span>MỤC TIÊU TRONG NGÀY (DAILY GOALS)</span>
+                                <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
+                                    <i class="fa-solid fa-shield-halved text-blue-600"></i><span>ĐÁNH GIÁ HỆ THỐNG GIAO DỊCH CHUYÊN SÂU (ADVANCED METRICS EVALUATION)</span>
                                 </h3>
-                                <button onclick="addDailyGoal()" class="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center space-x-1">
-                                    <i class="fa-solid fa-plus"></i> <span>Thêm mục tiêu</span>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Phân tích chuyên sâu tích hợp biểu đồ Cumulative P&L, Profit Factor, Risk/Reward và Win Rate chuẩn xác 100% từ P&L ($).</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">CUMULATIVE P&L</span>
+                                    <i class="fa-solid fa-chart-line text-blue-500"></i>
+                                </div>
+                                <div class="h-32 w-full my-2"><canvas id="cumulativeChart"></canvas></div>
+                                <div class="flex justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-200">
+                                    <span id="cumulStartLbl">Bắt đầu</span><span id="cumulTotalEnd" class="font-bold text-slate-700">$0</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs font-bold text-slate-600 uppercase">PROFIT FACTOR</span>
+                                        <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded" id="pfBadge">EXCELLENT</span>
+                                    </div>
+                                    <div class="text-2xl font-black text-slate-800 my-4 text-center" id="advancedProfitFactor">0.00</div>
+                                </div>
+                                <div class="flex justify-between text-[11px] pt-2 border-t border-slate-200 font-medium">
+                                    <span class="text-emerald-600" id="advGrossProfit">Gross Profit: $0</span>
+                                    <span class="text-rose-600" id="advGrossLoss">Gross Loss: -$0</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs font-bold text-slate-600 uppercase">RISK/REWARD (R:R)</span>
+                                        <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">EXCELLENT</span>
+                                    </div>
+                                    <div class="text-2xl font-black text-slate-800 my-4 text-center" id="advancedRR">N/A</div>
+                                </div>
+                                <div class="flex justify-between text-[11px] pt-2 border-t border-slate-200 font-medium">
+                                    <span class="text-slate-600" id="advAvgWin">Avg Win: $0</span>
+                                    <span class="text-slate-600" id="advAvgLoss">Avg Loss: -$0</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col justify-between">
+                                <div class="w-full flex justify-between items-center mb-1">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">WIN RATE</span>
+                                    <i class="fa-solid fa-percent text-blue-500"></i>
+                                </div>
+                                <div class="relative w-28 h-28 mx-auto my-1 flex items-center justify-center">
+                                    <canvas id="winRateGaugeCanvas"></canvas>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center pt-2 pointer-events-none">
+                                        <span class="text-lg font-black text-slate-800" id="gaugeWinRate">0%</span>
+                                        <span class="text-[9px] font-bold text-slate-400 uppercase">TỶ LỆ THẮNG</span>
+                                    </div>
+                                </div>
+                                <div class="w-full flex justify-between text-[11px] pt-2 border-t border-slate-200 font-medium">
+                                    <span class="text-emerald-600">Thắng: <strong id="gaugeWinCount">0</strong></span>
+                                    <span class="text-rose-600">Thua: <strong id="gaugeLossCount">0</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">EXPECTANCY PER TRADE</span><span class="text-xs font-black text-emerald-600" id="cardExpectancy">$0</span></div>
+                                <div class="text-xs"><span class="text-slate-500">Rating:</span> <strong class="text-slate-700" id="cardExpRating">Neutral</strong></div>
+                                <div class="pt-2 border-t border-slate-200 text-[11px] space-y-1">
+                                    <div class="flex justify-between"><span class="text-slate-500">Win Rate:</span><strong id="cardExpWinRate">0%</strong></div>
+                                    <div class="flex justify-between"><span class="text-slate-500">Avg Win:</span><strong id="cardExpAvgWin" class="text-emerald-600">$0</strong></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP SYMBOL</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
+                                <div id="cardTopSymbolContainer" class="space-y-1 text-xs">
+                                    <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
+                                    <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP SETUP</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
+                                <div id="cardTopSetupContainer" class="space-y-1 text-xs">
+                                    <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
+                                    <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                                <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-600 uppercase">TOP TAG</span><span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Top</span></div>
+                                <div id="cardTopTagContainer" class="space-y-1 text-xs">
+                                    <div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-emerald-600">$0</span></div>
+                                    <div class="text-[11px] text-slate-500">0 lệnh | 0% wr</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">DURATION ANALYSIS</span>
+                                <div class="grid grid-cols-2 gap-2 pt-2 text-xs">
+                                    <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">HIGHEST WIN RATE</span><strong class="text-emerald-600" id="cardHighestDuration">--</strong></div>
+                                    <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">LEAST PROFITABLE</span><strong class="text-slate-600" id="cardLeastDuration">--</strong></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">INTRADAY ACTIVITY</span>
+                                <div class="space-y-1 pt-1 text-xs">
+                                    <div class="flex justify-between"><span class="text-slate-500">Best Hour:</span><strong class="text-emerald-600" id="cardBestHour">--</strong></div>
+                                    <div class="flex justify-between"><span class="text-slate-500">Busiest Hour:</span><strong class="text-slate-800" id="cardBusiestHour">--</strong></div>
+                                    <div class="flex justify-between"><span class="text-slate-500">Total Trades:</span><strong class="text-slate-800" id="cardTotalTradesCount">0</strong></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">STREAK ANALYSIS</span>
+                                <div class="space-y-1 pt-1 text-xs">
+                                    <div class="flex justify-between"><span class="text-slate-500">Longest Win:</span><strong class="text-emerald-600" id="cardLongestWin">0 trades</strong></div>
+                                    <div class="flex justify-between"><span class="text-slate-500">Longest Loss:</span><strong class="text-rose-600" id="cardLongestLoss">0 trades</strong></div>
+                                    <div class="flex justify-between"><span class="text-slate-500">Current Streak:</span><strong class="text-emerald-600" id="cardCurrentStreak">0 wins</strong></div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">CURRENT DRAWDOWN</span>
+                                <div class="space-y-1 pt-1 text-xs">
+                                    <div class="flex justify-between"><span class="text-slate-500">Peak:</span><strong class="text-emerald-600" id="cardPeakVal">$0</strong></div>
+                                    <div class="flex justify-between"><span class="text-slate-500">Max Drawdown:</span><strong class="text-rose-600" id="cardMaxDD">$0</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">RECOVERY FACTOR</span>
+                                <div class="text-2xl font-black text-slate-800 my-2" id="cardRecoveryFactor">0.00</div>
+                                <div class="text-[11px] text-slate-500 flex justify-between"><span id="cardRecNet">Net: $0</span><span id="cardRecDD">DD: $0</span></div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">CONSISTENCY</span>
+                                <div class="text-2xl font-black text-slate-800 my-2" id="cardConsistency">0.00%</div>
+                                <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full transition-all duration-300" id="consistencyBar" style="width: 0%"></div></div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">SHARPE RATIO</span>
+                                <div class="text-2xl font-black text-slate-800 my-2" id="cardSharpe">6.95</div>
+                                <div class="text-[11px] text-slate-500" id="cardSharpeSub">Total Return: 0%</div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <span class="text-xs font-bold text-slate-600 uppercase block">SORTINO RATIO</span>
+                                <div class="text-2xl font-black text-slate-800 my-2" id="cardSortino">N/A</div>
+                                <div class="text-[11px] text-slate-500">Downside Risk: 0.00%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: DAILY PLANNER -->
+                <div id="tab-planner" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
+                                <i class="fa-solid fa-calendar-days text-blue-600"></i><span>DAILY PLANNER & KẾ HOẠCH NGÀY</span>
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Cân bằng tâm lý, thiết lập mục tiêu và định hình xu hướng ngày giao dịch.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="shiftPlannerWeek(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition">
+                                <i class="fa-solid fa-chevron-left mr-1"></i> Tuần trước
+                            </button>
+                            <div id="plannerWeekTotalProfit" class="text-xs font-bold px-3.5 py-2 rounded-lg border flex items-center space-x-1.5 transition">
+                                <span>TỔNG P&L TUẦN: $0</span>
+                            </div>
+                            <button onclick="shiftPlannerWeek(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition">
+                                Tuần sau <i class="fa-solid fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-7 gap-3" id="plannerWeekStrip"></div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-800 uppercase mb-3 flex items-center space-x-2">
+                                    <i class="fa-solid fa-face-smile text-blue-600"></i><span>ĐÁNH GIÁ PHIÊN</span>
+                                </h3>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4">
+                                    <span class="text-xs text-slate-500 font-medium block mb-1">P&L NGÀY ĐÃ CHỌN</span>
+                                    <div class="text-xl font-black text-slate-800" id="plannerSelectedDatePnL">$0</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-bold text-slate-700 block mb-2">TRẠNG THÁI TÂM LÝ (MENTAL STATE)</label>
+                                <div class="grid grid-cols-2 gap-2" id="mentalStateGroup">
+                                    <button type="button" onclick="selectMentalState('Confident')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">Confident</button>
+                                    <button type="button" onclick="selectMentalState('Calm')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">Calm</button>
+                                    <button type="button" onclick="selectMentalState('Disciplined')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">Disciplined</button>
+                                    <button type="button" onclick="selectMentalState('FOMO')" class="mental-btn text-xs font-semibold py-2 px-3 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 hover:bg-slate-100 transition text-left">FOMO</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-bold text-slate-700 block mb-2">THIÊN HƯỚNG THỊ TRƯỜNG (MARKET BIAS)</label>
+                                <div class="grid grid-cols-3 gap-2" id="marketBiasGroup">
+                                    <button type="button" onclick="selectMarketBias('Bullish')" class="bias-btn text-xs font-semibold py-2 px-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 transition text-center">🟢 TĂNG</button>
+                                    <button type="button" onclick="selectMarketBias('Bearish')" class="bias-btn text-xs font-semibold py-2 px-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 transition text-center">🔴 GIẢM</button>
+                                    <button type="button" onclick="selectMarketBias('Neutral')" class="bias-btn text-xs font-semibold py-2 px-2 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 transition text-center">🟡 ĐI NGANG</button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-2">
+                                    <span>ĐÁNH GIÁ NGÀY HÔM NAY</span><span id="ratingSliderVal" class="text-blue-600 font-black">50 / 100</span>
+                                </div>
+                                <input type="range" id="plannerRatingRange" min="0" max="100" value="50" oninput="updateRatingSliderVal(this.value)" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                                    <h3 class="text-xs font-bold text-slate-800 uppercase flex items-center space-x-2">
+                                        <i class="fa-solid fa-list-check text-blue-600"></i><span>MỤC TIÊU TRONG NGÀY (DAILY GOALS)</span>
+                                    </h3>
+                                    <button onclick="addDailyGoal()" class="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center space-x-1">
+                                        <i class="fa-solid fa-plus"></i> <span>Thêm mục tiêu</span>
+                                    </button>
+                                </div>
+                                <div id="dailyGoalsContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+                                <div class="pt-2">
+                                    <label class="text-xs font-bold text-slate-700 block mb-2">GHI CHÚ & PHÂN TÍCH PHIÊN (SESSION NOTES)</label>
+                                    <textarea id="plannerSessionNotes" rows="6" oninput="saveSessionNotesLive(this.value)" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 text-slate-700 font-medium" placeholder="Nhập nhận định thị trường..."></textarea>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100">
+                                <button onclick="savePlannerData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center justify-center space-x-2">
+                                    <i class="fa-solid fa-floppy-disk"></i><span>Lưu Kế Hoạch & Ghi Chú Ngày Cloud</span>
                                 </button>
                             </div>
-                            <div id="dailyGoalsContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
-                            <div class="pt-2">
-                                <label class="text-xs font-bold text-slate-700 block mb-2">GHI CHÚ & PHÂN TÍCH PHIÊN (SESSION NOTES)</label>
-                                <textarea id="plannerSessionNotes" rows="6" oninput="saveSessionNotesLive(this.value)" class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 text-slate-700 font-medium" placeholder="Nhập nhận định thị trường..."></textarea>
-                            </div>
                         </div>
-                        <div class="mt-6 pt-4 border-t border-slate-100">
-                            <button onclick="savePlannerData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-floppy-disk"></i><span>Lưu Kế Hoạch & Ghi Chú Ngày</span>
+                    </div>
+                </div>
+
+                <!-- TAB 3: TRADE LOG -->
+                <div id="tab-tradelog" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
+                                <i class="fa-solid fa-list-ul text-blue-600"></i><span>DANH SÁCH NHẬT KÝ GIAO DỊCH (TRADE LOG)</span>
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Danh sách các vị thế giao dịch chi tiết đồng bộ hoàn hảo trên Cloud.</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-semibold transition flex items-center space-x-1.5 border border-slate-200">
+                                <i class="fa-solid fa-file-arrow-down"></i> <span>Xuất file CSV</span>
+                            </button>
+                            <button onclick="openTradeModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-plus"></i> <span>Thêm giao dịch mới</span>
                             </button>
                         </div>
                     </div>
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                        <th class="p-3.5">Symbol</th>
+                                        <th class="p-3.5">P&L ($)</th>
+                                        <th class="p-3.5">Lợi nhuận (%)</th>
+                                        <th class="p-3.5">Volume</th>
+                                        <th class="p-3.5">Entry Timeframe</th>
+                                        <th class="p-3.5">Entry Price</th>
+                                        <th class="p-3.5">Close Price</th>
+                                        <th class="p-3.5">Giờ vào lệnh</th>
+                                        <th class="p-3.5">Duration</th>
+                                        <th class="p-3.5">Setup</th>
+                                        <th class="p-3.5">Tags</th>
+                                        <th class="p-3.5">Confluences</th>
+                                        <th class="p-3.5">Nội dung ghi chú</th>
+                                        <th class="p-3.5 text-center">Chart</th>
+                                        <th class="p-3.5 text-center">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tradeLogTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div id="tab-tradelog" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
-                            <i class="fa-solid fa-list-ul text-blue-600"></i><span>DANH SÁCH NHẬT KÝ GIAO DỊCH (TRADE LOG)</span>
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Danh sách các vị thế giao dịch chi tiết đồng bộ hoàn hảo với dữ liệu lịch biểu.</p>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-semibold transition flex items-center space-x-1.5 border border-slate-200">
-                            <i class="fa-solid fa-file-arrow-down"></i> <span>Xuất file CSV</span>
-                        </button>
-                        <button onclick="openTradeModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow transition flex items-center space-x-1.5">
-                            <i class="fa-solid fa-plus"></i> <span>Thêm giao dịch mới</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                    <th class="p-3.5">Symbol</th>
-                                    <th class="p-3.5">P&L ($)</th>
-                                    <th class="p-3.5">Lợi nhuận (%)</th>
-                                    <th class="p-3.5">Volume</th>
-                                    <th class="p-3.5">Entry Timeframe</th>
-                                    <th class="p-3.5">Entry Price</th>
-                                    <th class="p-3.5">Close Price</th>
-                                    <th class="p-3.5">Giờ vào lệnh</th>
-                                    <th class="p-3.5">Duration</th>
-                                    <th class="p-3.5">Setup</th>
-                                    <th class="p-3.5">Tags</th>
-                                    <th class="p-3.5">Confluences</th>
-                                    <th class="p-3.5">Nội dung ghi chú</th>
-                                    <th class="p-3.5 text-center">Chart</th>
-                                    <th class="p-3.5 text-center">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tradeLogTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-winrate" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
-                    <h2 class="text-sm font-bold text-slate-900 mb-1">WINRATE & PERFORMANCE ANALYSIS</h2>
-                    <p class="text-xs text-slate-500 mb-6">Thống kê chi tiết tỷ lệ thắng, lệnh thắng và lệnh thua trong hệ thống.</p>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col items-center justify-center">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-4 self-start">WIN RATE GAUGE</h3>
-                            <div class="relative w-40 h-40 flex items-center justify-center">
-                                <canvas id="winRateLargeGauge"></canvas>
-                                <div class="absolute inset-0 flex flex-col items-center justify-center pt-4 pointer-events-none">
-                                    <span class="text-2xl font-black text-slate-800" id="largeGaugeVal">0%</span>
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase">WINNING RATE</span>
+                <!-- TAB 4: WINRATE ANALYSIS -->
+                <div id="tab-winrate" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+                        <h2 class="text-sm font-bold text-slate-900 mb-1">WINRATE & PERFORMANCE ANALYSIS</h2>
+                        <p class="text-xs text-slate-500 mb-6">Thống kê chi tiết tỷ lệ thắng, lệnh thắng và lệnh thua trong hệ thống.</p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col items-center justify-center">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-4 self-start">WIN RATE GAUGE</h3>
+                                <div class="relative w-40 h-40 flex items-center justify-center">
+                                    <canvas id="winRateLargeGauge"></canvas>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center pt-4 pointer-events-none">
+                                        <span class="text-2xl font-black text-slate-800" id="largeGaugeVal">0%</span>
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase">WINNING RATE</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">CUMULATIVE P&L CHART</h3>
+                                <div class="h-44 w-full"><canvas id="winrateCumulativeChart"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-5 space-y-3">
+                                <h3 class="text-xs font-bold text-emerald-700 uppercase pb-2 border-b border-emerald-200">WINS SUMMARY</h3>
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex justify-between py-1 border-b border-emerald-100"><span class="text-slate-600">Tổng Lệnh Thắng</span><strong class="text-emerald-700" id="winSumTotal">0</strong></div>
+                                    <div class="flex justify-between py-1 border-b border-emerald-100"><span class="text-slate-600">Tỷ lệ Thắng</span><strong class="text-emerald-700" id="winSumRate">0%</strong></div>
+                                    <div class="flex justify-between py-1 border-b border-emerald-100"><span class="text-slate-600">Tổng Tiền Lãi</span><strong class="text-emerald-700" id="winSumAmount">$0</strong></div>
+                                    <div class="flex justify-between py-1"><span class="text-slate-600">Lệnh Thắng Lớn Nhất</span><strong class="text-emerald-700" id="winSumMax">$0</strong></div>
+                                </div>
+                            </div>
+                            <div class="bg-rose-50/50 border border-rose-200 rounded-xl p-5 space-y-3">
+                                <h3 class="text-xs font-bold text-rose-700 uppercase pb-2 border-b border-rose-200">LOSSES SUMMARY</h3>
+                                <div class="space-y-2 text-xs">
+                                    <div class="flex justify-between py-1 border-b border-rose-100"><span class="text-slate-600">Tổng Lệnh Thua</span><strong class="text-rose-700" id="lossSumTotal">0</strong></div>
+                                    <div class="flex justify-between py-1 border-b border-rose-100"><span class="text-slate-600">Tỷ lệ Thua</span><strong class="text-rose-700" id="lossSumRate">0%</strong></div>
+                                    <div class="flex justify-between py-1 border-b border-rose-100"><span class="text-slate-600">Tổng Tiền Thua</span><strong class="text-rose-700" id="lossSumAmount">-$0</strong></div>
+                                    <div class="flex justify-between py-1"><span class="text-slate-600">Lệnh Thua Lớn Nhất</span><strong class="text-rose-700" id="lossSumMax">-$0</strong></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">CUMULATIVE P&L CHART</h3>
-                            <div class="h-44 w-full"><canvas id="winrateCumulativeChart"></canvas></div>
-                        </div>
                     </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-5 space-y-3">
-                            <h3 class="text-xs font-bold text-emerald-700 uppercase pb-2 border-b border-emerald-200">WINS SUMMARY</h3>
-                            <div class="space-y-2 text-xs">
-                                <div class="flex justify-between py-1 border-b border-emerald-100"><span class="text-slate-600">Tổng Lệnh Thắng</span><strong class="text-emerald-700" id="winSumTotal">0</strong></div>
-                                <div class="flex justify-between py-1 border-b border-emerald-100"><span class="text-slate-600">Tỷ lệ Thắng</span><strong class="text-emerald-700" id="winSumRate">0%</strong></div>
-                                <div class="flex justify-between py-1 border-b border-emerald-100"><span class="text-slate-600">Tổng Tiền Lãi</span><strong class="text-emerald-700" id="winSumAmount">$0</strong></div>
-                                <div class="flex justify-between py-1"><span class="text-slate-600">Lệnh Thắng Lớn Nhất</span><strong class="text-emerald-700" id="winSumMax">$0</strong></div>
+                </div>
+
+                <!-- TAB 5: BY DAY OF WEEK -->
+                <div id="tab-byday" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                            <div>
+                                <h2 class="text-sm font-bold text-slate-900">BY DAY OF WEEK ANALYSIS</h2>
+                                <p class="text-xs text-slate-500 mt-0.5" id="byDaySubtitle">Phân tích hiệu suất theo từng ngày trong tuần cụ thể.</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="shiftByDayWeek(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Tuần trước</span>
+                                </button>
+                                <div id="byDayWeekTotalProfit" class="text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50">
+                                    <span>TỔNG TUẦN: $0</span>
+                                </div>
+                                <button onclick="shiftByDayWeek(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                    <span>Tuần sau</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="bg-rose-50/50 border border-rose-200 rounded-xl p-5 space-y-3">
-                            <h3 class="text-xs font-bold text-rose-700 uppercase pb-2 border-b border-rose-200">LOSSES SUMMARY</h3>
-                            <div class="space-y-2 text-xs">
-                                <div class="flex justify-between py-1 border-b border-rose-100"><span class="text-slate-600">Tổng Lệnh Thua</span><strong class="text-rose-700" id="lossSumTotal">0</strong></div>
-                                <div class="flex justify-between py-1 border-b border-rose-100"><span class="text-slate-600">Tỷ lệ Thua</span><strong class="text-rose-700" id="lossSumRate">0%</strong></div>
-                                <div class="flex justify-between py-1 border-b border-rose-100"><span class="text-slate-600">Tổng Tiền Thua</span><strong class="text-rose-700" id="lossSumAmount">-$0</strong></div>
-                                <div class="flex justify-between py-1"><span class="text-slate-600">Lệnh Thua Lớn Nhất</span><strong class="text-rose-700" id="lossSumMax">-$0</strong></div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY DAY OF THE WEEK</h3>
+                                <div class="h-64"><canvas id="dayTradesChart"></canvas></div>
                             </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY DAY OF THE WEEK</h3>
+                                <div class="h-64"><canvas id="dayPerfChart"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
+                                        <th class="p-3.5">DAY</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dayOfWeekTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="tab-byday" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-                        <div>
-                            <h2 class="text-sm font-bold text-slate-900">BY DAY OF WEEK ANALYSIS</h2>
-                            <p class="text-xs text-slate-500 mt-0.5" id="byDaySubtitle">Phân tích hiệu suất theo từng ngày trong tuần cụ thể.</p>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <button onclick="shiftByDayWeek(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
-                                <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Tuần trước</span>
-                            </button>
-                            <div id="byDayWeekTotalProfit" class="text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50">
-                                <span>TỔNG TUẦN: $0</span>
+                <!-- TAB 6: WEEKLY BREAKDOWN -->
+                <div id="tab-weekly" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                            <div>
+                                <h2 class="text-sm font-bold text-slate-900">WEEKLY BREAKDOWN ANALYSIS</h2>
+                                <p class="text-xs text-slate-500 mt-0.5" id="weeklySubTitle">Phân tích tuần trong tháng đang chọn.</p>
                             </div>
-                            <button onclick="shiftByDayWeek(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
-                                <span>Tuần sau</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY DAY OF THE WEEK</h3>
-                            <div class="h-64"><canvas id="dayTradesChart"></canvas></div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY DAY OF THE WEEK</h3>
-                            <div class="h-64"><canvas id="dayPerfChart"></canvas></div>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">DAY</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dayOfWeekTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-weekly" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-                        <div>
-                            <h2 class="text-sm font-bold text-slate-900">WEEKLY BREAKDOWN ANALYSIS</h2>
-                            <p class="text-xs text-slate-500 mt-0.5" id="weeklySubTitle">Phân tích tuần trong tháng đang chọn.</p>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <button onclick="shiftWeeklyMonth(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
-                                <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Tháng trước</span>
-                            </button>
-                            <div id="weeklyMonthTotalProfit" class="text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50">
-                                <span>TỔNG THÁNG: $0</span>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="shiftWeeklyMonth(-1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-chevron-left text-[10px]"></i> <span>Tháng trước</span>
+                                </button>
+                                <div id="weeklyMonthTotalProfit" class="text-xs font-bold px-3.5 py-1.5 rounded-lg border flex items-center space-x-1.5 bg-slate-50">
+                                    <span>TỔNG THÁNG: $0</span>
+                                </div>
+                                <button onclick="shiftWeeklyMonth(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
+                                    <span>Tháng sau</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                </button>
                             </div>
-                            <button onclick="shiftWeeklyMonth(1)" class="text-xs bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-700 transition flex items-center space-x-1">
-                                <span>Tháng sau</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                            </button>
                         </div>
-                    </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY WEEK</h3>
-                            <div class="h-64"><canvas id="weekTradesChart"></canvas></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY WEEK</h3>
+                                <div class="h-64"><canvas id="weekTradesChart"></canvas></div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY WEEK</h3>
+                                <div class="h-64"><canvas id="weekPerfChart"></canvas></div>
+                            </div>
                         </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY WEEK</h3>
-                            <div class="h-64"><canvas id="weekPerfChart"></canvas></div>
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
+                                        <th class="p-3.5">WEEK</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="weeklyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                            </table>
                         </div>
-                    </div>
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">WEEK</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="weeklyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
-                        </table>
                     </div>
                 </div>
-            </div>
 
-            <div id="tab-monthly" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-sm font-bold text-slate-900">KẾT QUẢ THEO THÁNG (MONTHLY RESULTS)</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Phân tích hiệu suất giao dịch và tần suất giao dịch phân bố theo các tháng trong năm.</p>
+                <!-- TAB 7: MONTHLY RESULTS -->
+                <div id="tab-monthly" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-sm font-bold text-slate-900">KẾT QUẢ THEO THÁNG (MONTHLY RESULTS)</h2>
+                                <p class="text-xs text-slate-500 mt-0.5">Phân tích hiệu suất giao dịch và tần suất giao dịch phân bố theo các tháng trong năm.</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY MONTH</h3>
-                            <div class="h-64"><canvas id="monthlyTradesChart"></canvas></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY MONTH</h3>
+                                <div class="h-64"><canvas id="monthlyTradesChart"></canvas></div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY MONTH</h3>
+                                <div class="h-64"><canvas id="monthlyPerfChart"></canvas></div>
+                            </div>
                         </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY MONTH</h3>
-                            <div class="h-64"><canvas id="monthlyPerfChart"></canvas></div>
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
+                                        <th class="p-3.5">MONTH</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="monthlyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                            </table>
                         </div>
-                    </div>
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">MONTH</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="monthlyTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
-                        </table>
                     </div>
                 </div>
-            </div>
 
-            <div id="tab-hourly" class="space-y-6 tab-content hidden">
-                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                    <h2 class="text-sm font-bold text-slate-900">HOURLY PERFORMANCE (22 ICT MACROS)</h2>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY ICT MACROS</h3>
-                            <div class="h-64"><canvas id="macroTradesChart"></canvas></div>
+                <!-- TAB 8: HOURLY PERFORMANCE -->
+                <div id="tab-hourly" class="space-y-6 tab-content hidden">
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
+                        <h2 class="text-sm font-bold text-slate-900">HOURLY PERFORMANCE (22 ICT MACROS)</h2>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY ICT MACROS</h3>
+                                <div class="h-64"><canvas id="macroTradesChart"></canvas></div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY ICT MACROS</h3>
+                                <div class="h-64"><canvas id="macroPerfChart"></canvas></div>
+                            </div>
                         </div>
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                            <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY ICT MACROS</h3>
-                            <div class="h-64"><canvas id="macroPerfChart"></canvas></div>
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
+                                        <th class="p-3.5">ICT MACRO INTERVAL</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="macroTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
+                            </table>
                         </div>
-                    </div>
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                    <th class="p-3.5">ICT MACRO INTERVAL</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
-                                </tr>
-                            </thead>
-                            <tbody id="macroTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -784,10 +850,10 @@
                         <input type="number" step="any" id="modalVolume" value="1" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Khung thời gian vào lệnh (Entry Timeframe)</label>
+                        <label class="font-bold text-slate-700 block mb-1">Entry Timeframe (Khung thời gian)</label>
                         <select id="modalFees" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="30s">30 giây (30s)</option>
-                            <option value="1m">1 phút (1m)</option>
+                            <option value="1m" selected>1 phút (1m)</option>
                             <option value="5m">5 phút (5m)</option>
                             <option value="10m">10 phút (10m)</option>
                             <option value="30m">30 phút (30m)</option>
@@ -823,6 +889,93 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- NEW CATEGORIZED FIELDS (ENGLISH) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Loss Reasons (SL Categories)</label>
+                        <select id="modalLossReason" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="">-- None / Win --</option>
+                            <option value="SL">SL</option>
+                            <option value="bias">bias</option>
+                            <option value="trailing SL">trailing SL</option>
+                            <option value="bad entry">bad entry</option>
+                            <option value="external factors">external factors</option>
+                            <option value="psychology">psychology</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Win / Profit Reasons</label>
+                        <select id="modalWinReason" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="">-- None / Loss --</option>
+                            <option value="correct bias">correct bias</option>
+                            <option value="SL">SL</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Hold Management Evaluation</label>
+                        <select id="modalHoldMgmt" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select Hold Evaluation --</option>
+                            <optgroup label="Good hold">
+                                <option value="hold_discipline">hold_discipline</option>
+                                <option value="hold_to_tp">hold_to_tp</option>
+                                <option value="hold_correct_bias">hold_correct_bias</option>
+                            </optgroup>
+                            <optgroup label="Bad hold">
+                                <option value="early_exit">early_exit</option>
+                                <option value="fear_close">fear_close</option>
+                                <option value="greed_hold">greed_hold</option>
+                                <option value="hope_hold">hope_hold</option>
+                                <option value="move_sl">move_sl</option>
+                                <option value="overmanage">overmanage</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-700 block mb-1">Error Category</label>
+                        <select id="modalErrorCategory" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="">-- None --</option>
+                            <option value="overmanage">overmanage</option>
+                            <option value="bad entry">bad entry</option>
+                            <option value="FOMO">FOMO</option>
+                            <option value="Revenge">Revenge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <label class="font-bold text-slate-700 block mb-1">Emotional State (Mental Evaluation)</label>
+                    <select id="modalEmotionalState" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <option value="">-- Select Emotional State --</option>
+                        <optgroup label="Positive Emotions">
+                            <option value="Confident">Confident</option>
+                            <option value="Calm">Calm</option>
+                            <option value="Disciplined">Disciplined</option>
+                            <option value="Patient">Patient</option>
+                            <option value="Focused">Focused</option>
+                            <option value="Objective">Objective</option>
+                            <option value="In control">In control</option>
+                            <option value="Relaxed">Relaxed</option>
+                            <option value="Trusting system">Trusting system</option>
+                        </optgroup>
+                        <optgroup label="Negative Emotions">
+                            <option value="Fear">Fear</option>
+                            <option value="FOMO">FOMO</option>
+                            <option value="Greed">Greed</option>
+                            <option value="Impatient">Impatient</option>
+                            <option value="Anxious">Anxious</option>
+                            <option value="Stressed">Stressed</option>
+                            <option value="Confused">Confused</option>
+                            <option value="Angry">Angry</option>
+                            <option value="Revenge trading">Revenge trading</option>
+                            <option value="Self-doubt">Self-doubt</option>
+                        </optgroup>
+                    </select>
+                </div>
+
                 <div>
                     <label class="font-bold text-slate-700 block mb-1.5">Các yếu tố hợp lưu (SMC / ICT Concepts)</label>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -845,7 +998,7 @@
                         <select id="modalDuration" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="30s">30s</option>
                             <option value="1m">1m</option>
-                            <option value="5m">5m</option>
+                            <option value="5m" selected>5m</option>
                             <option value="10m">10m</option>
                             <option value="30m">30m</option>
                             <option value="1h">1h+</option>
@@ -899,11 +1052,12 @@
             </div>
             <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3">
                 <button type="button" onclick="closeTradeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
-                <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch</button>
+                <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch Cloud</button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL: ACCOUNT -->
     <div id="accountModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -919,15 +1073,16 @@
                     <label class="font-bold text-slate-700 block mb-1">Số Vốn Khởi Tạo (Initial Balance $)</label>
                     <input type="number" id="newAccountBalance" value="100000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700">
                 </div>
-                <button onclick="addNewAccount()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow transition">Thêm Tài Khoản Tùy Chỉnh</button>
+                <button onclick="addNewAccount()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow transition">Thêm Tài Khoản Cloud</button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL: ACCOUNT MANAGE -->
     <div id="accountManageModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
-                <h3 class="font-bold text-sm tracking-wide">QUẢN LÝ TÀI KHOẢN GIAO DỊCH</h3>
+                <h3 class="font-bold text-sm tracking-wide">QUẢN LÝ TÀI KHOẢN CLOUD</h3>
                 <button onclick="closeAccountManageModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 space-y-4 text-xs max-h-[70vh] overflow-y-auto" id="accountManageList"></div>
@@ -937,13 +1092,28 @@
         </div>
     </div>
 
-    <div id="lightboxModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4" onclick="closeLightbox()">
-        <div class="relative max-w-4xl max-h-[90vh]">
-            <img id="lightboxImage" src="" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain border border-slate-700" alt="Trade Screenshot">
-            <button class="absolute -top-4 -right-4 bg-white text-slate-900 w-9 h-9 rounded-full font-bold shadow-lg flex items-center justify-center hover:bg-slate-200 transition">
-                <i class="fa-solid fa-xmark"></i>
+    <!-- MODAL: GALLERY LIGHTBOX -->
+    <div id="lightboxModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center hidden p-4 select-none">
+        <div class="absolute top-4 right-6 flex items-center space-x-4">
+            <span id="lightboxCounter" class="text-white text-xs font-bold bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">1 / 1</span>
+            <button onclick="closeLightbox()" class="bg-white text-slate-900 w-10 h-10 rounded-full font-bold shadow-2xl flex items-center justify-center hover:bg-slate-200 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
+        
+        <div class="relative max-w-5xl max-h-[75vh] flex items-center justify-center my-auto px-12">
+            <button onclick="slideLightbox(-1)" id="lightboxPrevBtn" class="absolute left-0 bg-slate-800/80 hover:bg-slate-700 text-white w-10 h-10 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            
+            <img id="lightboxImage" src="" class="max-w-full max-h-[72vh] rounded-xl shadow-2xl object-contain border border-slate-700" alt="Trade Screenshot">
+            
+            <button onclick="slideLightbox(1)" id="lightboxNextBtn" class="absolute right-0 bg-slate-800/80 hover:bg-slate-700 text-white w-10 h-10 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div id="lightboxThumbnails" class="flex items-center space-x-2 mt-4 max-w-full overflow-x-auto py-2 px-4 bg-slate-900/60 rounded-xl border border-slate-800"></div>
     </div>
 
     <script type="module">
@@ -959,7 +1129,7 @@
             getFirestore, 
             doc, 
             setDoc, 
-            getDoc 
+            onSnapshot 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -983,15 +1153,15 @@
         window.db = db;
         window.doc = doc;
         window.setDoc = setDoc;
-        window.getDoc = getDoc;
+        window.onSnapshot = onSnapshot;
+
+        let unsubscribeFirestore = null;
 
         window.signInWithGoogle = async function() {
             try {
-                const result = await signInWithPopup(auth, googleProvider);
-                window.updateLoginUI(result.user);
-                await window.syncDataFromCloud(result.user.uid);
+                await signInWithPopup(auth, googleProvider);
             } catch (error) {
-                console.error("Lỗi đăng nhập Google:", error);
+                console.error("Lỗi đăng nhập Google Cloud:", error);
                 if (error.code === 'auth/popup-blocked') {
                     alert("Popup bị chặn. Vui lòng cho phép popup cho trang này rồi thử lại.");
                 } else if (error.code !== 'auth/popup-closed-by-user') {
@@ -1003,9 +1173,19 @@
         window.updateLoginUI = function(user) {
             const loggedOutView = document.getElementById('loggedOutView');
             const loggedInView = document.getElementById('loggedInView');
+            const loginBanner = document.getElementById('loginRequiredBanner');
+            const mainContent = document.getElementById('mainDashboardContent');
+            const authControls = document.getElementById('authDependentControls');
+            const headerNewTradeBtn = document.getElementById('headerNewTradeBtn');
+
             if (user) {
-                loggedOutView.classList.add('hidden');
-                loggedInView.classList.remove('hidden');
+                if (loggedOutView) loggedOutView.classList.add('hidden');
+                if (loggedInView) loggedInView.classList.remove('hidden');
+                if (loginBanner) loginBanner.classList.add('hidden');
+                if (mainContent) mainContent.classList.remove('hidden');
+                if (authControls) authControls.classList.remove('hidden');
+                if (headerNewTradeBtn) headerNewTradeBtn.classList.remove('hidden');
+
                 document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
                 document.getElementById('userEmail').innerText = user.email || 'user@gmail.com';
                 const avatar = document.getElementById('userAvatarContainer');
@@ -1015,17 +1195,59 @@
                     avatar.innerText = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
                 }
             } else {
-                loggedInView.classList.add('hidden');
-                loggedOutView.classList.remove('hidden');
+                if (loggedInView) loggedInView.classList.add('hidden');
+                if (loggedOutView) loggedOutView.classList.remove('hidden');
+                if (loginBanner) loginBanner.classList.remove('hidden');
+                if (mainContent) mainContent.classList.add('hidden');
+                if (authControls) authControls.classList.add('hidden');
+                if (headerNewTradeBtn) headerNewTradeBtn.classList.add('hidden');
+
+                appState.trades = [];
+                appState.planners = {};
+                appState.accounts = {};
             }
         };
 
         onAuthStateChanged(auth, async (user) => {
             window.updateLoginUI(user);
             if (user) {
-                await window.syncDataFromCloud(user.uid);
+                if (unsubscribeFirestore) unsubscribeFirestore();
+                const userDocRef = doc(db, "users", user.uid, "data", "journalState");
+                
+                unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        appState.trades = Array.isArray(data.trades) ? data.trades : [];
+                        appState.planners = data.planners || {};
+                        appState.accounts = data.accounts || { 'Live': { name: 'Live Account', balance: 100000 } };
+                        appState.activeAccount = data.activeAccount || Object.keys(appState.accounts)[0] || 'Live';
+                    } else {
+                        const defaultState = {
+                            trades: [],
+                            planners: {},
+                            accounts: { 'Live': { name: 'Live Account', balance: 100000 } },
+                            activeAccount: 'Live'
+                        };
+                        setDoc(userDocRef, defaultState);
+                        appState.trades = [];
+                        appState.planners = {};
+                        appState.accounts = defaultState.accounts;
+                        appState.activeAccount = 'Live';
+                    }
+                    updateAccountSelectors();
+                    switchTab(appState.currentTab, true);
+                }, (error) => {
+                    console.error("Real-time cloud sync error:", error);
+                });
             } else {
-                window.loadLocalStateFallback();
+                if (unsubscribeFirestore) {
+                    unsubscribeFirestore();
+                    unsubscribeFirestore = null;
+                }
+                appState.trades = [];
+                appState.planners = {};
+                appState.accounts = {};
+                switchTab('overview', true);
             }
         });
     </script>
@@ -1038,64 +1260,14 @@
             currentMonth: realNow.getMonth(),
             plannerDate: realNow.toISOString().split('T')[0],
             activeAccount: 'Live',
-            accounts: {
-                'Live': { name: 'Live Account', balance: 100000 },
-                'Demo': { name: 'Demo Account', balance: 50000 }
-            },
-            trades: [
-                {
-                    id: 't-1',
-                    account: 'Live',
-                    date: '2026-07-16',
-                    symbol: 'NQ',
-                    type: 'LONG',
-                    entry: 29274,
-                    close: 29095,
-                    volume: 1,
-                    fees: '10m',
-                    pnl: 1161.6,
-                    returnPct: 1.16,
-                    setup: 'Reversal',
-                    tag: 'Discipline',
-                    confluences: ['SMT', 'FVG'],
-                    notes: 'Lệnh này cả ngày nó chạy nhiều rồi nhưng vẫn còn 1 cái PWL và khi mở cửa giá đi len sau đó tạo một cái PO3',
-                    duration: '10m',
-                    hour: '09:30-09:40',
-                    tvLink: 'https://www.tradingview.com/x/example',
-                    chartImgs: ['https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart+1']
-                }
-            ],
+            accounts: {},
+            trades: [],
             planners: {}
         };
 
         let filterApplied = false;
-        let byDayCurrentWeekStart = new Date(); // Tracks week for By Day Of Week tab
-        let weeklyMonthCurrent = { year: realNow.getFullYear(), month: realNow.getMonth() }; // Tracks month for Weekly Breakdown tab
-
-        window.syncDataFromCloud = async function(uid) {
-            try {
-                const userDocRef = window.doc(window.db, "users", uid, "data", "journalState");
-                const userSnap = await window.getDoc(userDocRef);
-                if (userSnap.exists()) {
-                    const data = userSnap.data();
-                    if (data.trades) appState.trades = data.trades;
-                    if (data.planners) appState.planners = data.planners;
-                    if (data.accounts) appState.accounts = data.accounts;
-                    if (data.activeAccount) appState.activeAccount = data.activeAccount;
-                } else {
-                    await window.setDoc(userDocRef, {
-                        trades: appState.trades,
-                        planners: appState.planners,
-                        accounts: appState.accounts,
-                        activeAccount: appState.activeAccount
-                    });
-                }
-            } catch (e) {
-                console.error("Cloud sync error:", e);
-            }
-            saveAppStateLocally();
-            switchTab(appState.currentTab);
-        };
+        let byDayCurrentWeekStart = new Date();
+        let weeklyMonthCurrent = { year: realNow.getFullYear(), month: realNow.getMonth() };
 
         async function saveCloudData() {
             const user = window.firebaseAuth?.currentUser;
@@ -1109,19 +1281,15 @@
                         activeAccount: appState.activeAccount
                     }, { merge: true });
                 } catch (e) {
-                    console.error("Error saving to cloud:", e);
+                    console.error("Error saving to cloud server:", e);
+                    alert("Lỗi lưu trữ Cloud: " + e.message);
                 }
+            } else {
+                alert("Vui lòng đăng nhập Google để lưu dữ liệu lên Cloud server.");
             }
         }
 
         function loadAppState() {
-            const saved = localStorage.getItem('jacooodevn_persistent_state_v35');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    appState = { ...appState, ...parsed };
-                } catch (e) { console.error(e); }
-            }
             const todayStr = realNow.toISOString().split('T')[0];
             if (!document.getElementById('filterDateFrom').value) {
                 document.getElementById('filterDateFrom').value = `${appState.currentYear}-${String(appState.currentMonth+1).padStart(2,'0')}-01`;
@@ -1133,20 +1301,6 @@
             document.getElementById('modalDate').value = todayStr;
             document.getElementById('overviewYear').value = appState.currentYear;
             updateAccountSelectors();
-        }
-
-        window.loadLocalStateFallback = function() {
-            loadAppState();
-            switchTab(appState.currentTab);
-        };
-
-        function saveAppStateLocally() {
-            localStorage.setItem('jacooodevn_persistent_state_v35', JSON.stringify(appState));
-        }
-
-        function saveAppState() {
-            saveAppStateLocally();
-            saveCloudData();
         }
 
         async function handleLogout() {
@@ -1169,21 +1323,33 @@
                 modalHtml += `<option value="${key}">${acc.name} ($${acc.balance.toLocaleString()})</option>`;
             }
 
-            filterAcc.innerHTML = filterHtml;
-            filterAcc.value = appState.activeAccount;
-            modalAcc.innerHTML = modalHtml;
+            if (filterAcc) {
+                filterAcc.innerHTML = filterHtml;
+                if (appState.accounts[appState.activeAccount]) {
+                    filterAcc.value = appState.activeAccount;
+                } else {
+                    filterAcc.value = 'all';
+                }
+            }
+
+            if (modalAcc) {
+                modalAcc.innerHTML = modalHtml;
+                modalAcc.value = appState.activeAccount;
+            }
 
             const activeAccObj = appState.accounts[appState.activeAccount] || Object.values(appState.accounts)[0];
             if (activeAccObj) {
-                document.getElementById('currentAccountBadge').innerText = `Tài khoản: ${activeAccObj.name} ($${activeAccObj.balance.toLocaleString()})`;
+                const badge = document.getElementById('currentAccountBadge');
+                if (badge) badge.innerText = `Tài khoản: ${activeAccObj.name} ($${activeAccObj.balance.toLocaleString()})`;
             }
         }
 
-        function switchTab(tabId) {
+        function switchTab(tabId, isSilent = false) {
             appState.currentTab = tabId;
-            saveAppState();
+            
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) targetTab.classList.remove('hidden');
 
             document.querySelectorAll('aside nav button').forEach(btn => {
                 btn.classList.remove('bg-blue-50', 'text-blue-600', 'font-bold');
@@ -1203,18 +1369,58 @@
             else if (tabId === 'hourly') renderHourlyPerformance();
         }
 
-        function resetDemoData() {
-            if (confirm('Khôi phục dữ liệu mẫu Demo?')) {
-                localStorage.removeItem('jacooodevn_persistent_state_v35');
-                location.reload();
+        function resetCloudDemoData() {
+            const user = window.firebaseAuth?.currentUser;
+            if (!user) {
+                alert("Vui lòng đăng nhập Google Cloud trước.");
+                return;
+            }
+            if (confirm('Khởi tạo dữ liệu mẫu Demo lên Cloud server của bạn?')) {
+                appState.accounts = {
+                    'Live': { name: 'Live Account', balance: 100000 },
+                    'Demo': { name: 'Demo Account', balance: 50000 }
+                };
+                appState.activeAccount = 'Live';
+                appState.trades = [
+                    {
+                        id: 't-1',
+                        account: 'Live',
+                        date: '2026-07-16',
+                        symbol: 'NQ',
+                        type: 'LONG',
+                        entry: 29274,
+                        close: 29145,
+                        volume: 1,
+                        fees: '30s',
+                        pnl: 1161.6,
+                        returnPct: 1.16,
+                        setup: 'Reversal',
+                        tag: 'Discipline',
+                        confluences: ['SMT', 'iFVG'],
+                        notes: 'Lệnh mẫu demo cloud...',
+                        duration: '30s',
+                        hour: '09:30-09:40',
+                        tvLink: '',
+                        chartImgs: [],
+                        lossReason: '',
+                        winReason: 'correct bias',
+                        holdMgmt: 'hold_to_tp',
+                        errorCategory: '',
+                        emotionalState: 'Confident'
+                    }
+                ];
+                saveCloudData();
+                switchTab(appState.currentTab);
             }
         }
 
-        function clearAllData() {
-            if (confirm('Xóa tất cả dữ liệu giao dịch?')) {
+        function clearCloudAllData() {
+            const user = window.firebaseAuth?.currentUser;
+            if (!user) return;
+            if (confirm('Xóa toàn bộ dữ liệu trên Cloud server? Thao tác này không thể hoàn tác!')) {
                 appState.trades = [];
                 appState.planners = {};
-                saveAppState();
+                saveCloudData();
                 switchTab(appState.currentTab);
             }
         }
@@ -1247,7 +1453,8 @@
         }
 
         function applyFiltersLive() {
-            saveAppState();
+            const accEl = document.getElementById('filterAccount');
+            if (accEl && accEl.value !== 'all') appState.activeAccount = accEl.value;
             switchTab(appState.currentTab);
         }
 
@@ -1405,28 +1612,109 @@
             document.getElementById('stat-max-loss-pts').innerText = `-${maxLossPts.toFixed(1)} pts`;
             document.getElementById('stat-total-pts').innerText = `${totalPoints.toFixed(1)} pts`;
 
+            renderAdvancedSystemAnalytics(filteredTrades);
             renderCumulativeChart();
             renderWinRateGauge(winRateVal, winTrades, lossTrades);
             renderAdvancedCards(filteredTrades, netProfit, winTrades, lossTrades, totalTrades, accBalance);
+        }
+
+        function renderAdvancedSystemAnalytics(trades) {
+            // 1. Top 3 Emotional States
+            const emotionCounts = {};
+            // 2. Top 3 Error Causes
+            const errorCounts = {};
+            // 3. Top 3 Winrate Metrics/Indicators (using setup, tag, or confluences)
+            const indicatorWins = {};
+            const indicatorTotals = {};
+
+            trades.forEach(t => {
+                if (t.emotionalState) {
+                    emotionCounts[t.emotionalState] = (emotionCounts[t.emotionalState] || 0) + 1;
+                }
+                const err = t.errorCategory || t.lossReason;
+                if (err) {
+                    errorCounts[err] = (errorCounts[err] || 0) + 1;
+                }
+                const isWin = Number(t.pnl) > 0;
+                const factors = [];
+                if (t.setup) factors.push(`Setup: ${t.setup}`);
+                if (t.tag) factors.push(`Tag: ${t.tag}`);
+                if (Array.isArray(t.confluences)) {
+                    t.confluences.forEach(c => factors.push(`Confluence: ${c}`));
+                }
+                factors.push(`Timeframe: ${t.fees || '1m'}`);
+
+                factors.forEach(f => {
+                    indicatorTotals[f] = (indicatorTotals[f] || 0) + 1;
+                    if (isWin) {
+                        indicatorWins[f] = (indicatorWins[f] || 0) + 1;
+                    }
+                });
+            });
+
+            // Sort Emotions
+            const sortedEmotions = Object.entries(emotionCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+            const emoContainer = document.getElementById('topEmotionsContainer');
+            if (sortedEmotions.length > 0) {
+                 emoContainer.innerHTML = sortedEmotions.map(([emo, count], i) => `
+                    <div class="flex justify-between items-center bg-white p-2 rounded border border-slate-200">
+                        <span class="font-bold text-slate-700">#${i+1} ${emo}</span>
+                        <span class="bg-purple-50 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold">${count} lần</span>
+                    </div>
+                 `).join('');
+            } else {
+                emoContainer.innerHTML = `<div class="text-slate-400 italic">Chưa có dữ liệu cảm xúc</div>`;
+            }
+
+            // Sort Errors
+            const sortedErrors = Object.entries(errorCounts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+            const errContainer = document.getElementById('topErrorsContainer');
+            if (sortedErrors.length > 0) {
+                errContainer.innerHTML = sortedErrors.map(([err, count], i) => `
+                    <div class="flex justify-between items-center bg-white p-2 rounded border border-slate-200">
+                        <span class="font-bold text-slate-700">#${i+1} ${err}</span>
+                        <span class="bg-rose-50 text-rose-700 px-2 py-0.5 rounded text-[10px] font-bold">${count} lần</span>
+                    </div>
+                `).join('');
+            } else {
+                errContainer.innerHTML = `<div class="text-slate-400 italic">Chưa có dữ liệu lỗi</div>`;
+            }
+
+            // Sort Winrate Metrics
+            const metricWinRates = Object.keys(indicatorTotals).map(metric => {
+                const total = indicatorTotals[metric];
+                const wins = indicatorWins[metric] || 0;
+                const wr = total > 0 ? (wins / total) * 100 : 0;
+                return { metric, wr, total };
+            }).filter(x => x.total >= 1).sort((a,b) => b.wr - a.wr).slice(0, 3);
+
+            const metricContainer = document.getElementById('topWinrateMetricsContainer');
+            if (metricWinRates.length > 0) {
+                metricContainer.innerHTML = metricWinRates.map((m, i) => `
+                    <div class="flex justify-between items-center bg-white p-2 rounded border border-slate-200">
+                        <span class="font-bold text-slate-700 truncate max-w-[140px]" title="${m.metric}">#${i+1} ${m.metric}</span>
+                        <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold">${m.wr.toFixed(0)}% (${m.total} lệnh)</span>
+                    </div>
+                `).join('');
+            } else {
+                metricContainer.innerHTML = `<div class="text-slate-400 italic">Chưa đủ dữ liệu winrate</div>`;
+            }
         }
 
         function shiftMonth(dir) {
             appState.currentMonth += dir;
             if (appState.currentMonth > 11) { appState.currentMonth = 0; appState.currentYear++; }
             if (appState.currentMonth < 0) { appState.currentMonth = 11; appState.currentYear--; }
-            saveAppState();
             renderOverview();
         }
 
         function changeOverviewYear(yearVal) {
             appState.currentYear = Number(yearVal);
-            saveAppState();
             renderOverview();
         }
 
         function selectPlannerDateFromCalendar(dateStr) {
             appState.plannerDate = dateStr;
-            saveAppState();
             switchTab('planner');
         }
 
@@ -1435,7 +1723,7 @@
             if (chartInstances['cumul']) chartInstances['cumul'].destroy();
 
             const filteredTrades = getFilteredTrades();
-            const sorted = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const sorted = [...filteredTrades].sort((a,b) => new Date(a.date + ' ' + (a.hour?.substring(0,5) || '00:00')) - new Date(b.date + ' ' + (b.hour?.substring(0,5) || '00:00')));
 
             let cumSum = 0;
             let labels = ['Bắt đầu'];
@@ -1508,8 +1796,9 @@
         }
 
         function renderAdvancedCards(filteredTrades, netProfit, wins, losses, totalTrades, balance) {
-            const validWins = filteredTrades.filter(t => Number(t.pnl) > 0);
-            const validLosses = filteredTrades.filter(t => Number(t.pnl) < 0);
+            const validTrades = filteredTrades.filter(t => Number(t.pnl) !== 0);
+            const validWins = validTrades.filter(t => Number(t.pnl) > 0);
+            const validLosses = validTrades.filter(t => Number(t.pnl) < 0);
 
             const grossProfit = validWins.reduce((s,t) => s + Number(t.pnl), 0);
             const grossLoss = Math.abs(validLosses.reduce((s,t) => s + Number(t.pnl), 0));
@@ -1664,14 +1953,12 @@
         function selectMentalState(state) {
             if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = {};
             appState.planners[appState.plannerDate].mentalState = state;
-            saveAppState();
             renderPlanner();
         }
 
         function selectMarketBias(bias) {
             if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = {};
             appState.planners[appState.plannerDate].marketBias = bias;
-            saveAppState();
             renderPlanner();
         }
 
@@ -1679,18 +1966,16 @@
             document.getElementById('ratingSliderVal').innerText = `${val} / 100`;
             if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = {};
             appState.planners[appState.plannerDate].rating = Number(val);
-            saveAppState();
         }
 
         function saveSessionNotesLive(notes) {
             if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = {};
             appState.planners[appState.plannerDate].sessionNotes = notes;
-            saveAppState();
         }
 
         function renderDailyGoals() {
             const container = document.getElementById('dailyGoalsContainer');
-            const plan = appState.planners[appState.plannerDate] || { goals: [{text: 'hold đến liquidity quan trọng nhé!!!!', completed: true}] };
+            const plan = appState.planners[appState.plannerDate] || { goals: [] };
             container.innerHTML = '';
             (plan.goals || []).forEach((g, idx) => {
                 container.innerHTML += `
@@ -1708,7 +1993,6 @@
             const plan = appState.planners[appState.plannerDate];
             if (plan && plan.goals && plan.goals[idx]) {
                 plan.goals[idx].completed = !plan.goals[idx].completed;
-                saveAppState();
             }
         }
 
@@ -1718,14 +2002,13 @@
                 if (!appState.planners[appState.plannerDate]) appState.planners[appState.plannerDate] = { goals: [] };
                 if (!appState.planners[appState.plannerDate].goals) appState.planners[appState.plannerDate].goals = [];
                 appState.planners[appState.plannerDate].goals.push({ text: goalText, completed: false });
-                saveAppState();
                 renderDailyGoals();
             }
         }
 
         function savePlannerData() {
-            saveAppState();
-            alert('Đã lưu kế hoạch và ghi chú ngày thành công!');
+            saveCloudData();
+            alert('Đã lưu kế hoạch và ghi chú ngày lên Cloud thành công!');
         }
 
         let currentModalImages = [];
@@ -1736,8 +2019,28 @@
                 for (let i = 0; i < files.length; i++) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        currentModalImages.push(e.target.result);
-                        renderImagePreviews();
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            let width = img.width;
+                            let height = img.height;
+                            const maxDim = 800;
+                            if (width > height && width > maxDim) {
+                                height *= maxDim / width;
+                                width = maxDim;
+                            } else if (height > maxDim) {
+                                width *= maxDim / height;
+                                height = maxDim;
+                            }
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+                            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                            currentModalImages.push(compressedDataUrl);
+                            renderImagePreviews();
+                        };
+                        img.src = e.target.result;
                     };
                     reader.readAsDataURL(files[i]);
                 }
@@ -1764,6 +2067,7 @@
             const list = document.getElementById('imagePreviewsList');
             const badge = document.getElementById('imageCountBadge');
             
+            if (!container || !list || !badge) return;
             list.innerHTML = '';
             badge.innerText = currentModalImages.length;
 
@@ -1772,7 +2076,7 @@
                 currentModalImages.forEach((imgUrl, idx) => {
                     list.innerHTML += `
                         <div class="relative group">
-                            <img src="${imgUrl}" class="h-20 w-20 rounded-lg object-cover border border-slate-300 shadow-sm">
+                            <img src="${imgUrl}" class="h-20 w-20 rounded-lg object-cover border border-slate-300 shadow-sm" onerror="this.src='https://placehold.co/200x200/ef4444/ffffff?text=Lỗi+Ảnh'">
                             <button type="button" onclick="removeModalImage(${idx})" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold shadow hover:bg-rose-700 transition">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
@@ -1789,7 +2093,7 @@
             const close = Number(document.getElementById('modalClose').value) || 0;
             const vol = Number(document.getElementById('modalVolume').value) || 1;
             const type = document.getElementById('modalType').value;
-            const accKey = document.getElementById('modalAccount').value;
+            const accKey = document.getElementById('modalAccount').value || appState.activeAccount;
             const accBalance = appState.accounts[accKey]?.balance || 100000;
 
             if (entry && close) {
@@ -1804,7 +2108,7 @@
 
         function calculateReturnFromPnl() {
             const pnl = Number(document.getElementById('modalPnl').value) || 0;
-            const accKey = document.getElementById('modalAccount').value;
+            const accKey = document.getElementById('modalAccount').value || appState.activeAccount;
             const accBalance = appState.accounts[accKey]?.balance || 100000;
             const returnPct = (pnl / accBalance) * 100;
             document.getElementById('modalReturnPct').value = returnPct.toFixed(2);
@@ -1813,6 +2117,7 @@
 
         function renderTradeLog() {
             const tbody = document.getElementById('tradeLogTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             
             const filteredTrades = getFilteredTrades();
@@ -1839,7 +2144,6 @@
                 dayTrades.forEach((t) => {
                     const pnlFormatted = formatPnlString(t.pnl);
                     const pnlColor = Number(t.pnl) > 0 ? 'text-emerald-600 font-bold' : (Number(t.pnl) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
-                    const retColor = Number(t.returnPct) > 0 ? 'text-emerald-600 font-bold' : (Number(t.returnPct) < 0 ? 'text-rose-600 font-bold' : 'text-slate-800');
                     
                     let confluencesHtml = '';
                     if (t.confluences && t.confluences.length > 0) {
@@ -1848,13 +2152,16 @@
                         confluencesHtml = `<span class="text-slate-400 text-[10px]">--</span>`;
                     }
 
-                    let imgs = t.chartImgs || (t.chartImg ? [t.chartImg] : []);
+                    let imgs = Array.isArray(t.chartImgs) ? t.chartImgs : (t.chartImg ? [t.chartImg] : []);
                     let chartThumbHtml = '';
                     if (imgs.length > 0) {
+                        let thumbs = imgs.slice(0, 3).map((imgUrl, imgIdx) => `
+                            <img src="${imgUrl}" class="w-8 h-8 rounded object-cover border border-slate-300 shadow-sm cursor-pointer hover:scale-110 transition" onclick="openLightboxForTrade('${t.id}', ${imgIdx})" onerror="this.src='https://placehold.co/100x100/ef4444/ffffff?text=Lỗi'">
+                        `).join('');
                         chartThumbHtml = `
-                            <div class="flex items-center justify-center space-x-1 cursor-pointer" onclick="openLightbox('${imgs[0]}')">
-                                <i class="fa-regular fa-image text-emerald-600 text-sm"></i>
-                                <span class="text-[10px] font-bold text-slate-500">(${imgs.length})</span>
+                            <div class="flex items-center justify-center space-x-1">
+                                ${thumbs}
+                                ${imgs.length > 3 ? `<span class="text-[10px] font-bold text-slate-500">+${imgs.length - 3}</span>` : ''}
                             </div>
                         `;
                     } else {
@@ -1867,13 +2174,13 @@
                         <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                             <td class="p-3.5 font-bold text-slate-800">${t.symbol}</td>
                             <td class="p-3.5 ${pnlColor}">${pnlFormatted}</td>
-                            <td class="p-3.5 ${retColor}">${Number(t.returnPct)>=0?'+':''}${t.returnPct}%</td>
+                            <td class="p-3.5 ${Number(t.returnPct)>=0?'text-emerald-600 font-bold':'text-rose-600 font-bold'}">${Number(t.returnPct)>=0?'+':''}${t.returnPct}%</td>
                             <td class="p-3.5">${t.volume}</td>
-                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono text-[11px] font-bold">${t.fees}</span></td>
+                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono text-[11px] font-bold">${t.fees || '1m'}</span></td>
                             <td class="p-3.5">${t.entry}</td>
                             <td class="p-3.5">${t.close}</td>
                             <td class="p-3.5 text-slate-500">${t.hour}</td>
-                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration}</span></td>
+                            <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration || '5m'}</span></td>
                             <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
                             <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[10px] font-semibold">${t.tag}</span></td>
                             <td class="p-3.5">${confluencesHtml}</td>
@@ -1895,7 +2202,7 @@
             let csvContent = "data:text/csv;charset=utf-8,Symbol,P%26L,Volume,EntryTimeframe,Entry,Close,Date\n";
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach(t => {
-                csvContent += `${t.symbol},${t.pnl},${t.volume},${t.fees},${t.entry},${t.close},${t.date}\n`;
+                csvContent += `${t.symbol},${t.pnl},${t.volume},${t.fees || '1m'},${t.entry},${t.close},${t.date}\n`;
             });
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
@@ -1917,20 +2224,25 @@
                 const t = appState.trades.find(x => x.id === tradeId);
                 if (t) {
                     document.getElementById('editTradeId').value = t.id;
-                    document.getElementById('modalAccount').value = t.account;
+                    document.getElementById('modalAccount').value = t.account || appState.activeAccount;
                     document.getElementById('modalDate').value = t.date;
                     document.getElementById('modalSymbol').value = t.symbol;
                     document.getElementById('modalType').value = t.type;
                     document.getElementById('modalEntry').value = t.entry;
                     document.getElementById('modalClose').value = t.close;
                     document.getElementById('modalVolume').value = t.volume;
-                    document.getElementById('modalFees').value = t.fees || '10m';
+                    document.getElementById('modalFees').value = t.fees || '1m';
                     document.getElementById('modalPnl').value = t.pnl;
                     document.getElementById('modalReturnPct').value = t.returnPct;
                     document.getElementById('modalSetup').value = t.setup;
                     document.getElementById('modalTag').value = t.tag;
+                    document.getElementById('modalLossReason').value = t.lossReason || '';
+                    document.getElementById('modalWinReason').value = t.winReason || '';
+                    document.getElementById('modalHoldMgmt').value = t.holdMgmt || '';
+                    document.getElementById('modalErrorCategory').value = t.errorCategory || '';
+                    document.getElementById('modalEmotionalState').value = t.emotionalState || '';
                     document.getElementById('modalNotes').value = t.notes || '';
-                    document.getElementById('modalDuration').value = t.duration;
+                    document.getElementById('modalDuration').value = t.duration || '5m';
                     document.getElementById('modalHour').value = t.hour;
                     document.getElementById('modalTvLink').value = t.tvLink || '';
 
@@ -1938,16 +2250,25 @@
                         cb.checked = t.confluences && t.confluences.includes(cb.value);
                     });
 
-                    currentModalImages = t.chartImgs || (t.chartImg ? [t.chartImg] : []);
+                    currentModalImages = Array.isArray(t.chartImgs) ? [...t.chartImgs] : (t.chartImg ? [t.chartImg] : []);
                     renderImagePreviews();
                 }
             } else {
                 document.getElementById('tradeModalTitle').innerText = '+ THÊM GIAO DỊCH MỚI';
                 document.getElementById('editTradeId').value = '';
+                document.getElementById('modalAccount').value = appState.activeAccount;
+                document.getElementById('modalDate').value = realNow.toISOString().split('T')[0];
+                document.getElementById('modalFees').value = '1m'; 
+                document.getElementById('modalDuration').value = '5m'; 
                 document.getElementById('modalEntry').value = '';
                 document.getElementById('modalClose').value = '';
                 document.getElementById('modalPnl').value = '';
                 document.getElementById('modalReturnPct').value = '';
+                document.getElementById('modalLossReason').value = '';
+                document.getElementById('modalWinReason').value = '';
+                document.getElementById('modalHoldMgmt').value = '';
+                document.getElementById('modalErrorCategory').value = '';
+                document.getElementById('modalEmotionalState').value = '';
                 document.getElementById('modalNotes').value = '';
                 document.querySelectorAll('input[name="smcConfluence"]').forEach(cb => cb.checked = false);
             }
@@ -1966,32 +2287,37 @@
 
                 if (saveBtn) {
                     saveBtn.disabled = true;
-                    saveBtn.innerText = 'Đang lưu...';
+                    saveBtn.innerText = 'Đang lưu lên Cloud...';
                 }
 
                 const id = document.getElementById('editTradeId').value || 't-' + Date.now();
-                const account = document.getElementById('modalAccount').value;
-                const date = document.getElementById('modalDate').value;
-                const symbol = document.getElementById('modalSymbol').value;
-                const type = document.getElementById('modalType').value;
+                const account = document.getElementById('modalAccount').value || appState.activeAccount;
+                const date = document.getElementById('modalDate').value || realNow.toISOString().split('T')[0];
+                const symbol = document.getElementById('modalSymbol').value || 'NQ';
+                const type = document.getElementById('modalType').value || 'LONG';
                 const entry = Number(document.getElementById('modalEntry').value) || 0;
                 const close = Number(document.getElementById('modalClose').value) || 0;
-                const volume = Number(document.getElementById('modalVolume').value);
-                const fees = document.getElementById('modalFees').value;
-                const returnPct = Number(document.getElementById('modalReturnPct').value);
-                const setup = document.getElementById('modalSetup').value;
-                const tag = document.getElementById('modalTag').value;
-                const notes = document.getElementById('modalNotes').value;
-                const duration = document.getElementById('modalDuration').value;
-                const hour = document.getElementById('modalHour').value;
-                const tvLink = document.getElementById('modalTvLink').value;
+                const volume = Number(document.getElementById('modalVolume').value) || 1;
+                const fees = document.getElementById('modalFees').value || '1m';
+                const returnPct = Number(document.getElementById('modalReturnPct').value) || 0;
+                const setup = document.getElementById('modalSetup').value || 'Continuation';
+                const tag = document.getElementById('modalTag').value || 'Discipline';
+                const lossReason = document.getElementById('modalLossReason').value || '';
+                const winReason = document.getElementById('modalWinReason').value || '';
+                const holdMgmt = document.getElementById('modalHoldMgmt').value || '';
+                const errorCategory = document.getElementById('modalErrorCategory').value || '';
+                const emotionalState = document.getElementById('modalEmotionalState').value || '';
+                const notes = document.getElementById('modalNotes').value || '';
+                const duration = document.getElementById('modalDuration').value || '5m';
+                const hour = document.getElementById('modalHour').value || '09:30-09:40';
+                const tvLink = document.getElementById('modalTvLink').value || '';
                 
                 const confluences = [];
                 document.querySelectorAll('input[name="smcConfluence"]:checked').forEach(cb => confluences.push(cb.value));
 
-                const chartImgs = currentModalImages.length > 0 ? currentModalImages : ['https://placehold.co/600x400/1e293b/ffffff?text=Trade+Chart'];
+                const chartImgs = Array.isArray(currentModalImages) ? [...currentModalImages] : [];
 
-                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, tag, confluences, notes, duration, hour, tvLink, chartImgs };
+                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, tag, lossReason, winReason, holdMgmt, errorCategory, emotionalState, confluences, notes, duration, hour, tvLink, chartImgs };
 
                 const existingIdx = appState.trades.findIndex(t => t.id === id);
                 if (existingIdx >= 0) {
@@ -2000,35 +2326,93 @@
                     appState.trades.unshift(tradeObj);
                 }
 
-                saveAppStateLocally();
-                await saveCloudData();
+                const dfFrom = document.getElementById('filterDateFrom');
+                const dfTo = document.getElementById('filterDateTo');
+                if (dfFrom && dfTo) {
+                    if (date < dfFrom.value) dfFrom.value = date;
+                    if (date > dfTo.value) dfTo.value = date;
+                }
+
                 closeTradeModal();
-                switchTab(appState.currentTab);
+                await saveCloudData();
+                switchTab(appState.currentTab, false);
             } catch (err) {
-                console.error("Lỗi khi lưu giao dịch:", err);
+                console.error("Lỗi khi lưu giao dịch lên Cloud:", err);
                 alert("Đã xảy ra lỗi khi lưu giao dịch: " + err.message);
             } finally {
                 if (saveBtn) {
                     saveBtn.disabled = false;
-                    saveBtn.innerText = 'Lưu Giao Dịch';
+                    saveBtn.innerText = 'Lưu Giao Dịch Cloud';
                 }
             }
         }
 
         function editTrade(id) { openTradeModal(id); }
         async function deleteTrade(id) {
-            if (confirm('Bạn có chắc muốn xóa giao dịch này?')) {
+            if (confirm('Bạn có chắc muốn xóa giao dịch này trên Cloud?')) {
                 appState.trades = appState.trades.filter(t => t.id !== id);
-                saveAppStateLocally();
                 await saveCloudData();
-                switchTab(appState.currentTab);
+                switchTab(appState.currentTab, false);
             }
         }
 
-        function openLightbox(imgUrl) {
-            document.getElementById('lightboxImage').src = imgUrl;
-            document.getElementById('lightboxModal').classList.remove('hidden');
+        let currentLightboxImages = [];
+        let currentLightboxIndex = 0;
+
+        function openLightboxForTrade(tradeId, imgIndex = 0) {
+            const trade = appState.trades.find(t => t.id === tradeId);
+            if (trade) {
+                const imgs = Array.isArray(trade.chartImgs) ? trade.chartImgs : (trade.chartImg ? [trade.chartImg] : []);
+                if (imgs.length > 0) {
+                    currentLightboxImages = imgs;
+                    currentLightboxIndex = Math.max(0, Math.min(imgIndex, imgs.length - 1));
+                    renderLightbox();
+                    document.getElementById('lightboxModal').classList.remove('hidden');
+                }
+            }
         }
+
+        function renderLightbox() {
+            const imgEl = document.getElementById('lightboxImage');
+            const counterEl = document.getElementById('lightboxCounter');
+            const thumbsEl = document.getElementById('lightboxThumbnails');
+            const prevBtn = document.getElementById('lightboxPrevBtn');
+            const nextBtn = document.getElementById('lightboxNextBtn');
+
+            if (!imgEl || !counterEl || !thumbsEl) return;
+
+            imgEl.src = currentLightboxImages[currentLightboxIndex];
+            counterEl.innerText = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+
+            if (currentLightboxImages.length > 1) {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            }
+
+            thumbsEl.innerHTML = '';
+            currentLightboxImages.forEach((url, idx) => {
+                const activeBorder = idx === currentLightboxIndex ? 'border-blue-500 ring-2 ring-blue-500/50 scale-105' : 'border-slate-700 opacity-60 hover:opacity-100';
+                thumbsEl.innerHTML += `
+                    <img src="${url}" class="w-16 h-16 rounded-lg object-cover cursor-pointer border-2 ${activeBorder} transition flex-shrink-0" onclick="selectLightboxIndex(${idx})" onerror="this.src='https://placehold.co/100x100/ef4444/ffffff?text=Lỗi'">
+                `;
+            });
+        }
+
+        function selectLightboxIndex(idx) {
+            currentLightboxIndex = idx;
+            renderLightbox();
+        }
+
+        function slideLightbox(dir) {
+            currentLightboxIndex += dir;
+            if (currentLightboxIndex < 0) currentLightboxIndex = currentLightboxImages.length - 1;
+            if (currentLightboxIndex >= currentLightboxImages.length) currentLightboxIndex = 0;
+            renderLightbox();
+        }
+
         function closeLightbox() { document.getElementById('lightboxModal').classList.add('hidden'); }
 
         function openAccountModal() { document.getElementById('accountModal').classList.remove('hidden'); }
@@ -2042,6 +2426,7 @@
 
         function renderAccountManageList() {
             const listContainer = document.getElementById('accountManageList');
+            if (!listContainer) return;
             listContainer.innerHTML = '';
             for (const [key, acc] of Object.entries(appState.accounts)) {
                 listContainer.innerHTML += `
@@ -2059,17 +2444,16 @@
         }
 
         async function deleteAccount(accKey) {
-            if (confirm(`Bạn có chắc muốn xóa tài khoản "${accKey}"? Tất cả giao dịch của tài khoản này cũng sẽ bị xóa vĩnh viễn!`)) {
+            if (confirm(`Bạn có chắc muốn xóa tài khoản "${accKey}" trên Cloud?`)) {
                 delete appState.accounts[accKey];
                 appState.trades = appState.trades.filter(t => t.account !== accKey);
                 if (appState.activeAccount === accKey) {
                     appState.activeAccount = Object.keys(appState.accounts)[0] || 'Live';
                 }
-                saveAppStateLocally();
-                await saveCloudData();
                 updateAccountSelectors();
                 renderAccountManageList();
-                switchTab(appState.currentTab);
+                await saveCloudData();
+                switchTab(appState.currentTab, false);
             }
         }
 
@@ -2079,12 +2463,11 @@
             const key = accName.replace(/\s+/g, '_');
             appState.accounts[key] = { name: accName, balance: accBal };
             appState.activeAccount = key;
-            saveAppStateLocally();
-            await saveCloudData();
             updateAccountSelectors();
-            alert(`Đã thêm tài khoản ${accName} ($${accBal.toLocaleString()}) thành công!`);
+            alert(`Đã thêm tài khoản ${accName} ($${accBal.toLocaleString()}) lên Cloud thành công!`);
             closeAccountModal();
-            switchTab(appState.currentTab);
+            await saveCloudData();
+            switchTab(appState.currentTab, false);
         }
 
         function renderWinrateAnalysis() {
@@ -2158,7 +2541,6 @@
             });
         }
 
-        // Color coding: < 50% red, 50%-69% amber, >= 70% emerald
         function getTimeAnalysisWinRateColorClass(wr) {
             if (wr >= 70) return 'text-emerald-600 font-bold';
             if (wr >= 50) return 'text-amber-600 font-bold';
@@ -2168,7 +2550,6 @@
         function renderByDayOfWeek() {
             const daysNames = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
             
-            // Calculate Monday of current selected week for By Day Of Week tab
             const monday = new Date(byDayCurrentWeekStart);
             const dayOfWeek = monday.getDay();
             const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
@@ -2274,11 +2655,9 @@
             
             document.getElementById('weeklySubTitle').innerText = `Phân tích các tuần thuộc ${monthNames[month]} năm ${year}`;
 
-            // Generate all Mondays of weeks intersecting with this month
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
 
-            // Find Monday of the week containing firstDay
             let startMon = new Date(firstDay);
             let dayOfWeek = startMon.getDay();
             let diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
@@ -2504,7 +2883,7 @@
 
         window.onload = function() {
             loadAppState();
-            switchTab(appState.currentTab);
+            switchTab(appState.currentTab, true);
         };
     </script>
 </body>
