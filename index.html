@@ -270,52 +270,7 @@
                         </div>
                     </div>
 
-                    <!-- UNIFIED ADVANCED SYSTEM ANALYTICS SECTION (PLACED RIGHT UNDERNEATH KPI ROW) -->
-                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
-                        <div class="pb-3 border-b border-slate-100 flex items-center justify-between">
-                            <div>
-                                <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
-                                    <i class="fa-solid fa-brain text-purple-600"></i><span>ADVANCED SYSTEM ANALYTICS (TOP 5 EMOTIONS, ERRORS & WINRATE METRICS)</span>
-                                </h3>
-                                <p class="text-[11px] text-slate-500 mt-0.5">Top 5 frequent emotional states, top 5 error causes, and top 5 winrate indicators derived from logged trades.</p>
-                            </div>
-                            <span class="text-[10px] font-bold text-purple-600 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-lg">AI ANALYTICS</span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Top 5 Emotional States -->
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 EMOTIONAL STATES</span>
-                                    <i class="fa-solid fa-face-smile text-purple-500"></i>
-                                </div>
-                                <div id="topEmotionsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa có dữ liệu cảm xúc</div>
-                                </div>
-                            </div>
-                            <!-- Top 5 Error Causes -->
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 ERROR CAUSES</span>
-                                    <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
-                                </div>
-                                <div id="topErrorsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa có dữ liệu lỗi</div>
-                                </div>
-                            </div>
-                            <!-- Top 5 Winrate Metrics/Indicators -->
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 WINRATE METRICS</span>
-                                    <i class="fa-solid fa-award text-emerald-500"></i>
-                                </div>
-                                <div id="topWinrateMetricsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa đủ dữ liệu winrate</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ADVANCED METRICS EVALUATION -->
+                    <!-- REVERSED SECTION 1: ADVANCED METRICS EVALUATION -->
                     <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                             <div>
@@ -473,6 +428,51 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- REVERSED SECTION 2: ADVANCED SYSTEM ANALYTICS (TOP 5 EMOTIONS, ERRORS & WINRATE METRICS) -->
+                    <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-4">
+                        <div class="pb-3 border-b border-slate-100 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-900 uppercase flex items-center space-x-2">
+                                    <i class="fa-solid fa-brain text-purple-600"></i><span>ADVANCED SYSTEM ANALYTICS (TOP 5 EMOTIONS, ERRORS & WINRATE METRICS)</span>
+                                </h3>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Top 5 frequent emotional states, top 5 error causes, and top 5 winrate indicators derived from logged trades.</p>
+                            </div>
+                            <span class="text-[10px] font-bold text-purple-600 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-lg">AI ANALYTICS</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Top 5 Emotional States -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 EMOTIONAL STATES</span>
+                                    <i class="fa-solid fa-face-smile text-purple-500"></i>
+                                </div>
+                                <div id="topEmotionsContainer" class="space-y-1 text-xs pt-1">
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu cảm xúc</div>
+                                </div>
+                            </div>
+                            <!-- Top 5 Error Causes -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 ERROR CAUSES</span>
+                                    <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
+                                </div>
+                                <div id="topErrorsContainer" class="space-y-1 text-xs pt-1">
+                                    <div class="text-slate-400 italic">Chưa có dữ liệu lỗi</div>
+                                </div>
+                            </div>
+                            <!-- Top 5 Winrate Metrics/Indicators -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 WINRATE METRICS</span>
+                                    <i class="fa-solid fa-award text-emerald-500"></i>
+                                </div>
+                                <div id="topWinrateMetricsContainer" class="space-y-1 text-xs pt-1">
+                                    <div class="text-slate-400 italic">Chưa đủ dữ liệu winrate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- TAB 2: DAILY PLANNER -->
@@ -586,20 +586,21 @@
                     </div>
                     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
+                            <table class="w-full text-left border-collapse min-w-[1300px]">
                                 <thead>
-                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">
                                         <th class="p-3.5">Symbol</th>
                                         <th class="p-3.5">P&L ($)</th>
                                         <th class="p-3.5">Lợi nhuận (%)</th>
-                                        <th class="p-3.5">Volume</th>
+                                        <th class="p-3.5">Direction / Lot</th>
                                         <th class="p-3.5">Entry Timeframe</th>
                                         <th class="p-3.5">Entry Price</th>
                                         <th class="p-3.5">Close Price</th>
                                         <th class="p-3.5">Giờ vào lệnh</th>
                                         <th class="p-3.5">Duration</th>
                                         <th class="p-3.5">Setup</th>
-                                        <th class="p-3.5">Reasons (Win/Loss)</th>
+                                        <th class="p-3.5">Loss Reason</th>
+                                        <th class="p-3.5">Win Reason</th>
                                         <th class="p-3.5">Hold Mgmt</th>
                                         <th class="p-3.5">Emotional State</th>
                                         <th class="p-3.5">Confluences</th>
@@ -808,7 +809,7 @@
         </main>
     </div>
 
-    <!-- MODAL: ADD / EDIT TRADE -->
+    <!-- MODAL: ADD / EDIT TRADE (COMPACT & REDESIGNED) -->
     <div id="tradeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8 animate-in fade-in zoom-in duration-200">
             <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
@@ -818,49 +819,49 @@
                 </div>
                 <button onclick="closeTradeModal()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto text-xs">
+            <div class="p-5 space-y-3.5 max-h-[75vh] overflow-y-auto text-xs">
                 <input type="hidden" id="editTradeId">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Tài khoản ghi nhận</label>
-                        <select id="modalAccount" onchange="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500"></select>
+                        <select id="modalAccount" onchange="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500"></select>
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Ngày Giao Dịch</label>
-                        <input type="date" id="modalDate" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <input type="date" id="modalDate" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Mã Giao Dịch (Ticker)</label>
-                        <input type="text" id="modalSymbol" value="NQ" oninput="this.value = this.value.toUpperCase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. NQ, ES, BTC">
+                        <input type="text" id="modalSymbol" value="NQ" oninput="this.value = this.value.toUpperCase()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. NQ, ES, BTC">
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Loại Giao Dịch</label>
-                        <select id="modalType" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <select id="modalType" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="LONG">MUA (LONG)</option>
                             <option value="SHORT">BÁN (SHORT)</option>
                         </select>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Giá vào lệnh (Entry Price)</label>
-                        <input type="number" step="any" id="modalEntry" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20000">
+                        <input type="number" step="any" id="modalEntry" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20000">
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Giá đóng lệnh (Close Price)</label>
-                        <input type="number" step="any" id="modalClose" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20100">
+                        <input type="number" step="any" id="modalClose" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="e.g. 20100">
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Số lượng giao dịch (Volume / Lots)</label>
-                        <input type="number" step="any" id="modalVolume" value="1" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <input type="number" step="any" id="modalVolume" value="1" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Entry Timeframe (Khung thời gian)</label>
-                        <select id="modalFees" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <label class="font-bold text-slate-700 block mb-1">Entry Timeframe</label>
+                        <select id="modalFees" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="30s">30 giây (30s)</option>
                             <option value="1m" selected>1 phút (1m)</option>
                             <option value="5m">5 phút (5m)</option>
@@ -870,20 +871,20 @@
                         </select>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Kết quả P&L ($) *</label>
-                        <input type="number" step="any" id="modalPnl" oninput="calculateReturnFromPnl()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1161.6">
+                        <input type="number" step="any" id="modalPnl" oninput="calculateReturnFromPnl()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1161.6">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1" id="modalReturnPctLabel">Lợi nhuận (%) (Tự động theo vốn tài khoản)</label>
-                        <input type="number" step="any" id="modalReturnPct" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1.16">
+                        <label class="font-bold text-slate-700 block mb-1" id="modalReturnPctLabel">Lợi nhuận (%)</label>
+                        <input type="number" step="any" id="modalReturnPct" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-bold text-emerald-600 focus:outline-none focus:border-blue-500" placeholder="e.g. 1.16">
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-3">
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Trading Setup / Chiến lược</label>
-                        <select id="modalSetup" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <select id="modalSetup" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="Continuation">Continuation (Tiếp diễn)</option>
                             <option value="Reversal">Reversal (Đảo chiều)</option>
                             <option value="Breakout">Breakout (Phá vỡ)</option>
@@ -891,10 +892,10 @@
                     </div>
                 </div>
 
-                <!-- CATEGORIZED FIELDS (ENGLISH) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <!-- SEPARATED LOSS REASONS & WIN REASONS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Loss Reasons (SL Categories)</label>
+                        <label class="font-bold text-slate-700 block mb-1">Loss Reason</label>
                         <select id="modalLossReason" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="">-- None / Win --</option>
                             <option value="SL">SL</option>
@@ -906,7 +907,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Win / Profit Reasons</label>
+                        <label class="font-bold text-slate-700 block mb-1">Win Reason</label>
                         <select id="modalWinReason" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="">-- None / Loss --</option>
                             <option value="correct bias">correct bias</option>
@@ -915,39 +916,24 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                    <div>
-                        <label class="font-bold text-slate-700 block mb-1">Hold Management Evaluation</label>
-                        <select id="modalHoldMgmt" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="">-- Select Hold Evaluation --</option>
-                            <optgroup label="Good hold">
-                                <option value="hold_discipline">hold_discipline</option>
-                                <option value="hold_to_tp">hold_to_tp</option>
-                                <option value="hold_correct_bias">hold_correct_bias</option>
-                            </optgroup>
-                            <optgroup label="Bad hold">
-                                <option value="early_exit">early_exit</option>
-                                <option value="fear_close">fear_close</option>
-                                <option value="greed_hold">greed_hold</option>
-                                <option value="hope_hold">hope_hold</option>
-                                <option value="move_sl">move_sl</option>
-                                <option value="overmanage">overmanage</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="font-bold text-slate-700 block mb-1">Error Category</label>
-                        <select id="modalErrorCategory" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="">-- None --</option>
-                            <option value="overmanage">overmanage</option>
-                            <option value="bad entry">bad entry</option>
-                            <option value="FOMO">FOMO</option>
-                            <option value="Revenge">Revenge</option>
-                        </select>
-                    </div>
+                <!-- HOLD MANAGEMENT (FLAT LIST, NO HEADERS) -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <label class="font-bold text-slate-700 block mb-1">Hold Management Evaluation</label>
+                    <select id="modalHoldMgmt" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <option value="">-- Select Hold Evaluation --</option>
+                        <option value="hold_discipline">hold_discipline</option>
+                        <option value="hold_to_tp">hold_to_tp</option>
+                        <option value="hold_correct_bias">hold_correct_bias</option>
+                        <option value="early_exit">early_exit</option>
+                        <option value="fear_close">fear_close</option>
+                        <option value="greed_hold">greed_hold</option>
+                        <option value="hope_hold">hope_hold</option>
+                        <option value="move_sl">move_sl</option>
+                        <option value="overmanage">overmanage</option>
+                    </select>
                 </div>
 
-                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <label class="font-bold text-slate-700 block mb-1">Emotional State Evaluation (Mental)</label>
                     <select id="modalEmotionalState" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                         <option value="">-- Select Emotional State --</option>
@@ -978,8 +964,8 @@
                 </div>
 
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1.5">Các yếu tố hợp lưu (SMC / ICT Concepts)</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <label class="font-bold text-slate-700 block mb-1">Các yếu tố hợp lưu (SMC / ICT Concepts)</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="SMT" class="accent-blue-600"> <span>SMT</span></label>
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="MSS" class="accent-blue-600"> <span>MSS</span></label>
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="CISD" class="accent-blue-600"> <span>CISD</span></label>
@@ -990,13 +976,13 @@
                     </div>
                 </div>
                 <div>
-                    <label class="font-bold text-slate-700 block mb-1">Nội dung ghi chú về lệnh (Trade Content / Notes)</label>
-                    <textarea id="modalNotes" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500 whitespace-pre-wrap" placeholder="Nhập lý do vào lệnh..."></textarea>
+                    <label class="font-bold text-slate-700 block mb-1">Nội dung ghi chú về lệnh (Notes)</label>
+                    <textarea id="modalNotes" rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500 whitespace-pre-wrap" placeholder="Nhập lý do vào lệnh..."></textarea>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Thời lượng nắm giữ (Duration)</label>
-                        <select id="modalDuration" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <label class="font-bold text-slate-700 block mb-1">Duration</label>
+                        <select id="modalDuration" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="30s">30s</option>
                             <option value="1m">1m</option>
                             <option value="5m" selected>5m</option>
@@ -1007,7 +993,7 @@
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Giờ vào lệnh (22 ICT Macros)</label>
-                        <select id="modalHour" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                        <select id="modalHour" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="09:30-09:40">09:30-09:40</option>
                             <option value="09:40-09:50">09:40-09:50</option>
                             <option value="09:50-10:10 (AM Macro)">09:50-10:10 (AM Macro)</option>
@@ -1035,23 +1021,23 @@
                 </div>
                 <div>
                     <label class="font-bold text-slate-700 block mb-1">Link biểu đồ TradingView</label>
-                    <input type="text" id="modalTvLink" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500 mb-3" placeholder="e.g. https://www.tradingview.com/x/...">
+                    <input type="text" id="modalTvLink" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500 mb-2" placeholder="e.g. https://www.tradingview.com/x/...">
                     
-                    <label class="font-bold text-slate-700 block mb-1">Ảnh chụp lệnh (Hỗ trợ nhiều ảnh)</label>
+                    <label class="font-bold text-slate-700 block mb-1">Ảnh chụp lệnh (Nhiều ảnh)</label>
                     <div class="flex items-center space-x-2">
-                        <input type="text" id="modalChartImgInput" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Dán URL ảnh hoặc chọn tệp">
-                        <button type="button" onclick="addChartImageFromInput()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2.5 rounded-lg text-xs transition">Thêm URL</button>
-                        <label class="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 font-bold px-3 py-2.5 rounded-lg text-xs transition">
+                        <input type="text" id="modalChartImgInput" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500" placeholder="Dán URL ảnh hoặc chọn tệp">
+                        <button type="button" onclick="addChartImageFromInput()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2 rounded-lg text-xs transition">Thêm URL</button>
+                        <label class="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 font-bold px-3 py-2 rounded-lg text-xs transition">
                             Chọn tệp <input type="file" id="modalFileUploader" accept="image/*" multiple class="hidden" onchange="handleMultipleFileSelect(event)">
                         </label>
                     </div>
-                    <div id="imagePreviewContainer" class="hidden mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                        <span class="text-[11px] font-bold text-slate-500 block mb-2">Ảnh đã đính kèm (<span id="imageCountBadge">0</span>):</span>
+                    <div id="imagePreviewContainer" class="hidden mt-2 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                        <span class="text-[11px] font-bold text-slate-500 block mb-1.5">Ảnh đã đính kèm (<span id="imageCountBadge">0</span>):</span>
                         <div id="imagePreviewsList" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
             </div>
-            <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3">
+            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end space-x-3">
                 <button type="button" onclick="closeTradeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
                 <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch Cloud</button>
             </div>
@@ -1072,8 +1058,8 @@
                 <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl space-y-2 text-indigo-900">
                     <span class="font-bold block"><i class="fa-solid fa-circle-info mr-1"></i> Hướng dẫn định dạng (Mỗi dòng 1 lệnh):</span>
                     <p class="text-[11px] leading-relaxed font-mono bg-white p-2.5 rounded border border-indigo-100">
-                        Date, Symbol, Type, Entry, Close, Volume, PnL, Setup, LossReason, WinReason, HoldMgmt, ErrorCategory, EmotionalState<br>
-                        Ví dụ: 2026-07-22, NQ, LONG, 20000, 20100, 1, 500, Reversal, , correct bias, hold_discipline, , Confident
+                        Date, Symbol, Type, Entry, Close, Volume, PnL, Setup, LossReason, WinReason, HoldMgmt, EmotionalState<br>
+                        Ví dụ: 2026-07-22, NQ, LONG, 20000, 20100, 1, 500, Reversal, , correct bias, hold_discipline, Confident
                     </p>
                 </div>
                 <div>
@@ -1449,7 +1435,6 @@
                         lossReason: '',
                         winReason: 'correct bias',
                         holdMgmt: 'hold_to_tp',
-                        errorCategory: '',
                         emotionalState: 'Confident',
                         confluences: ['SMT', 'iFVG'],
                         notes: 'Lệnh mẫu demo cloud...',
@@ -1676,7 +1661,7 @@
                 if (t.emotionalState) {
                     emotionCounts[t.emotionalState] = (emotionCounts[t.emotionalState] || 0) + 1;
                 }
-                const err = t.errorCategory || t.lossReason;
+                const err = t.lossReason;
                 if (err) {
                     errorCounts[err] = (errorCounts[err] || 0) + 1;
                 }
@@ -2181,7 +2166,7 @@
                 
                 tbody.innerHTML += `
                     <tr class="bg-slate-100/80 font-bold text-slate-700">
-                        <td colspan="17" class="py-2 px-3.5 text-xs border-y border-slate-200">
+                        <td colspan="18" class="py-2 px-3.5 text-xs border-y border-slate-200">
                             <i class="fa-regular fa-calendar text-blue-600 mr-1.5"></i> ${dateStr} (${dayTrades.length} lệnh)
                         </td>
                     </tr>
@@ -2214,29 +2199,34 @@
                         chartThumbHtml = `<span class="text-slate-300 text-[10px]">--</span>`;
                     }
 
-                    const reasonsDisplay = t.winReason || t.lossReason || '<span class="text-slate-300">--</span>';
-                    const holdMgmtDisplay = t.holdMgmt ? `<span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">${t.holdMgmt}</span>` : '<span class="text-slate-300">--</span>';
-                    const emotionDisplay = t.emotionalState ? `<span class="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-bold">${t.emotionalState}</span>` : '<span class="text-slate-300">--</span>';
+                    const lossReasonDisplay = t.lossReason ? `<span class="bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.5 rounded text-[11px] font-medium">${t.lossReason}</span>` : '<span class="text-slate-300">--</span>';
+                    const winReasonDisplay = t.winReason ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded text-[11px] font-medium">${t.winReason}</span>` : '<span class="text-slate-300">--</span>';
+                    const holdMgmtDisplay = t.holdMgmt ? `<span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded text-[11px] font-medium">${t.holdMgmt}</span>` : '<span class="text-slate-300">--</span>';
+                    const emotionDisplay = t.emotionalState ? `<span class="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-bold text-[11px]">${t.emotionalState}</span>` : '<span class="text-slate-300">--</span>';
                     const notesText = t.notes || '';
+                    
+                    const directionBadge = t.type === 'LONG' ? '<span class="text-emerald-600 font-bold">LONG</span>' : '<span class="text-rose-600 font-bold">SHORT</span>';
+                    const returnPctVal = Number(t.returnPct) || 0;
 
                     tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <tr class="hover:bg-slate-50 transition border-b border-slate-100 whitespace-nowrap">
                             <td class="p-3.5 font-bold text-slate-800">${t.symbol}</td>
                             <td class="p-3.5 ${pnlColor}">${pnlFormatted}</td>
-                            <td class="p-3.5 ${Number(t.returnPct)>=0?'text-emerald-600 font-bold':'text-rose-600 font-bold'}">${Number(t.returnPct)>=0?'+':''}${t.returnPct}%</td>
-                            <td class="p-3.5">${t.volume}</td>
+                            <td class="p-3.5 ${returnPctVal>=0?'text-emerald-600 font-bold':'text-rose-600 font-bold'}">${returnPctVal>=0?'+':''}${returnPctVal.toFixed(2)}%</td>
+                            <td class="p-3.5">${directionBadge} / ${t.volume}</td>
                             <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono text-[11px] font-bold">${t.fees || '1m'}</span></td>
                             <td class="p-3.5">${t.entry}</td>
                             <td class="p-3.5">${t.close}</td>
                             <td class="p-3.5 text-slate-500">${t.hour}</td>
                             <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration || '5m'}</span></td>
                             <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
-                            <td class="p-3.5">${reasonsDisplay}</td>
+                            <td class="p-3.5">${lossReasonDisplay}</td>
+                            <td class="p-3.5">${winReasonDisplay}</td>
                             <td class="p-3.5">${holdMgmtDisplay}</td>
                             <td class="p-3.5">${emotionDisplay}</td>
                             <td class="p-3.5">${confluencesHtml}</td>
-                            <td class="p-3.5 max-w-xs text-slate-600">
-                                <div class="whitespace-pre-wrap break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
+                            <td class="p-3.5 max-w-xs text-slate-600 whitespace-normal">
+                                <div class="break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
                             </td>
                             <td class="p-3.5 text-center">${chartThumbHtml}</td>
                             <td class="p-3.5 text-center space-x-2">
@@ -2289,7 +2279,6 @@
                     document.getElementById('modalLossReason').value = t.lossReason || '';
                     document.getElementById('modalWinReason').value = t.winReason || '';
                     document.getElementById('modalHoldMgmt').value = t.holdMgmt || '';
-                    document.getElementById('modalErrorCategory').value = t.errorCategory || '';
                     document.getElementById('modalEmotionalState').value = t.emotionalState || '';
                     document.getElementById('modalNotes').value = t.notes || '';
                     document.getElementById('modalDuration').value = t.duration || '5m';
@@ -2317,7 +2306,6 @@
                 document.getElementById('modalLossReason').value = '';
                 document.getElementById('modalWinReason').value = '';
                 document.getElementById('modalHoldMgmt').value = '';
-                document.getElementById('modalErrorCategory').value = '';
                 document.getElementById('modalEmotionalState').value = '';
                 document.getElementById('modalNotes').value = '';
                 document.querySelectorAll('input[name="smcConfluence"]').forEach(cb => cb.checked = false);
@@ -2354,7 +2342,6 @@
                 const lossReason = document.getElementById('modalLossReason').value || '';
                 const winReason = document.getElementById('modalWinReason').value || '';
                 const holdMgmt = document.getElementById('modalHoldMgmt').value || '';
-                const errorCategory = document.getElementById('modalErrorCategory').value || '';
                 const emotionalState = document.getElementById('modalEmotionalState').value || '';
                 const notes = document.getElementById('modalNotes').value || '';
                 const duration = document.getElementById('modalDuration').value || '5m';
@@ -2366,7 +2353,7 @@
 
                 const chartImgs = Array.isArray(currentModalImages) ? [...currentModalImages] : [];
 
-                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, lossReason, winReason, holdMgmt, errorCategory, emotionalState, confluences, notes, duration, hour, tvLink, chartImgs };
+                const tradeObj = { id, account, date, symbol, type, entry, close, volume, fees, pnl: pnlVal, returnPct, setup, lossReason, winReason, holdMgmt, emotionalState, confluences, notes, duration, hour, tvLink, chartImgs };
 
                 const existingIdx = appState.trades.findIndex(t => t.id === id);
                 if (existingIdx >= 0) {
@@ -2435,7 +2422,7 @@
             lines.forEach((line, idx) => {
                 const parts = line.split(',').map(p => p.trim());
                 if (parts.length >= 7) {
-                    const [date, symbol, type, entry, close, volume, pnl, setup = 'Continuation', lossReason = '', winReason = '', holdMgmt = '', errorCategory = '', emotionalState = 'Confident'] = parts;
+                    const [date, symbol, type, entry, close, volume, pnl, setup = 'Continuation', lossReason = '', winReason = '', holdMgmt = '', emotionalState = 'Confident'] = parts;
                     const tradeObj = {
                         id: 'batch-' + Date.now() + '-' + idx,
                         account: appState.activeAccount,
@@ -2452,7 +2439,6 @@
                         lossReason,
                         winReason,
                         holdMgmt,
-                        errorCategory,
                         emotionalState,
                         confluences: [],
                         notes: 'Batch Imported',
