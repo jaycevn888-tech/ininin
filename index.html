@@ -462,7 +462,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                                 <span class="text-xs font-bold text-slate-600 uppercase block">RECOVERY FACTOR</span>
-                                <div class="text-2xl font-black text-slate-800 my-2" id="cardRecoveryFactor">0.00</div>
+                                <div class="text-2xl font-black text-slate-800 my-2" id="cardRecoveryFactor">N/A</div>
                                 <div class="text-[11px] text-slate-500 flex justify-between"><span id="cardRecNet">Net: $0</span><span id="cardRecDD">DD: $0</span></div>
                             </div>
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
@@ -472,7 +472,7 @@
                             </div>
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                                 <span class="text-xs font-bold text-slate-600 uppercase block">SHARPE RATIO</span>
-                                <div class="text-2xl font-black text-slate-800 my-2" id="cardSharpe">6.95</div>
+                                <div class="text-2xl font-black text-slate-800 my-2" id="cardSharpe">N/A</div>
                                 <div class="text-[11px] text-slate-500" id="cardSharpeSub">Total Return: 0%</div>
                             </div>
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
@@ -918,7 +918,7 @@
                         <select id="modalFees" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="30s">30 giây (30s)</option>
                             <option value="1m" selected>1 phút (1m)</option>
-                            <option value="5m">5 phút (5m)</option>
+                            <option value="5m">6 phút (5m)</option>
                             <option value="10m">10 phút (10m)</option>
                             <option value="30m">30 phút (30m)</option>
                             <option value="1h+">1 giờ trở lên (1h+)</option>
@@ -1235,6 +1235,15 @@
         let currentUser = null;
         let vaultKey = null;
         let vaultUnlocked = false;
+
+        const VAULT_SESSION_MS = 6 * 60 * 1000;
+        function markVaultSession() {
+            try { sessionStorage.setItem('jacooodevn_vault_until', String(Date.now() + VAULT_SESSION_MS)); } catch(_) {}
+        }
+        function isVaultSessionValid() {
+            try { return Date.now() < Number(sessionStorage.getItem('jacooodevn_vault_until') || 0); } catch(_) { return false; }
+        }
+
         let vaultIsSetupMode = false;
         let didInitialUnlockRender = false;
 
@@ -1393,7 +1402,7 @@
             document.getElementById('authLoggedOut')?.classList.add('hidden');
             document.getElementById('authLoggedIn')?.classList.remove('hidden');
             const badge = document.getElementById('vaultStatusBadge');
-            if (badge) badge.innerText = 'Vault open';
+            if (badge) badge.innerText = 'Vault mở · E2E';
             if (currentUser) {
                 const email = currentUser.email || '';
                 const el = document.getElementById('userEmail');
@@ -1447,6 +1456,7 @@
                     const salt = crypto.getRandomValues(new Uint8Array(16));
                     vaultKey = await deriveKey(p1, salt);
                     vaultUnlocked = true;
+                    markVaultSession();
                     localStorage.setItem('jacooodevn_vault_salt_' + currentUser.id, b64encode(salt));
                     if (!appState.accounts || !Object.keys(appState.accounts).length) {
                         appState.accounts = { 'Live': { name: 'Live Account', balance: 100000 } };
@@ -1482,6 +1492,7 @@
                     }
                     vaultKey = key;
                     vaultUnlocked = true;
+                    markVaultSession();
                     localStorage.setItem('jacooodevn_vault_salt_' + currentUser.id, saltB64);
                     saveLocalCache();
                     closeVaultModal();
@@ -1505,6 +1516,15 @@
             }
             document.getElementById('authLoggedOut')?.classList.add('hidden');
             document.getElementById('authLoggedIn')?.classList.remove('hidden');
+            if (vaultUnlocked && vaultKey) {
+                showUnlockedUI();
+                return;
+            }
+            if (typeof isVaultSessionValid === 'function' && isVaultSessionValid() && loadLocalCache()) {
+                vaultUnlocked = true;
+                showUnlockedUI();
+                return;
+            }
             let hasVault = false;
             try {
                 const res = await supabaseClient.from('journal_vault').select('user_id').eq('user_id', currentUser.id).maybeSingle();
@@ -2301,11 +2321,90 @@
             document.getElementById('cardExpWinRate').innerText = totalTrades > 0 ? (winRate*100).toFixed(0) + '%' : '0%';
             document.getElementById('cardExpAvgWin').innerText = `+$${avgWin.toFixed(0)}`;
 
-            if (totalTrades > 0) {
-                document.getElementById('cardTopSymbolContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>NQ</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopSetupContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>REVERSAL</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
-                document.getElementById('cardTopTagContainer').innerHTML = `<div class="flex justify-between font-bold text-slate-800"><span>METRIC</span><span class="${netProfit>=0?'text-emerald-600':'text-rose-600'}">${formatPnlString(netProfit)}</span></div><div class="text-[11px] text-slate-500">${totalTrades} lệnh | ${(winRate*100).toFixed(0)}% wr</div>`;
+                        // TOP SYMBOL by net PnL
+            const symbolStats = {};
+            filteredTrades.forEach(t => {
+                const sym = (t.symbol || 'UNKNOWN').toUpperCase();
+                if (!symbolStats[sym]) symbolStats[sym] = { pnl: 0, count: 0, wins: 0 };
+                symbolStats[sym].pnl += Number(t.pnl) || 0;
+                symbolStats[sym].count += 1;
+                if (Number(t.pnl) > 0) symbolStats[sym].wins += 1;
+            });
+            const sortedSyms = Object.entries(symbolStats).sort((a,b) => b[1].pnl - a[1].pnl);
+            if (sortedSyms.length > 0) {
+                const [topSym, st] = sortedSyms[0];
+                const wr = st.count ? (st.wins / st.count * 100).toFixed(0) : 0;
+                document.getElementById('cardTopSymbolContainer').innerHTML =
+                    '<div class="flex justify-between font-bold text-slate-800"><span>' + topSym + '</span><span class="' + (st.pnl>=0?'text-emerald-600':'text-rose-600') + '">' + formatPnlString(st.pnl) + '</span></div>' +
+                    '<div class="text-[11px] text-slate-500">' + st.count + ' lenh | ' + wr + '% wr</div>';
+            } else {
+                document.getElementById('cardTopSymbolContainer').innerHTML =
+                    '<div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-slate-400">$0</span></div><div class="text-[11px] text-slate-500">0 lenh</div>';
             }
+
+            // TOP SETUP by net PnL
+            const setupStats = {};
+            filteredTrades.forEach(t => {
+                const s = t.setup || 'None';
+                if (!setupStats[s]) setupStats[s] = { pnl: 0, count: 0, wins: 0 };
+                setupStats[s].pnl += Number(t.pnl) || 0;
+                setupStats[s].count += 1;
+                if (Number(t.pnl) > 0) setupStats[s].wins += 1;
+            });
+            const sortedSetups = Object.entries(setupStats).sort((a,b) => b[1].pnl - a[1].pnl);
+            if (sortedSetups.length > 0) {
+                const [topSetup, st] = sortedSetups[0];
+                const wr = st.count ? (st.wins / st.count * 100).toFixed(0) : 0;
+                document.getElementById('cardTopSetupContainer').innerHTML =
+                    '<div class="flex justify-between font-bold text-slate-800"><span>' + topSetup + '</span><span class="' + (st.pnl>=0?'text-emerald-600':'text-rose-600') + '">' + formatPnlString(st.pnl) + '</span></div>' +
+                    '<div class="text-[11px] text-slate-500">' + st.count + ' lenh | ' + wr + '% wr</div>';
+            }
+
+            // TOP METRIC = best Win Reason by PnL (fallback setup)
+            const metricStats = {};
+            filteredTrades.forEach(t => {
+                const m = t.winReason || t.setup || null;
+                if (!m) return;
+                if (!metricStats[m]) metricStats[m] = { pnl: 0, count: 0, wins: 0 };
+                metricStats[m].pnl += Number(t.pnl) || 0;
+                metricStats[m].count += 1;
+                if (Number(t.pnl) > 0) metricStats[m].wins += 1;
+            });
+            const sortedMetrics = Object.entries(metricStats).sort((a,b) => b[1].pnl - a[1].pnl);
+            if (sortedMetrics.length > 0) {
+                const [topM, st] = sortedMetrics[0];
+                const wr = st.count ? (st.wins / st.count * 100).toFixed(0) : 0;
+                document.getElementById('cardTopTagContainer').innerHTML =
+                    '<div class="flex justify-between font-bold text-slate-800"><span>' + topM + '</span><span class="' + (st.pnl>=0?'text-emerald-600':'text-rose-600') + '">' + formatPnlString(st.pnl) + '</span></div>' +
+                    '<div class="text-[11px] text-slate-500">' + st.count + ' lenh | ' + wr + '% wr</div>';
+            } else {
+                document.getElementById('cardTopTagContainer').innerHTML =
+                    '<div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-slate-400">$0</span></div><div class="text-[11px] text-slate-500">No metric</div>';
+            }
+
+            // DURATION ANALYSIS
+            const durStats = {};
+            filteredTrades.forEach(t => {
+                const d = t.duration || 'Unknown';
+                if (!durStats[d]) durStats[d] = { pnl: 0, count: 0, wins: 0 };
+                durStats[d].pnl += Number(t.pnl) || 0;
+                durStats[d].count += 1;
+                if (Number(t.pnl) > 0) durStats[d].wins += 1;
+            });
+            const durList = Object.entries(durStats).filter(x => x[1].count > 0);
+            if (durList.length > 0) {
+                const byWr = [...durList].sort((a,b) => (b[1].wins/b[1].count) - (a[1].wins/a[1].count));
+                const byPnl = [...durList].sort((a,b) => a[1].pnl - b[1].pnl);
+                const best = byWr[0];
+                const worst = byPnl[0];
+                const bestWr = (best[1].wins/best[1].count*100).toFixed(0);
+                document.getElementById('cardHighestDuration').innerText = best[0] + ' (' + bestWr + '%)';
+                document.getElementById('cardLeastDuration').innerText = worst[0] + ' (' + formatPnlString(worst[1].pnl) + ')';
+            } else {
+                document.getElementById('cardHighestDuration').innerText = '--';
+                document.getElementById('cardLeastDuration').innerText = '--';
+            }
+
 
             document.getElementById('cardTotalTradesCount').innerText = totalTrades;
             document.getElementById('cardLongestWin').innerText = `${wins} trades`;
@@ -2326,16 +2425,67 @@
             document.getElementById('cardPeakVal').innerText = formatPnlString(Math.max(0, peak));
             document.getElementById('cardMaxDD').innerText = maxDD > 0 ? `-$${maxDD.toLocaleString()}` : `$0`;
 
-            const recoveryFactor = maxDD > 0 ? (netProfit / maxDD).toFixed(2) : (netProfit > 0 ? '15.00' : '0.00');
+            // Recovery Factor = Net Profit / Max Drawdown
+            let recoveryFactor = 'N/A';
+            if (maxDD > 0) recoveryFactor = (netProfit / maxDD).toFixed(2);
+            else if (totalTrades === 0) recoveryFactor = 'N/A';
+            else if (netProfit > 0) recoveryFactor = '∞';
+            else recoveryFactor = '0.00';
             document.getElementById('cardRecoveryFactor').innerText = recoveryFactor;
+            const rfSub = document.querySelector('#cardRecoveryFactor')?.parentElement?.querySelector('.text-\\[11px\\]');
+            // update DD sub labels if present
+            const ddLabel = document.getElementById('cardMaxDD');
 
-            const maxWinTrade = validWins.length > 0 ? Math.max(...validWins.map(t => Number(t.pnl))) : 0;
-            const consistencyPct = netProfit > 0 ? Math.min(100, (maxWinTrade / netProfit) * 100) : 0;
-            document.getElementById('cardConsistency').innerText = consistencyPct.toFixed(2) + '%';
+            // Consistency = % of trading days that were profitable
+            const dayMap = {};
+            filteredTrades.forEach(t => {
+                if (!dayMap[t.date]) dayMap[t.date] = 0;
+                dayMap[t.date] += Number(t.pnl) || 0;
+            });
+            const dayVals = Object.values(dayMap);
+            const greenDays = dayVals.filter(v => v > 0).length;
+            const consistencyPct = dayVals.length > 0 ? (greenDays / dayVals.length * 100) : 0;
+            document.getElementById('cardConsistency').innerText = dayVals.length ? (consistencyPct.toFixed(1) + '%') : 'N/A';
             document.getElementById('consistencyBar').style.width = Math.min(100, Math.max(0, consistencyPct)) + '%';
 
-            document.getElementById('cardSharpe').innerText = '6.95';
-            document.getElementById('cardSortino').innerText = 'N/A';
+            // Sharpe-like ratio (trade-level): mean(pnl) / stdev(pnl)
+            // Sortino-like: mean(pnl) / downside stdev (only losses)
+            const pnls = filteredTrades.map(t => Number(t.pnl) || 0);
+            let sharpeStr = 'N/A';
+            let sortinoStr = 'N/A';
+            let sharpeSub = 'Total Return: 0%';
+            let sortinoSub = 'Downside Risk: 0.00%';
+            if (pnls.length >= 2) {
+                const mean = pnls.reduce((a,b)=>a+b,0) / pnls.length;
+                const variance = pnls.reduce((a,b)=>a + Math.pow(b - mean, 2), 0) / (pnls.length - 1);
+                const stdev = Math.sqrt(variance);
+                if (stdev > 0) sharpeStr = (mean / stdev).toFixed(2);
+                else if (mean > 0) sharpeStr = '∞';
+                else sharpeStr = '0.00';
+
+                const downside = pnls.filter(p => p < 0);
+                if (downside.length > 0) {
+                    const dVar = downside.reduce((a,b)=>a + Math.pow(b, 2), 0) / downside.length;
+                    const dStd = Math.sqrt(dVar);
+                    sortinoSub = 'Downside Risk: ' + dStd.toFixed(2);
+                    if (dStd > 0) sortinoStr = (mean / dStd).toFixed(2);
+                    else sortinoStr = mean > 0 ? '∞' : '0.00';
+                } else {
+                    sortinoStr = mean > 0 ? '∞' : 'N/A';
+                    sortinoSub = 'Downside Risk: 0.00';
+                }
+                const totalRet = netProfit;
+                sharpeSub = 'Mean/Stdev (trades)';
+            } else if (pnls.length === 1) {
+                sharpeStr = 'N/A';
+                sortinoStr = 'N/A';
+                sharpeSub = 'Need ≥2 trades';
+            }
+            document.getElementById('cardSharpe').innerText = sharpeStr;
+            const sharpeSubEl = document.getElementById('cardSharpeSub');
+            if (sharpeSubEl) sharpeSubEl.innerText = sharpeSub;
+            document.getElementById('cardSortino').innerText = sortinoStr;
+
         }
 
         function renderPlanner() {
