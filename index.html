@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>jacooodevn - Analytics Journal Cloud</title>
+    <title>jacooodevn - Analytics Journal Secure</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -30,6 +30,7 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
 
@@ -42,7 +43,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-slate-900 tracking-tight leading-none text-base">jacooodevn</h1>
-                    <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Analytics Journal Cloud</span>
+                    <span class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Analytics Journal Secure</span>
                 </div>
             </div>
 
@@ -58,11 +59,18 @@
                     <i class="fa-solid fa-gear"></i> <span>Quản lý</span>
                 </button>
                 <button onclick="resetCloudDemoData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-slate-200">
-                    <i class="fa-solid fa-rotate-right"></i> <span>Khởi tạo Demo Cloud</span>
+                    <i class="fa-solid fa-rotate-right"></i> <span>Khởi tạo Demo</span>
                 </button>
                 <button onclick="clearCloudAllData()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-rose-200">
-                    <i class="fa-solid fa-trash-can"></i> <span>Xóa tất cả Cloud</span>
+                    <i class="fa-solid fa-trash-can"></i> <span>Xóa tất cả</span>
                 </button>
+                <button onclick="exportFullBackup()" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-emerald-200" title="Lưu file JSON thật trên ổ cứng">
+                    <i class="fa-solid fa-hard-drive"></i> <span>Xuất Backup</span>
+                </button>
+                <button onclick="importFullBackup()" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 px-3 py-1.5 rounded-lg font-medium transition flex items-center space-x-1 border border-amber-200" title="Khôi phục từ file JSON trên ổ cứng">
+                    <i class="fa-solid fa-file-import"></i> <span>Nhập Backup</span>
+                </button>
+                <input type="file" id="backupFileInput" accept=".json,application/json" class="hidden" onchange="handleBackupFileSelect(event)">
             </div>
         </div>
 
@@ -75,86 +83,129 @@
             </button>
             
             <div id="authContainer" class="flex items-center space-x-3 pl-4 border-l border-slate-200">
-                <div id="loggedOutView" class="flex items-center space-x-2">
-                    <button onclick="signInWithGoogle()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
+                <div id="authLoggedOut" class="flex items-center space-x-2">
+                    <button type="button" id="btnGoogleSignInHeader" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center space-x-2">
                         <i class="fa-brands fa-google text-red-500"></i>
-                        <span>Đăng nhập Google Cloud</span>
+                        <span>Dang nhap Google</span>
                     </button>
                 </div>
-                <div id="loggedInView" class="hidden flex items-center space-x-3">
+                <div id="authLoggedIn" class="hidden flex items-center space-x-3">
+                    <div class="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span class="text-xs font-semibold text-emerald-700" id="vaultStatusBadge">Vault</span>
+                    </div>
                     <div class="text-right hidden sm:block">
                         <div class="text-xs font-bold text-slate-900" id="userName">User</div>
-                        <div class="text-[10px] text-slate-500" id="userEmail">user@gmail.com</div>
+                        <div class="text-[10px] text-slate-500" id="userEmail"></div>
                     </div>
-                    <div id="userAvatarContainer" class="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow">
-                        U
-                    </div>
-                    <button onclick="handleLogout()" title="Đăng xuất" class="text-slate-400 hover:text-rose-600 p-1.5 transition">
+                    <button type="button" onclick="handleLogout()" title="Logout" class="text-slate-400 hover:text-rose-600 p-1.5">
                         <i class="fa-solid fa-right-from-bracket text-sm"></i>
                     </button>
                 </div>
             </div>
         </div>
+    </div>
     </header>
 
     <!-- BODY LAYOUT -->
     <div class="flex-1 flex overflow-hidden relative">
         <!-- SIDEBAR -->
-        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto z-30 flex-shrink-0 select-none hidden lg:flex">
-            <div class="py-6 px-4 space-y-8">
+        <aside id="appSidebar" class="bg-white border-r border-slate-200 flex flex-col justify-between sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden z-30 flex-shrink-0 select-none hidden lg:flex transition-all duration-300 ease-in-out w-64" data-collapsed="false">
+            <!-- Toggle -->
+            <div class="flex items-center justify-end px-2 pt-3 pb-1 flex-shrink-0">
+                <button type="button" onclick="toggleSidebarCollapse()" id="sidebarCollapseBtn" title="Thu gọn / Mở rộng" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow transition">
+                    <i id="sidebarCollapseIcon" class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+            </div>
+            <div class="py-2 px-2 space-y-4 flex-1">
+                <!-- GENERAL -->
                 <div>
-                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-3">General</h3>
-                    <nav class="space-y-1">
-                        <button onclick="switchTab('overview')" id="nav-overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-chart-pie w-5 text-center text-slate-500"></i><span>Overview</span>
+                    <div class="sidebar-section-title px-3 mb-1.5">
+                        <span class="sidebar-label text-[10px] font-bold text-slate-400 uppercase tracking-wider">General</span>
+                        <div class="sidebar-section-dot hidden w-full flex justify-center py-1">
+                            <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                        </div>
+                    </div>
+                    <div class="space-y-0.5">
+                        <button onclick="switchTab('overview')" id="nav-overview" title="Overview" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-chart-pie w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Overview</span>
                         </button>
-                        <button onclick="switchTab('planner')" id="nav-planner" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-calendar-days w-5 text-center text-slate-500"></i><span>Daily Planner</span>
+                        <button onclick="switchTab('planner')" id="nav-planner" title="Daily Planner" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-calendar-days w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Daily Planner</span>
                         </button>
-                        <button onclick="switchTab('tradelog')" id="nav-tradelog" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-list-ul w-5 text-center text-slate-500"></i><span>Trade Log</span>
+                        <button onclick="switchTab('tradelog')" id="nav-tradelog" title="Trade Log" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-list-ul w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Trade Log</span>
                         </button>
-                        <button onclick="switchTab('winrate')" id="nav-winrate" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-percent w-5 text-center text-slate-500"></i><span>Winrate Analysis</span>
+                        <button onclick="switchTab('winrate')" id="nav-winrate" title="Winrate Analysis" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-percent w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Winrate Analysis</span>
                         </button>
-                    </nav>
+                    </div>
                 </div>
+                <!-- TIME ANALYSIS -->
                 <div>
-                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-3">Time Analysis</h3>
-                    <nav class="space-y-1">
-                        <button onclick="switchTab('byday')" id="nav-byday" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-calendar-week w-5 text-center text-slate-500"></i><span>By Day Of Week</span>
+                    <div class="sidebar-section-title px-3 mb-1.5">
+                        <span class="sidebar-label text-[10px] font-bold text-slate-400 uppercase tracking-wider">Time Analysis</span>
+                        <div class="sidebar-section-dot hidden w-full flex justify-center py-1">
+                            <span class="w-6 border-t border-slate-200"></span>
+                        </div>
+                    </div>
+                    <div class="space-y-0.5">
+                        <button onclick="switchTab('byday')" id="nav-byday" title="By Day Of Week" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-calendar-week w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">By Day Of Week</span>
                         </button>
-                        <button onclick="switchTab('weekly')" id="nav-weekly" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-chart-column w-5 text-center text-slate-500"></i><span>Weekly Breakdown</span>
+                        <button onclick="switchTab('weekly')" id="nav-weekly" title="Weekly Breakdown" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-chart-column w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Weekly Breakdown</span>
                         </button>
-                        <button onclick="switchTab('monthly')" id="nav-monthly" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-calendar-alt w-5 text-center text-slate-500"></i><span>Monthly Results</span>
+                        <button onclick="switchTab('monthly')" id="nav-monthly" title="Monthly Results" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-calendar-alt w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Monthly Results</span>
                         </button>
-                        <button onclick="switchTab('hourly')" id="nav-hourly" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
-                            <i class="fa-solid fa-clock w-5 text-center text-slate-500"></i><span>Hourly Performance (22 ICT Macros)</span>
+                        <button onclick="switchTab('hourly')" id="nav-hourly" title="Hourly Performance" class="sidebar-nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-clock w-5 text-center text-slate-500 flex-shrink-0"></i>
+                            <span class="sidebar-label whitespace-nowrap">Hourly Performance</span>
                         </button>
-                    </nav>
+                    </div>
                 </div>
             </div>
-            <div class="p-4 border-t border-slate-200 text-center bg-white flex-shrink-0">
-                <span class="text-[11px] text-slate-400 font-medium">jacooodevn v3.7 Secure Cloud</span>
+            <div class="p-3 border-t border-slate-200 text-center bg-white flex-shrink-0 overflow-hidden">
+                <span class="sidebar-label text-[10px] text-slate-400 font-medium whitespace-nowrap">jacooodevn v3.8 Secure</span>
             </div>
         </aside>
 
         <!-- MAIN CONTENT AREA -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 p-6 h-[calc(100vh-4rem)]">
             <!-- LOGIN REQUIRED BANNER -->
-            <div id="loginRequiredBanner" class="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center my-auto max-w-lg mx-auto shadow-sm">
-                <div class="w-14 h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+            <div id="loginRequiredBanner" class="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center my-12 max-w-md mx-auto shadow-sm">
+                <div class="w-14 h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-xl">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h3 class="text-base font-bold text-amber-900 mb-2">Yêu cầu đăng nhập Google để truy cập Cloud Journal</h3>
-                <p class="text-xs text-amber-700 mb-6 leading-relaxed">Hệ thống lưu trữ 100% trên Cloud Server an toàn tuyệt đối, gắn liền với tài khoản Google của bạn và đồng bộ thời gian thực trên mọi thiết bị.</p>
-                <button onclick="signInWithGoogle()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-5 py-3 rounded-xl shadow transition inline-flex items-center space-x-2">
-                    <i class="fa-brands fa-google text-sm"></i>
-                    <span>Đăng nhập Google ngay</span>
+                <h3 class="text-base font-bold text-amber-900 mb-2">Dang nhap Google + Master Password</h3>
+                <p class="text-xs text-amber-700 mb-5 leading-relaxed">Du lieu ma hoa E2E, luu online tren Supabase, dong bo moi thiet bi.</p>
+                <button type="button" id="btnGoogleSignIn" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-3 rounded-xl shadow transition inline-flex items-center justify-center gap-2 mb-3">
+                    <i class="fa-brands fa-google"></i>
+                    <span>Dang nhap Google</span>
                 </button>
+                <div class="relative flex items-center my-3">
+                    <div class="flex-grow border-t border-amber-200"></div>
+                    <span class="flex-shrink mx-2 text-[10px] text-amber-700">hoac email</span>
+                    <div class="flex-grow border-t border-amber-200"></div>
+                </div>
+                <div class="space-y-2.5 text-left">
+                    <input id="emailAuthEmail" type="email" placeholder="Email" class="w-full border border-amber-200 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-blue-500">
+                    <input id="emailAuthPass" type="password" placeholder="Password (min 6)" class="w-full border border-amber-200 rounded-lg px-3 py-2 text-xs bg-white focus:outline-none focus:border-blue-500">
+                    <div class="flex gap-2">
+                        <button type="button" id="btnSignIn" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-3 py-2.5 rounded-lg">Sign in</button>
+                        <button type="button" id="btnSignUp" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-bold px-3 py-2.5 rounded-lg">Sign up</button>
+                    </div>
+                    <p id="authMsg" class="text-[11px] text-rose-600 hidden"></p>
+                    <p class="text-[10px] text-amber-800/80 leading-relaxed">Google can host HTTPS (Netlify) hoac localhost. Mo file:// chi dung duoc Email.</p>
+                </div>
             </div>
 
             <!-- DASHBOARD CONTAINER -->
@@ -174,10 +225,13 @@
                         <div class="flex items-center space-x-2">
                             <span class="text-xs text-slate-500 font-medium">Setup:</span>
                             <select id="filterSetup" onchange="applyFiltersLive()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 font-medium text-slate-700">
-                                <option value="all">Tất cả Setup</option>
+                                <option value="all">All Setup</option>
                                 <option value="Continuation">Continuation</option>
                                 <option value="Reversal">Reversal</option>
-                                <option value="Breakout">Breakout</option>
+                                <option value="bb">Breaker Block</option>
+                                <option value="ob">Order Block</option>
+                                <option value="fvg">Fair Value Gap</option>
+                                <option value="liqui_sweep">Liquidity Sweep</option>
                             </select>
                         </div>
                         <div class="flex items-center space-x-2 bg-slate-50 border border-slate-300 px-2.5 py-1.5 rounded-lg text-xs">
@@ -464,11 +518,11 @@
                             <!-- Top 5 Winrate Metrics/Indicators -->
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 WINRATE METRICS</span>
+                                    <span class="text-xs font-bold text-slate-600 uppercase">TOP 5 WIN REASON</span>
                                     <i class="fa-solid fa-award text-emerald-500"></i>
                                 </div>
                                 <div id="topWinrateMetricsContainer" class="space-y-1 text-xs pt-1">
-                                    <div class="text-slate-400 italic">Chưa đủ dữ liệu winrate</div>
+                                    <div class="text-slate-400 italic">Chưa đủ dữ liệu Win Reason</div>
                                 </div>
                             </div>
                         </div>
@@ -556,7 +610,7 @@
                             </div>
                             <div class="mt-6 pt-4 border-t border-slate-100">
                                 <button onclick="savePlannerData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 rounded-lg shadow-md shadow-blue-500/20 transition flex items-center justify-center space-x-2">
-                                    <i class="fa-solid fa-floppy-disk"></i><span>Lưu Kế Hoạch & Ghi Chú Ngày Cloud</span>
+                                    <i class="fa-solid fa-floppy-disk"></i><span>Lưu Kế Hoạch & Ghi Chú Ngày</span>
                                 </button>
                             </div>
                         </div>
@@ -570,7 +624,7 @@
                             <h2 class="text-sm font-bold text-slate-900 flex items-center space-x-2">
                                 <i class="fa-solid fa-list-ul text-blue-600"></i><span>DANH SÁCH NHẬT KÝ GIAO DỊCH (TRADE LOG)</span>
                             </h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Danh sách các vị thế giao dịch chi tiết đồng bộ hoàn hảo trên Cloud.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Danh sách các vị thế giao dịch chi tiết đồng bộ hoàn hảo .</p>
                         </div>
                         <div class="flex items-center space-x-3">
                             <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg font-semibold transition flex items-center space-x-1.5 border border-slate-200">
@@ -593,7 +647,7 @@
                                         <th class="p-3.5">P&L ($)</th>
                                         <th class="p-3.5">Lợi nhuận (%)</th>
                                         <th class="p-3.5">Direction / Lot</th>
-                                        <th class="p-3.5">Entry Timeframe</th>
+                                        <th class="p-3.5">Entry</th>
                                         <th class="p-3.5">Entry Price</th>
                                         <th class="p-3.5">Close Price</th>
                                         <th class="p-3.5">Giờ vào lệnh</th>
@@ -602,7 +656,7 @@
                                         <th class="p-3.5">Loss Reason</th>
                                         <th class="p-3.5">Win Reason</th>
                                         <th class="p-3.5">Hold Mgmt</th>
-                                        <th class="p-3.5">Emotional State</th>
+                                        <th class="p-3.5">Emotional</th>
                                         <th class="p-3.5">Confluences</th>
                                         <th class="p-3.5">Nội dung ghi chú</th>
                                         <th class="p-3.5 text-center">Chart</th>
@@ -782,14 +836,14 @@
                 <!-- TAB 8: HOURLY PERFORMANCE -->
                 <div id="tab-hourly" class="space-y-6 tab-content hidden">
                     <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm space-y-6">
-                        <h2 class="text-sm font-bold text-slate-900">HOURLY PERFORMANCE (22 ICT MACROS)</h2>
+                        <h2 class="text-sm font-bold text-slate-900">HOURLY PERFORMANCE</h2>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY ICT MACROS</h3>
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">TRADES DISTRIBUTION BY HOUR</h3>
                                 <div class="h-64"><canvas id="macroTradesChart"></canvas></div>
                             </div>
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY ICT MACROS</h3>
+                                <h3 class="text-xs font-bold text-slate-600 uppercase mb-3">PERFORMANCE BY HOUR</h3>
                                 <div class="h-64"><canvas id="macroPerfChart"></canvas></div>
                             </div>
                         </div>
@@ -797,7 +851,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase">
-                                        <th class="p-3.5">ICT MACRO INTERVAL</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
+                                        <th class="p-3.5">HOUR INTERVAL</th><th class="p-3.5">NET PROFIT</th><th class="p-3.5">TRADES</th><th class="p-3.5">VOLUMES</th><th class="p-3.5">WIN RATE</th>
                                     </tr>
                                 </thead>
                                 <tbody id="macroTableBody" class="divide-y divide-slate-100 text-xs font-medium text-slate-700"></tbody>
@@ -860,7 +914,7 @@
                         <input type="number" step="any" id="modalVolume" value="1" oninput="calculateTradeResults()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Entry Timeframe</label>
+                        <label class="font-bold text-slate-700 block mb-1">Entry</label>
                         <select id="modalFees" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="30s">30 giây (30s)</option>
                             <option value="1m" selected>1 phút (1m)</option>
@@ -883,11 +937,15 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-3">
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Trading Setup / Chiến lược</label>
+                        <label class="font-bold text-slate-700 block mb-1">Setup</label>
                         <select id="modalSetup" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                            <option value="Continuation">Continuation (Tiếp diễn)</option>
-                            <option value="Reversal">Reversal (Đảo chiều)</option>
-                            <option value="Breakout">Breakout (Phá vỡ)</option>
+                            <option value="">-- Select Setup --</option>
+                            <option value="Continuation">Continuation</option>
+                            <option value="Reversal">Reversal</option>
+                            <option value="bb">Breaker Block</option>
+                            <option value="ob">Order Block</option>
+                            <option value="fvg">Fair Value Gap</option>
+                            <option value="liqui_sweep">Liquidity Sweep</option>
                         </select>
                     </div>
                 </div>
@@ -898,68 +956,69 @@
                         <label class="font-bold text-slate-700 block mb-1">Loss Reason</label>
                         <select id="modalLossReason" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="">-- None / Win --</option>
-                            <option value="SL">SL</option>
-                            <option value="bias">bias</option>
-                            <option value="trailing SL">trailing SL</option>
-                            <option value="bad entry">bad entry</option>
-                            <option value="external factors">external factors</option>
-                            <option value="psychology">psychology</option>
+                            <option value="wrong_bias">Wrong bias</option>
+                            <option value="no_confirmation">No confirmation</option>
+                            <option value="early_entry">Early entry</option>
+                            <option value="late_entry">Late entry</option>
+                            <option value="counter_trend">Counter trend</option>
+                            <option value="bad_sl">Bad SL</option>
+                            <option value="sl_too_tight">SL too tight</option>
+                            <option value="overrisk">Overrisk</option>
+                            <option value="revenge_trade">Revenge trade</option>
+                            <option value="fomo">FOMO</option>
+                            <option value="overtrade">Overtrade</option>
+                            <option value="news_volatility">News volatility</option>
                         </select>
                     </div>
                     <div>
                         <label class="font-bold text-slate-700 block mb-1">Win Reason</label>
                         <select id="modalWinReason" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="">-- None / Loss --</option>
-                            <option value="correct bias">correct bias</option>
-                            <option value="SL">SL</option>
+                            <option value="correct_bias">Correct bias</option>
+                            <option value="htf_alignment">HTF alignment</option>
+                            <option value="clean_setup">Clean setup</option>
+                            <option value="good_entry">Good entry</option>
+                            <option value="liquidity_taken">Liquidity taken</option>
+                            <option value="strong_momentum">Strong momentum</option>
+                            <option value="rr_respected">RR respected</option>
+                            <option value="patient_hold">Patient hold</option>
+                            <option value="session_timing">Session timing</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- HOLD MANAGEMENT (FLAT LIST, NO HEADERS) -->
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <label class="font-bold text-slate-700 block mb-1">Hold Management Evaluation</label>
+                    <label class="font-bold text-slate-700 block mb-1">Hold Management</label>
                     <select id="modalHoldMgmt" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                        <option value="">-- Select Hold Evaluation --</option>
-                        <option value="hold_discipline">hold_discipline</option>
-                        <option value="hold_to_tp">hold_to_tp</option>
-                        <option value="hold_correct_bias">hold_correct_bias</option>
-                        <option value="early_exit">early_exit</option>
-                        <option value="fear_close">fear_close</option>
-                        <option value="greed_hold">greed_hold</option>
-                        <option value="hope_hold">hope_hold</option>
-                        <option value="move_sl">move_sl</option>
-                        <option value="overmanage">overmanage</option>
+                        <option value="">-- Select Hold Management --</option>
+                        <option value="hold_to_tp">Hold to TP</option>
+                        <option value="hold_runner">Hold runner</option>
+                        <option value="early_exit">Early exit</option>
+                        <option value="fear_close">Fear close</option>
+                        <option value="greed_hold">Greed hold</option>
+                        <option value="move_sl_be">Move SL to BE</option>
+                        <option value="move_sl_lock">Move SL lock profit</option>
+                        <option value="move_sl_bad">Move SL bad</option>
+                        <option value="overmanage">Overmanage</option>
+                        <option value="no_management">No management</option>
                     </select>
                 </div>
 
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                    <label class="font-bold text-slate-700 block mb-1">Emotional State Evaluation (Mental)</label>
+                    <label class="font-bold text-slate-700 block mb-1">Emotional</label>
                     <select id="modalEmotionalState" class="w-full bg-white border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
-                        <option value="">-- Select Emotional State --</option>
-                        <optgroup label="Positive Emotions">
-                            <option value="Confident">Confident</option>
-                            <option value="Calm">Calm</option>
-                            <option value="Disciplined">Disciplined</option>
-                            <option value="Patient">Patient</option>
-                            <option value="Focused">Focused</option>
-                            <option value="Objective">Objective</option>
-                            <option value="In control">In control</option>
-                            <option value="Relaxed">Relaxed</option>
-                            <option value="Trusting system">Trusting system</option>
-                        </optgroup>
-                        <optgroup label="Negative Emotions">
-                            <option value="Fear">Fear</option>
-                            <option value="FOMO">FOMO</option>
-                            <option value="Greed">Greed</option>
-                            <option value="Impatient">Impatient</option>
-                            <option value="Anxious">Anxious</option>
-                            <option value="Stressed">Stressed</option>
-                            <option value="Confused">Confused</option>
-                            <option value="Angry">Angry</option>
-                            <option value="Revenge trading">Revenge trading</option>
-                            <option value="Self-doubt">Self-doubt</option>
-                        </optgroup>
+                        <option value="">-- Select Emotional --</option>
+                        <option value="calm">Calm</option>
+                        <option value="confident">Confident</option>
+                        <option value="focused">Focused</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="fomo">FOMO</option>
+                        <option value="fear">Fear</option>
+                        <option value="greedy">Greedy</option>
+                        <option value="revenge">Revenge</option>
+                        <option value="impatient">Impatient</option>
+                        <option value="tilted">Tilted</option>
                     </select>
                 </div>
 
@@ -973,6 +1032,7 @@
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="OB" class="accent-blue-600"> <span>OB</span></label>
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="Unicorn" class="accent-blue-600"> <span>Unicorn</span></label>
                         <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="iFVG" class="accent-blue-600"> <span>iFVG</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="smcConfluence" value="BPR" class="accent-blue-600"> <span>BPR</span></label>
                     </div>
                 </div>
                 <div>
@@ -992,28 +1052,28 @@
                         </select>
                     </div>
                     <div>
-                        <label class="font-bold text-slate-700 block mb-1">Giờ vào lệnh (22 ICT Macros)</label>
+                        <label class="font-bold text-slate-700 block mb-1">Giờ vào lệnh</label>
                         <select id="modalHour" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-medium text-slate-700 focus:outline-none focus:border-blue-500">
                             <option value="09:30-09:40">09:30-09:40</option>
                             <option value="09:40-09:50">09:40-09:50</option>
-                            <option value="09:50-10:10 (AM Macro)">09:50-10:10 (AM Macro)</option>
+                            <option value="09:50-10:10">09:50-10:10</option>
                             <option value="10:10-10:20">10:10-10:20</option>
                             <option value="10:20-10:30">10:20-10:30</option>
                             <option value="10:30-10:40">10:30-10:40</option>
                             <option value="10:40-10:50">10:40-10:50</option>
-                            <option value="10:50-11:10 (AM Macro)">10:50-11:10 (AM Macro)</option>
+                            <option value="10:50-11:10">10:50-11:10</option>
                             <option value="11:10-11:20">11:10-11:20</option>
                             <option value="11:20-11:30">11:20-11:30</option>
                             <option value="11:30-11:40">11:30-11:40</option>
                             <option value="11:40-11:50">11:40-11:50</option>
-                            <option value="11:50-12:10 (Macro)">11:50-12:10 (Macro)</option>
+                            <option value="11:50-12:10">11:50-12:10</option>
                             <option value="12:10-12:20">12:10-12:20</option>
                             <option value="12:20-12:30">12:20-12:30</option>
                             <option value="12:30-12:40">12:30-12:40</option>
                             <option value="12:40-12:50">12:40-12:50</option>
                             <option value="12:50-01:00">12:50-01:00</option>
                             <option value="01:00-01:10">01:00-01:10</option>
-                            <option value="01:10-01:40 (Macro)">01:10-01:40 (Macro)</option>
+                            <option value="01:10-01:40">01:10-01:40</option>
                             <option value="01:40-01:50">01:40-01:50</option>
                             <option value="01:50-02:00">01:50-02:00</option>
                         </select>
@@ -1039,7 +1099,7 @@
             </div>
             <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end space-x-3">
                 <button type="button" onclick="closeTradeModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
-                <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch Cloud</button>
+                <button type="button" id="saveTradeBtn" onclick="saveTradeRecord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow-md shadow-blue-500/20 transition">Lưu Giao Dịch</button>
             </div>
         </div>
     </div>
@@ -1085,7 +1145,7 @@
             </div>
             <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex justify-end space-x-3">
                 <button type="button" onclick="closeBatchModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-lg text-xs transition">Hủy</button>
-                <button type="button" id="saveBatchBtn" onclick="saveBatchRecords()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow transition">Lưu tất cả lên Cloud</button>
+                <button type="button" id="saveBatchBtn" onclick="saveBatchRecords()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-lg text-xs shadow transition">Lưu tất cả</button>
             </div>
         </div>
     </div>
@@ -1106,7 +1166,7 @@
                     <label class="font-bold text-slate-700 block mb-1">Số Vốn Khởi Tạo (Initial Balance $)</label>
                     <input type="number" id="newAccountBalance" value="100000" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-700">
                 </div>
-                <button onclick="addNewAccount()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow transition">Thêm Tài Khoản Cloud</button>
+                <button onclick="addNewAccount()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg shadow transition">Thêm Tài Khoản</button>
             </div>
         </div>
     </div>
@@ -1134,12 +1194,12 @@
             </button>
         </div>
         
-        <div class="relative max-w-6xl max-h-[75vh] flex items-center justify-center my-auto px-16 w-full">
+        <div class="relative max-w-[96vw] max-h-[90vh] flex items-center justify-center my-auto px-12 w-full">
             <button onclick="slideLightbox(-1)" id="lightboxPrevBtn" class="absolute left-2 bg-slate-800/80 hover:bg-slate-700 text-white w-12 h-12 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10 text-lg">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
             
-            <img id="lightboxImage" src="" class="max-w-full max-h-[72vh] rounded-xl shadow-2xl object-contain border border-slate-700 mx-auto" alt="Trade Screenshot">
+            <img id="lightboxImage" src="" class="max-w-[96vw] max-h-[88vh] w-auto h-auto rounded-xl shadow-2xl object-contain border border-slate-700 mx-auto" alt="Trade Screenshot">
             
             <button onclick="slideLightbox(1)" id="lightboxNextBtn" class="absolute right-2 bg-slate-800/80 hover:bg-slate-700 text-white w-12 h-12 rounded-full flex items-center justify-center border border-slate-700 transition shadow-xl z-10 text-lg">
                 <i class="fa-solid fa-chevron-right"></i>
@@ -1148,148 +1208,10 @@
 
         <div id="lightboxThumbnails" class="flex items-center space-x-2 mt-4 max-w-full overflow-x-auto py-2 px-4 bg-slate-900/60 rounded-xl border border-slate-800"></div>
     </div>
-
-    <!-- FIREBASE MODULE & CORE APP LOGIC -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithPopup, 
-            GoogleAuthProvider, 
-            signOut, 
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            onSnapshot 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAAwnd3wLLjryYJLRIQVQkF2csx94oYzn8",
-            authDomain: "jacooodevn-trading-journal.firebaseapp.com",
-            projectId: "jacooodevn-trading-journal",
-            storageBucket: "jacooodevn-trading-journal.firebasestorage.app",
-            messagingSenderId: "69110629443",
-            appId: "1:69110629443:web:955eda8b31cc10067d00f6",
-            measurementId: "G-S7KFDB3WTK"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const googleProvider = new GoogleAuthProvider();
-
-        window.firebaseAuth = auth;
-        window.googleProvider = googleProvider;
-        window.signOut = signOut;
-        window.db = db;
-        window.doc = doc;
-        window.setDoc = setDoc;
-        window.onSnapshot = onSnapshot;
-
-        let unsubscribeFirestore = null;
-
-        window.signInWithGoogle = async function() {
-            try {
-                await signInWithPopup(auth, googleProvider);
-            } catch (error) {
-                console.error("Lỗi đăng nhập Google Cloud:", error);
-                if (error.code === 'auth/popup-blocked') {
-                    alert("Popup bị chặn. Vui lòng cho phép popup cho trang này rồi thử lại.");
-                } else if (error.code !== 'auth/popup-closed-by-user') {
-                    alert("Đăng nhập thất bại: " + error.message);
-                }
-            }
-        };
-
-        window.updateLoginUI = function(user) {
-            const loggedOutView = document.getElementById('loggedOutView');
-            const loggedInView = document.getElementById('loggedInView');
-            const loginBanner = document.getElementById('loginRequiredBanner');
-            const mainContent = document.getElementById('mainDashboardContent');
-            const authControls = document.getElementById('authDependentControls');
-            const headerNewTradeBtn = document.getElementById('headerNewTradeBtn');
-            const headerBatchImportBtn = document.getElementById('headerBatchImportBtn');
-
-            if (user) {
-                if (loggedOutView) loggedOutView.classList.add('hidden');
-                if (loggedInView) loggedInView.classList.remove('hidden');
-                if (loginBanner) loginBanner.classList.add('hidden');
-                if (mainContent) mainContent.classList.remove('hidden');
-                if (authControls) authControls.classList.remove('hidden');
-                if (headerNewTradeBtn) headerNewTradeBtn.classList.remove('hidden');
-                if (headerBatchImportBtn) headerBatchImportBtn.classList.remove('hidden');
-
-                document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
-                document.getElementById('userEmail').innerText = user.email || 'user@gmail.com';
-                const avatar = document.getElementById('userAvatarContainer');
-                if (user.photoURL) {
-                    avatar.innerHTML = `<img src="${user.photoURL}" class="w-full h-full rounded-full object-cover">`;
-                } else {
-                    avatar.innerText = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
-                }
-            } else {
-                if (loggedInView) loggedInView.classList.add('hidden');
-                if (loggedOutView) loggedOutView.classList.remove('hidden');
-                if (loginBanner) loginBanner.classList.remove('hidden');
-                if (mainContent) mainContent.classList.add('hidden');
-                if (authControls) authControls.classList.add('hidden');
-                if (headerNewTradeBtn) headerNewTradeBtn.classList.add('hidden');
-                if (headerBatchImportBtn) headerBatchImportBtn.classList.add('hidden');
-
-                appState.trades = [];
-                appState.planners = {};
-                appState.accounts = {};
-            }
-        };
-
-        onAuthStateChanged(auth, async (user) => {
-            window.updateLoginUI(user);
-            if (user) {
-                if (unsubscribeFirestore) unsubscribeFirestore();
-                const userDocRef = doc(db, "users", user.uid, "data", "journalState");
-                
-                unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        appState.trades = Array.isArray(data.trades) ? data.trades : [];
-                        appState.planners = data.planners || {};
-                        appState.accounts = data.accounts || { 'Live': { name: 'Live Account', balance: 100000 } };
-                        appState.activeAccount = data.activeAccount || Object.keys(appState.accounts)[0] || 'Live';
-                    } else {
-                        const defaultState = {
-                            trades: [],
-                            planners: {},
-                            accounts: { 'Live': { name: 'Live Account', balance: 100000 } },
-                            activeAccount: 'Live'
-                        };
-                        setDoc(userDocRef, defaultState);
-                        appState.trades = [];
-                        appState.planners = {};
-                        appState.accounts = defaultState.accounts;
-                        appState.activeAccount = 'Live';
-                    }
-                    updateAccountSelectors();
-                    switchTab(appState.currentTab, true);
-                }, (error) => {
-                    console.error("Real-time cloud sync error:", error);
-                });
-            } else {
-                if (unsubscribeFirestore) {
-                    unsubscribeFirestore();
-                    unsubscribeFirestore = null;
-                }
-                appState.trades = [];
-                appState.planners = {};
-                appState.accounts = {};
-                switchTab('overview', true);
-            }
-        });
-    </script>
-
+    <!-- LOCAL STORAGE VERSION -->
     <script>
+
+        // ========== APP STATE ==========
         const realNow = new Date();
         let appState = {
             currentTab: 'overview',
@@ -1297,33 +1219,486 @@
             currentMonth: realNow.getMonth(),
             plannerDate: realNow.toISOString().split('T')[0],
             activeAccount: 'Live',
-            accounts: {},
+            accounts: { 'Live': { name: 'Live Account', balance: 100000 } },
             trades: [],
             planners: {}
         };
-
         let filterApplied = false;
         let byDayCurrentWeekStart = new Date();
         let weeklyMonthCurrent = { year: realNow.getFullYear(), month: realNow.getMonth() };
 
-        async function saveCloudData() {
-            const user = window.firebaseAuth?.currentUser;
-            if (user) {
-                try {
-                    const userDocRef = window.doc(window.db, "users", user.uid, "data", "journalState");
-                    await window.setDoc(userDocRef, {
-                        trades: appState.trades,
-                        planners: appState.planners,
-                        accounts: appState.accounts,
-                        activeAccount: appState.activeAccount
-                    }, { merge: true });
-                } catch (e) {
-                    console.error("Error saving to cloud server:", e);
-                    alert("Lỗi lưu trữ Cloud: " + e.message);
+        // ========== SUPABASE ==========
+        const SUPABASE_URL = 'https://mndfpejztiftikeaegkn.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1uZGZwZWp6dGlmdGlrZWFlZ2tuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5OTE2NzEsImV4cCI6MjEwMDU2NzY3MX0.XcmFGJaEFh239iFU8-EiaVqf49xe66MoJklneD-vqzI';
+
+        let supabaseClient = null;
+        let currentUser = null;
+        let vaultKey = null;
+        let vaultUnlocked = false;
+        let vaultIsSetupMode = false;
+        let didInitialUnlockRender = false;
+
+        function initSupabase() {
+            try {
+                if (window.supabase && window.supabase.createClient) {
+                    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    return true;
                 }
-            } else {
-                alert("Vui lòng đăng nhập Google để lưu dữ liệu lên Cloud server.");
+            } catch (e) { console.error(e); }
+            return false;
+        }
+
+        // ========== CRYPTO ==========
+        function b64encode(buf) {
+            const bytes = buf instanceof ArrayBuffer ? new Uint8Array(buf) : new Uint8Array(buf);
+            let s = '';
+            for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+            return btoa(s);
+        }
+        function b64decode(str) {
+            const s = atob(str);
+            const bytes = new Uint8Array(s.length);
+            for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+            return bytes.buffer;
+        }
+        async function deriveKey(password, saltBuf) {
+            const enc = new TextEncoder();
+            const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+            return crypto.subtle.deriveKey(
+                { name: 'PBKDF2', salt: saltBuf, iterations: 310000, hash: 'SHA-256' },
+                baseKey,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt']
+            );
+        }
+        async function encryptPayload(obj, key) {
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const enc = new TextEncoder();
+            const cipher = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, enc.encode(JSON.stringify(obj)));
+            return { ciphertext: b64encode(cipher), iv: b64encode(iv) };
+        }
+        async function decryptPayload(cipherB64, ivB64, key) {
+            const dec = new TextDecoder();
+            const plain = await crypto.subtle.decrypt(
+                { name: 'AES-GCM', iv: new Uint8Array(b64decode(ivB64)) },
+                key,
+                b64decode(cipherB64)
+            );
+            return JSON.parse(dec.decode(plain));
+        }
+
+        function getFullStatePayload() {
+            return {
+                version: 2,
+                exportedAt: new Date().toISOString(),
+                trades: appState.trades,
+                planners: appState.planners,
+                accounts: appState.accounts,
+                activeAccount: appState.activeAccount,
+                currentYear: appState.currentYear,
+                currentMonth: appState.currentMonth,
+                plannerDate: appState.plannerDate
+            };
+        }
+
+        function applyStateFromData(data) {
+            if (!data || typeof data !== 'object') return;
+            appState.trades = Array.isArray(data.trades) ? data.trades : [];
+            appState.planners = data.planners || {};
+            appState.accounts = data.accounts || { 'Live': { name: 'Live Account', balance: 100000 } };
+            appState.activeAccount = data.activeAccount || Object.keys(appState.accounts)[0] || 'Live';
+            if (data.currentYear != null) appState.currentYear = Number(data.currentYear);
+            if (data.currentMonth != null) appState.currentMonth = Number(data.currentMonth);
+            if (data.plannerDate) appState.plannerDate = data.plannerDate;
+        }
+
+        function saveLocalCache() {
+            try {
+                const slim = getFullStatePayload();
+                // cache without huge images if needed
+                localStorage.setItem('jacooodevn_secure_cache_v1', JSON.stringify(slim));
+            } catch (e) {
+                try {
+                    const slim = getFullStatePayload();
+                    slim.trades = (slim.trades || []).map(t => {
+                        const x = Object.assign({}, t);
+                        x.chartImgs = [];
+                        x.chartImg = '';
+                        return x;
+                    });
+                    localStorage.setItem('jacooodevn_secure_cache_v1', JSON.stringify(slim));
+                } catch (_) {}
             }
+        }
+
+        function loadLocalCache() {
+            try {
+                const raw = localStorage.getItem('jacooodevn_secure_cache_v1');
+                if (!raw) return false;
+                applyStateFromData(JSON.parse(raw));
+                return true;
+            } catch (_) { return false; }
+        }
+
+        let syncTimer = null;
+        async function syncEncryptedToCloud(force, saltOverride) {
+            if (!vaultUnlocked || !vaultKey || !supabaseClient || !currentUser) return;
+            try {
+                const payload = getFullStatePayload();
+                const { ciphertext, iv } = await encryptPayload(payload, vaultKey);
+                let saltB64 = localStorage.getItem('jacooodevn_vault_salt_' + currentUser.id);
+                if (saltOverride) saltB64 = b64encode(saltOverride);
+                const row = {
+                    user_id: currentUser.id,
+                    ciphertext: ciphertext,
+                    iv: iv,
+                    salt: saltB64,
+                    updated_at: new Date().toISOString()
+                };
+                const { error } = await supabaseClient.from('journal_vault').upsert(row, { onConflict: 'user_id' });
+                if (error) console.warn('cloud sync', error);
+            } catch (e) {
+                console.warn('sync', e);
+            }
+        }
+
+        function saveLocalData() {
+            if (!vaultUnlocked) return false;
+            saveLocalCache();
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(function() { syncEncryptedToCloud(); }, 600);
+            return true;
+        }
+
+        function showLockedUI() {
+            vaultUnlocked = false;
+            const b = document.getElementById('loginRequiredBanner');
+            const m = document.getElementById('mainDashboardContent');
+            if (b) b.classList.remove('hidden');
+            if (m) m.classList.add('hidden');
+            document.getElementById('headerNewTradeBtn')?.classList.add('hidden');
+            document.getElementById('headerBatchImportBtn')?.classList.add('hidden');
+            document.getElementById('authDependentControls')?.classList.add('hidden');
+            document.getElementById('authLoggedOut')?.classList.remove('hidden');
+            document.getElementById('authLoggedIn')?.classList.add('hidden');
+        }
+
+        function showUnlockedUI() {
+            document.getElementById('loginRequiredBanner')?.classList.add('hidden');
+            document.getElementById('mainDashboardContent')?.classList.remove('hidden');
+            document.getElementById('headerNewTradeBtn')?.classList.remove('hidden');
+            document.getElementById('headerBatchImportBtn')?.classList.remove('hidden');
+            document.getElementById('authDependentControls')?.classList.remove('hidden');
+            document.getElementById('authLoggedOut')?.classList.add('hidden');
+            document.getElementById('authLoggedIn')?.classList.remove('hidden');
+            const badge = document.getElementById('vaultStatusBadge');
+            if (badge) badge.innerText = 'Vault open';
+            if (currentUser) {
+                const email = currentUser.email || '';
+                const el = document.getElementById('userEmail');
+                const nm = document.getElementById('userName');
+                if (el) el.innerText = email;
+                if (nm) nm.innerText = email.split('@')[0] || 'User';
+            }
+            updateAccountSelectors();
+            if (!didInitialUnlockRender) {
+                didInitialUnlockRender = true;
+                appState.currentTab = 'overview';
+                switchTab('overview', true);
+            } else {
+                switchTab(appState.currentTab || 'overview', true);
+            }
+            if (typeof restoreSidebarSections === 'function') restoreSidebarSections();
+        }
+
+        function openVaultModal(isSetup) {
+            vaultIsSetupMode = !!isSetup;
+            const modal = document.getElementById('vaultModal');
+            const title = document.getElementById('vaultModalTitle');
+            const setup = document.getElementById('vaultSetupFields');
+            const unlock = document.getElementById('vaultUnlockFields');
+            const err = document.getElementById('vaultErr');
+            if (err) { err.classList.add('hidden'); err.innerText = ''; }
+            if (isSetup) {
+                if (title) title.innerText = 'Create Master Password';
+                setup?.classList.remove('hidden');
+                unlock?.classList.add('hidden');
+            } else {
+                if (title) title.innerText = 'Open Vault';
+                setup?.classList.add('hidden');
+                unlock?.classList.remove('hidden');
+            }
+            modal?.classList.remove('hidden');
+        }
+
+        function closeVaultModal() {
+            document.getElementById('vaultModal')?.classList.add('hidden');
+        }
+
+        async function submitVault() {
+            const err = document.getElementById('vaultErr');
+            try {
+                if (vaultIsSetupMode) {
+                    const p1 = document.getElementById('vaultPassSetup').value;
+                    const p2 = document.getElementById('vaultPassSetup2').value;
+                    if (!p1 || p1.length < 6) throw new Error('Password min 6 characters');
+                    if (p1 !== p2) throw new Error('Passwords do not match');
+                    const salt = crypto.getRandomValues(new Uint8Array(16));
+                    vaultKey = await deriveKey(p1, salt);
+                    vaultUnlocked = true;
+                    localStorage.setItem('jacooodevn_vault_salt_' + currentUser.id, b64encode(salt));
+                    if (!appState.accounts || !Object.keys(appState.accounts).length) {
+                        appState.accounts = { 'Live': { name: 'Live Account', balance: 100000 } };
+                        appState.activeAccount = 'Live';
+                    }
+                    saveLocalCache();
+                    await syncEncryptedToCloud(true, salt);
+                    closeVaultModal();
+                    showUnlockedUI();
+                } else {
+                    const pw = document.getElementById('vaultPassUnlock').value;
+                    if (!pw) throw new Error('Enter Master Password');
+                    let row = null;
+                    if (supabaseClient && currentUser) {
+                        const res = await supabaseClient.from('journal_vault').select('ciphertext, iv, salt').eq('user_id', currentUser.id).maybeSingle();
+                        row = res.data;
+                    }
+                    const saltB64 = (row && row.salt) || localStorage.getItem('jacooodevn_vault_salt_' + currentUser.id);
+                    if (!saltB64) {
+                        openVaultModal(true);
+                        return;
+                    }
+                    const key = await deriveKey(pw, b64decode(saltB64));
+                    if (row && row.ciphertext && row.iv) {
+                        try {
+                            const data = await decryptPayload(row.ciphertext, row.iv, key);
+                            applyStateFromData(data);
+                        } catch (e) {
+                            throw new Error('Wrong Master Password');
+                        }
+                    } else {
+                        loadLocalCache();
+                    }
+                    vaultKey = key;
+                    vaultUnlocked = true;
+                    localStorage.setItem('jacooodevn_vault_salt_' + currentUser.id, saltB64);
+                    saveLocalCache();
+                    closeVaultModal();
+                    showUnlockedUI();
+                }
+            } catch (e) {
+                if (err) {
+                    err.innerText = e.message || String(e);
+                    err.classList.remove('hidden');
+                } else {
+                    alert(e.message || String(e));
+                }
+            }
+        }
+
+        async function onAuthReady(session) {
+            currentUser = session && session.user ? session.user : null;
+            if (!currentUser) {
+                showLockedUI();
+                return;
+            }
+            document.getElementById('authLoggedOut')?.classList.add('hidden');
+            document.getElementById('authLoggedIn')?.classList.remove('hidden');
+            let hasVault = false;
+            try {
+                const res = await supabaseClient.from('journal_vault').select('user_id').eq('user_id', currentUser.id).maybeSingle();
+                hasVault = !!(res && res.data);
+            } catch (_) {}
+            if (!hasVault && !localStorage.getItem('jacooodevn_vault_salt_' + currentUser.id)) {
+                openVaultModal(true);
+            } else {
+                openVaultModal(false);
+            }
+        }
+
+        function showAuthMsg(msg) {
+            const el = document.getElementById('authMsg');
+            if (!el) { alert(msg); return; }
+            el.innerText = msg;
+            el.classList.remove('hidden');
+        }
+
+        
+        async function signInWithGoogle() {
+            if (!supabaseClient) initSupabase();
+            if (!supabaseClient) {
+                showAuthMsg('Supabase chua load. Kiem tra mang.');
+                return;
+            }
+            if (location.protocol === 'file:') {
+                showAuthMsg('Google khong chay voi file:// — hay host Netlify/localhost, hoac dung Email ben duoi.');
+                alert('Google login can HTTPS hoac localhost.\\n\\nCach 1: Host file len Netlify (keo tha HTML)\\nCach 2: Dung Sign in Email\\nCach 3: Mo bang Live Server (localhost)');
+                return;
+            }
+            const redirectTo = window.location.href.split('#')[0];
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: redirectTo }
+            });
+            if (error) {
+                showAuthMsg('Google loi: ' + error.message);
+                alert('Google login error: ' + error.message);
+            }
+        }
+
+        async function signInWithEmail() {
+            if (!supabaseClient) initSupabase();
+            if (!supabaseClient) {
+                showAuthMsg('Supabase SDK not loaded. Check internet connection.');
+                return;
+            }
+            const email = ((document.getElementById('emailAuthEmail') && document.getElementById('emailAuthEmail').value) || '').trim();
+            const password = (document.getElementById('emailAuthPass') && document.getElementById('emailAuthPass').value) || '';
+            if (!email || !password) {
+                showAuthMsg('Enter email and password');
+                return;
+            }
+            const { error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+            if (error) showAuthMsg('Sign in failed: ' + error.message);
+        }
+
+        async function signUpWithEmail() {
+            if (!supabaseClient) initSupabase();
+            if (!supabaseClient) {
+                showAuthMsg('Supabase SDK not loaded. Check internet.');
+                return;
+            }
+            const email = ((document.getElementById('emailAuthEmail') && document.getElementById('emailAuthEmail').value) || '').trim();
+            const password = (document.getElementById('emailAuthPass') && document.getElementById('emailAuthPass').value) || '';
+            if (!email || !password) {
+                showAuthMsg('Enter email and password');
+                return;
+            }
+            if (password.length < 6) {
+                showAuthMsg('Password min 6 characters');
+                return;
+            }
+            const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
+            if (error) {
+                showAuthMsg('Sign up failed: ' + error.message);
+                return;
+            }
+            if (data && data.user && !data.session) {
+                showAuthMsg('Sign up OK. Disable Confirm email in Supabase, then Sign in.');
+            } else {
+                showAuthMsg('Sign up OK. Create Master Password next.');
+            }
+        }
+
+        async function handleLogout() {
+            vaultKey = null;
+            vaultUnlocked = false;
+            currentUser = null;
+            didInitialUnlockRender = false;
+            if (supabaseClient) await supabaseClient.auth.signOut();
+            showLockedUI();
+        }
+
+                // ========== BACKUP (plaintext export still available when unlocked) ==========
+        // ===== HARD-DISK BACKUP (JSON file on real disk) =====
+        function exportFullBackup() {
+            try {
+                const payload = getFullStatePayload();
+                const json = JSON.stringify(payload, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g, '-');
+                a.href = url;
+                a.download = `jacooodevn-backup-${stamp}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                // Also refresh localStorage
+                saveLocalData();
+                alert('Đã xuất file backup JSON xuống ổ cứng.\nHãy cất file này ở thư mục an toàn (Documents, USB, Google Drive...).');
+            } catch (e) {
+                console.error(e);
+                alert('Lỗi xuất backup: ' + e.message);
+            }
+        }
+
+        function importFullBackup() {
+            document.getElementById('backupFileInput').click();
+        }
+
+        function handleBackupFileSelect(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            if (!confirm('Nhập backup sẽ GHI ĐÈ toàn bộ dữ liệu hiện tại. Tiếp tục?')) {
+                event.target.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!data || typeof data !== 'object') throw new Error('Invalid backup file');
+                    let trades = Array.isArray(data.trades) ? data.trades : [];
+                    const rawSize = (e.target.result || '').length;
+                    if (rawSize > 2500000) {
+                        const strip = confirm('Backup is very large (' + Math.round(rawSize/1024/1024*10)/10 + ' MB).\n\nOK = import WITHOUT chart images (recommended)\nCancel = try full import');
+                        if (strip) {
+                            trades = trades.map(t => {
+                                const x = Object.assign({}, t);
+                                x.chartImgs = [];
+                                x.chartImg = '';
+                                return x;
+                            });
+                        }
+                    } else {
+                        // still strip images if many base64 present to avoid quota
+                        const hasBigImgs = trades.some(t => (t.chartImgs && t.chartImgs.join('').length > 500000) || (t.chartImg && t.chartImg.length > 200000));
+                        if (hasBigImgs) {
+                            trades = trades.map(t => {
+                                const x = Object.assign({}, t);
+                                x.chartImgs = [];
+                                x.chartImg = '';
+                                return x;
+                            });
+                        }
+                    }
+                    appState.trades = trades;
+                    appState.planners = data.planners || {};
+                    appState.accounts = data.accounts || { 'Live': { name: 'Live Account', balance: 100000 } };
+                    appState.activeAccount = data.activeAccount || Object.keys(appState.accounts)[0] || 'Live';
+                    if (data.currentYear != null) appState.currentYear = Number(data.currentYear);
+                    if (data.currentMonth != null && data.currentMonth !== undefined) appState.currentMonth = Number(data.currentMonth);
+                    if (data.plannerDate) appState.plannerDate = data.plannerDate;
+                    saveLocalData();
+                    updateAccountSelectors();
+                    switchTab('overview', true);
+                    alert('Backup restored. Trades: ' + appState.trades.length);
+                } catch (err) {
+                    console.error(err);
+                    alert('Không đọc được file backup: ' + err.message);
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // Auto-backup reminder: if last export > 7 days ago (optional light check)
+        function checkBackupReminder() {
+            try {
+                const last = localStorage.getItem('jacooodevn_last_backup_hint');
+                const now = Date.now();
+                if (!last || (now - Number(last)) > 7 * 24 * 3600 * 1000) {
+                    // only show once per session
+                    if (!sessionStorage.getItem('backup_hint_shown')) {
+                        sessionStorage.setItem('backup_hint_shown', '1');
+                        // soft reminder in console / optional toast - skip popup to avoid annoyance
+                    }
+                    localStorage.setItem('jacooodevn_last_backup_hint', String(now));
+                }
+            } catch (_) {}
         }
 
         function loadAppState() {
@@ -1340,13 +1715,7 @@
             updateAccountSelectors();
         }
 
-        async function handleLogout() {
-            try {
-                if (window.firebaseAuth && window.signOut) {
-                    await window.signOut(window.firebaseAuth);
-                }
-            } catch (e) { console.error(e); }
-        }
+        
 
         function updateAccountSelectors() {
             const filterAcc = document.getElementById('filterAccount');
@@ -1381,8 +1750,62 @@
             }
         }
 
+
+        function toggleSidebarCollapse() {
+            const sb = document.getElementById('appSidebar');
+            const icon = document.getElementById('sidebarCollapseIcon');
+            if (!sb) return;
+            const collapsed = sb.getAttribute('data-collapsed') === 'true';
+            const next = !collapsed;
+            sb.setAttribute('data-collapsed', next ? 'true' : 'false');
+            if (next) {
+                sb.classList.remove('w-64');
+                sb.classList.add('w-[72px]');
+                sb.querySelectorAll('.sidebar-label').forEach(el => el.classList.add('hidden'));
+                sb.querySelectorAll('.sidebar-section-dot').forEach(el => el.classList.remove('hidden'));
+                sb.querySelectorAll('.sidebar-nav-btn').forEach(el => {
+                    el.classList.remove('gap-3', 'px-3');
+                    el.classList.add('justify-center', 'px-0');
+                });
+                if (icon) {
+                    icon.classList.remove('fa-chevron-left');
+                    icon.classList.add('fa-chevron-right');
+                }
+            } else {
+                sb.classList.add('w-64');
+                sb.classList.remove('w-[72px]');
+                sb.querySelectorAll('.sidebar-label').forEach(el => el.classList.remove('hidden'));
+                sb.querySelectorAll('.sidebar-section-dot').forEach(el => el.classList.add('hidden'));
+                sb.querySelectorAll('.sidebar-nav-btn').forEach(el => {
+                    el.classList.add('gap-3', 'px-3');
+                    el.classList.remove('justify-center', 'px-0');
+                });
+                if (icon) {
+                    icon.classList.add('fa-chevron-left');
+                    icon.classList.remove('fa-chevron-right');
+                }
+            }
+            try { localStorage.setItem('jacooodevn_sidebar_collapsed', next ? '1' : '0'); } catch(_) {}
+        }
+        function restoreSidebarSections() {
+            try {
+                if (localStorage.getItem('jacooodevn_sidebar_collapsed') === '1') {
+                    const sb = document.getElementById('appSidebar');
+                    if (sb && sb.getAttribute('data-collapsed') !== 'true') {
+                        toggleSidebarCollapse();
+                    }
+                }
+            } catch(_) {}
+        }
+
         function switchTab(tabId, isSilent = false) {
             appState.currentTab = tabId;
+            if (!isSilent && vaultUnlocked) {
+                try {
+                    // nhớ tab trong session (không ảnh hưởng F5 → overview)
+                    sessionStorage.setItem('jacooodevn_last_tab', tabId);
+                } catch(_) {}
+            }
             
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             const targetTab = document.getElementById(`tab-${tabId}`);
@@ -1407,12 +1830,7 @@
         }
 
         function resetCloudDemoData() {
-            const user = window.firebaseAuth?.currentUser;
-            if (!user) {
-                alert("Vui lòng đăng nhập Google Cloud trước.");
-                return;
-            }
-            if (confirm('Khởi tạo dữ liệu mẫu Demo lên Cloud server của bạn?')) {
+            if (confirm('Khởi tạo dữ liệu mẫu Demo trên máy tính của bạn?')) {
                 appState.accounts = {
                     'Live': { name: 'Live Account', balance: 100000 },
                     'Demo': { name: 'Demo Account', balance: 50000 }
@@ -1431,36 +1849,69 @@
                         fees: '30s',
                         pnl: 1161.6,
                         returnPct: 1.16,
-                        setup: 'Reversal',
+                        setup: 'ob',
                         lossReason: '',
-                        winReason: 'correct bias',
+                        winReason: 'clean_setup',
                         holdMgmt: 'hold_to_tp',
-                        emotionalState: 'Confident',
+                        emotionalState: 'confident',
                         confluences: ['SMT', 'iFVG'],
-                        notes: 'Lệnh mẫu demo cloud...',
+                        notes: 'Lệnh mẫu demo local...',
                         duration: '30s',
                         hour: '09:30-09:40',
                         tvLink: '',
                         chartImgs: []
                     }
                 ];
-                saveCloudData();
+                saveLocalData();
                 switchTab(appState.currentTab);
             }
         }
 
         function clearCloudAllData() {
-            const user = window.firebaseAuth?.currentUser;
-            if (!user) return;
-            if (confirm('Xóa toàn bộ dữ liệu trên Cloud server? Thao tác này không thể hoàn tác!')) {
+            if (confirm('Xóa toàn bộ dữ liệu trên máy tính? Thao tác này không thể hoàn tác!')) {
                 appState.trades = [];
                 appState.planners = {};
-                saveCloudData();
+                saveLocalData();
                 switchTab(appState.currentTab);
             }
         }
 
         let chartInstances = {};
+
+        function getHourColorClass(hour) {
+            if (!hour) return 'bg-slate-50 text-slate-600 border border-slate-200';
+            const h = formatHourLabel(hour);
+            // Nền nhạt + chữ tối, mỗi khung một hue khác hẳn (dễ đọc)
+            const map = {
+                '09:30-09:40': 'bg-blue-50 text-blue-700 border border-blue-200',
+                '09:40-09:50': 'bg-sky-50 text-sky-700 border border-sky-200',
+                '09:50-10:10': 'bg-cyan-50 text-cyan-800 border border-cyan-200',
+                '10:10-10:20': 'bg-teal-50 text-teal-800 border border-teal-200',
+                '10:20-10:30': 'bg-emerald-50 text-emerald-800 border border-emerald-200',
+                '10:30-10:40': 'bg-green-50 text-green-800 border border-green-200',
+                '10:40-10:50': 'bg-lime-50 text-lime-800 border border-lime-200',
+                '10:50-11:10': 'bg-yellow-50 text-yellow-800 border border-yellow-200',
+                '11:10-11:20': 'bg-amber-50 text-amber-800 border border-amber-200',
+                '11:20-11:30': 'bg-orange-50 text-orange-800 border border-orange-200',
+                '11:30-11:40': 'bg-red-50 text-red-700 border border-red-200',
+                '11:40-11:50': 'bg-rose-50 text-rose-700 border border-rose-200',
+                '11:50-12:10': 'bg-pink-50 text-pink-700 border border-pink-200',
+                '12:10-12:20': 'bg-fuchsia-50 text-fuchsia-800 border border-fuchsia-200',
+                '12:20-12:30': 'bg-purple-50 text-purple-800 border border-purple-200',
+                '12:30-12:40': 'bg-violet-50 text-violet-800 border border-violet-200',
+                '12:40-12:50': 'bg-indigo-50 text-indigo-800 border border-indigo-200',
+                '12:50-01:00': 'bg-slate-100 text-slate-700 border border-slate-300',
+                '01:00-01:10': 'bg-stone-100 text-stone-700 border border-stone-300',
+                '01:10-01:40': 'bg-zinc-100 text-zinc-700 border border-zinc-300',
+                '01:40-01:50': 'bg-neutral-100 text-neutral-700 border border-neutral-300',
+                '01:50-02:00': 'bg-gray-100 text-gray-700 border border-gray-300'
+            };
+            return map[h] || 'bg-slate-50 text-slate-700 border border-slate-200';
+        }
+        function formatHourLabel(hour) {
+            if (!hour) return '--';
+            return String(hour).replace(/\s*\((AM )?Macro\)/gi, '').trim();
+        }
 
         function formatPnlString(amount) {
             const num = Number(amount) || 0;
@@ -1665,22 +2116,14 @@
                 if (err) {
                     errorCounts[err] = (errorCounts[err] || 0) + 1;
                 }
-                const isWin = Number(t.pnl) > 0;
-                const factors = [];
-                if (t.setup) factors.push(`Setup: ${t.setup}`);
-                if (t.winReason) factors.push(`WinReason: ${t.winReason}`);
-                if (t.holdMgmt) factors.push(`HoldMgmt: ${t.holdMgmt}`);
-                if (Array.isArray(t.confluences)) {
-                    t.confluences.forEach(c => factors.push(`Confluence: ${c}`));
-                }
-                factors.push(`Timeframe: ${t.fees || '1m'}`);
-
-                factors.forEach(f => {
+                // Chỉ thống kê theo Win Reason
+                if (t.winReason) {
+                    const f = t.winReason;
                     indicatorTotals[f] = (indicatorTotals[f] || 0) + 1;
-                    if (isWin) {
+                    if (Number(t.pnl) > 0) {
                         indicatorWins[f] = (indicatorWins[f] || 0) + 1;
                     }
-                });
+                }
             });
 
             // Top 5 Emotions
@@ -1728,7 +2171,7 @@
                     </div>
                 `).join('');
             } else {
-                metricContainer.innerHTML = `<div class="text-slate-400 italic">Chưa đủ dữ liệu winrate</div>`;
+                metricContainer.innerHTML = `<div class="text-slate-400 italic">Chưa đủ dữ liệu Win Reason</div>`;
             }
         }
 
@@ -1736,11 +2179,13 @@
             appState.currentMonth += dir;
             if (appState.currentMonth > 11) { appState.currentMonth = 0; appState.currentYear++; }
             if (appState.currentMonth < 0) { appState.currentMonth = 11; appState.currentYear--; }
+            saveLocalData();
             renderOverview();
         }
 
         function changeOverviewYear(yearVal) {
             appState.currentYear = Number(yearVal);
+            saveLocalData();
             renderOverview();
         }
 
@@ -2038,8 +2483,8 @@
         }
 
         function savePlannerData() {
-            saveCloudData();
-            alert('Đã lưu kế hoạch và ghi chú ngày lên Cloud thành công!');
+            saveLocalData();
+            alert('Đã lưu kế hoạch và ghi chú ngày thành công!');
         }
 
         let currentModalImages = [];
@@ -2056,7 +2501,7 @@
                             const ctx = canvas.getContext('2d');
                             let width = img.width;
                             let height = img.height;
-                            const maxDim = 800;
+                            const maxDim = 900;
                             if (width > height && width > maxDim) {
                                 height *= maxDim / width;
                                 width = maxDim;
@@ -2067,7 +2512,7 @@
                             canvas.width = width;
                             canvas.height = height;
                             ctx.drawImage(img, 0, 0, width, height);
-                            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
                             currentModalImages.push(compressedDataUrl);
                             renderImagePreviews();
                         };
@@ -2217,7 +2662,7 @@
                             <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono text-[11px] font-bold">${t.fees || '1m'}</span></td>
                             <td class="p-3.5">${t.entry}</td>
                             <td class="p-3.5">${t.close}</td>
-                            <td class="p-3.5 text-slate-500">${t.hour}</td>
+                            <td class="p-3.5"><span class="px-2 py-0.5 rounded text-[11px] font-bold ${getHourColorClass(t.hour)}">${formatHourLabel(t.hour)}</span></td>
                             <td class="p-3.5"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">${t.duration || '5m'}</span></td>
                             <td class="p-3.5"><span class="bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full text-[10px] font-bold">${t.setup}</span></td>
                             <td class="p-3.5">${lossReasonDisplay}</td>
@@ -2225,8 +2670,8 @@
                             <td class="p-3.5">${holdMgmtDisplay}</td>
                             <td class="p-3.5">${emotionDisplay}</td>
                             <td class="p-3.5">${confluencesHtml}</td>
-                            <td class="p-3.5 max-w-xs text-slate-600 whitespace-normal">
-                                <div class="break-words leading-relaxed max-h-28 overflow-y-auto pr-1">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
+                            <td class="p-3.5 min-w-[220px] max-w-[420px] text-slate-600 whitespace-normal align-top">
+                                <div class="break-words leading-relaxed whitespace-pre-wrap">${notesText || '<span class="text-slate-300">Không có ghi chú</span>'}</div>
                             </td>
                             <td class="p-3.5 text-center">${chartThumbHtml}</td>
                             <td class="p-3.5 text-center space-x-2">
@@ -2325,7 +2770,7 @@
 
                 if (saveBtn) {
                     saveBtn.disabled = true;
-                    saveBtn.innerText = 'Đang lưu lên Cloud...';
+                    saveBtn.innerText = 'Đang lưu...';
                 }
 
                 const id = document.getElementById('editTradeId').value || 't-' + Date.now();
@@ -2338,7 +2783,7 @@
                 const volume = Number(document.getElementById('modalVolume').value) || 1;
                 const fees = document.getElementById('modalFees').value || '1m';
                 const returnPct = Number(document.getElementById('modalReturnPct').value) || 0;
-                const setup = document.getElementById('modalSetup').value || 'Continuation';
+                const setup = document.getElementById('modalSetup').value || '';
                 const lossReason = document.getElementById('modalLossReason').value || '';
                 const winReason = document.getElementById('modalWinReason').value || '';
                 const holdMgmt = document.getElementById('modalHoldMgmt').value || '';
@@ -2370,24 +2815,24 @@
                 }
 
                 closeTradeModal();
-                await saveCloudData();
+                saveLocalData();
                 switchTab(appState.currentTab, false);
             } catch (err) {
-                console.error("Lỗi khi lưu giao dịch lên Cloud:", err);
+                console.error("Lỗi khi lưu giao dịch :", err);
                 alert("Đã xảy ra lỗi khi lưu giao dịch: " + err.message);
             } finally {
                 if (saveBtn) {
                     saveBtn.disabled = false;
-                    saveBtn.innerText = 'Lưu Giao Dịch Cloud';
+                    saveBtn.innerText = 'Lưu Giao Dịch';
                 }
             }
         }
 
         function editTrade(id) { openTradeModal(id); }
         async function deleteTrade(id) {
-            if (confirm('Bạn có chắc muốn xóa giao dịch này trên Cloud?')) {
+            if (confirm('Bạn có chắc muốn xóa giao dịch này ?')) {
                 appState.trades = appState.trades.filter(t => t.id !== id);
-                await saveCloudData();
+                saveLocalData();
                 switchTab(appState.currentTab, false);
             }
         }
@@ -2422,7 +2867,7 @@
             lines.forEach((line, idx) => {
                 const parts = line.split(',').map(p => p.trim());
                 if (parts.length >= 7) {
-                    const [date, symbol, type, entry, close, volume, pnl, setup = 'Continuation', lossReason = '', winReason = '', holdMgmt = '', emotionalState = 'Confident'] = parts;
+                    const [date, symbol, type, entry, close, volume, pnl, setup = 'ob', lossReason = '', winReason = '', holdMgmt = '', emotionalState = 'Confident'] = parts;
                     const tradeObj = {
                         id: 'batch-' + Date.now() + '-' + idx,
                         account: appState.activeAccount,
@@ -2435,7 +2880,7 @@
                         fees: '1m',
                         pnl: Number(pnl) || 0,
                         returnPct: ((Number(pnl) || 0) / 100000) * 100,
-                        setup: setup || 'Continuation',
+                        setup: setup || '',
                         lossReason,
                         winReason,
                         holdMgmt,
@@ -2474,18 +2919,18 @@
             if (parsedBatchTrades.length === 0) return;
             const btn = document.getElementById('saveBatchBtn');
             btn.disabled = true;
-            btn.innerText = 'Đang lưu lên Cloud...';
+            btn.innerText = 'Đang lưu...';
 
             parsedBatchTrades.forEach(t => {
                 appState.trades.unshift(t);
             });
 
-            await saveCloudData();
+            saveLocalData();
             btn.disabled = false;
-            btn.innerText = 'Lưu tất cả lên Cloud';
+            btn.innerText = 'Lưu tất cả';
             closeBatchModal();
             switchTab(appState.currentTab, false);
-            alert(`Đã nhập thành công ${parsedBatchTrades.length} giao dịch lên Cloud!`);
+            alert(`Đã nhập thành công ${parsedBatchTrades.length} giao dịch !`);
         }
 
         /* LIGHTBOX MULTI-IMAGE VIEWER */
@@ -2577,7 +3022,7 @@
         }
 
         async function deleteAccount(accKey) {
-            if (confirm(`Bạn có chắc muốn xóa tài khoản "${accKey}" trên Cloud?`)) {
+            if (confirm(`Bạn có chắc muốn xóa tài khoản "${accKey}" ?`)) {
                 delete appState.accounts[accKey];
                 appState.trades = appState.trades.filter(t => t.account !== accKey);
                 if (appState.activeAccount === accKey) {
@@ -2585,7 +3030,7 @@
                 }
                 updateAccountSelectors();
                 renderAccountManageList();
-                await saveCloudData();
+                saveLocalData();
                 switchTab(appState.currentTab, false);
             }
         }
@@ -2597,9 +3042,9 @@
             appState.accounts[key] = { name: accName, balance: accBal };
             appState.activeAccount = key;
             updateAccountSelectors();
-            alert(`Đã thêm tài khoản ${accName} ($${accBal.toLocaleString()}) lên Cloud thành công!`);
+            alert(`Đã thêm tài khoản ${accName} ($${accBal.toLocaleString()}) thành công!`);
             closeAccountModal();
-            await saveCloudData();
+            saveLocalData();
             switchTab(appState.currentTab, false);
         }
 
@@ -2949,11 +3394,11 @@
 
         function renderHourlyPerformance() {
             const macros = [
-                '09:30-09:40', '09:40-09:50', '09:50-10:10 (AM Macro)', '10:10-10:20', 
-                '10:20-10:30', '10:30-10:40', '10:40-10:50', '10:50-11:10 (AM Macro)',
+                '09:30-09:40', '09:40-09:50', '09:50-10:10', '10:10-10:20', 
+                '10:20-10:30', '10:30-10:40', '10:40-10:50', '10:50-11:10',
                 '11:10-11:20', '11:20-11:30', '11:30-11:40', '11:40-11:50',
-                '11:50-12:10 (Macro)', '12:10-12:20', '12:20-12:30', '12:30-12:40',
-                '12:40-12:50', '12:50-01:00', '01:00-01:10', '01:10-01:40 (Macro)',
+                '11:50-12:10', '12:10-12:20', '12:20-12:30', '12:30-12:40',
+                '12:40-12:50', '12:50-01:00', '01:00-01:10', '01:10-01:40',
                 '01:40-01:50', '01:50-02:00'
             ];
             let counts = new Array(22).fill(0);
@@ -3014,10 +3459,59 @@
             document.getElementById('macroTableBody').innerHTML = macroTableHTML;
         }
 
-        window.onload = function() {
-            loadAppState();
-            switchTab(appState.currentTab, true);
+        window.onload = async function() {
+            initSupabase();
+            // Wire auth buttons
+            var btnIn = document.getElementById('btnSignIn');
+            var btnUp = document.getElementById('btnSignUp');
+            var btnVault = document.getElementById('btnVaultSubmit');
+            var btnG = document.getElementById('btnGoogleSignIn');
+            var btnGH = document.getElementById('btnGoogleSignInHeader');
+            if (btnIn) btnIn.onclick = function() { signInWithEmail(); };
+            if (btnUp) btnUp.onclick = function() { signUpWithEmail(); };
+            if (btnVault) btnVault.onclick = function() { submitVault(); };
+            if (btnG) btnG.onclick = function() { signInWithGoogle(); };
+            if (btnGH) btnGH.onclick = function() { signInWithGoogle(); };
+            document.getElementById('emailAuthPass')?.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') signInWithEmail();
+            });
+            document.getElementById('vaultPassUnlock')?.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') submitVault();
+            });
+
+            showLockedUI();
+            if (!supabaseClient) {
+                showAuthMsg('Cannot load Supabase. Check network / CDN.');
+                return;
+            }
+            const sessionRes = await supabaseClient.auth.getSession();
+            await onAuthReady(sessionRes.data.session);
+            supabaseClient.auth.onAuthStateChange(async function(event, session) {
+                if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') {
+                    await onAuthReady(session);
+                } else if (event === 'SIGNED_OUT') {
+                    await onAuthReady(null);
+                }
+            });
+            if (typeof checkBackupReminder === 'function') checkBackupReminder();
         };
     </script>
+
+    <div id="vaultModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+            <h3 id="vaultModalTitle" class="text-sm font-bold text-slate-900 mb-1">Open Vault</h3>
+            <p class="text-[11px] text-slate-500 mb-4">Master Password never leaves this device. Losing it = cannot decrypt data.</p>
+            <div id="vaultSetupFields" class="hidden space-y-2 mb-3">
+                <input id="vaultPassSetup" type="password" placeholder="Create Master Password" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs">
+                <input id="vaultPassSetup2" type="password" placeholder="Confirm Master Password" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs">
+            </div>
+            <div id="vaultUnlockFields" class="space-y-2 mb-3">
+                <input id="vaultPassUnlock" type="password" placeholder="Master Password" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs">
+            </div>
+            <p id="vaultErr" class="text-[11px] text-rose-600 hidden mb-2"></p>
+            <button type="button" id="btnVaultSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-lg">Continue</button>
+        </div>
+    </div>
+
 </body>
 </html>
