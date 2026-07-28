@@ -428,10 +428,10 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-                                <span class="text-xs font-bold text-slate-600 uppercase block">DURATION ANALYSIS</span>
+                                <span class="text-xs font-bold text-slate-600 uppercase block">ENTRY HOUR ANALYSIS</span>
                                 <div class="grid grid-cols-2 gap-2 pt-2 text-xs">
-                                    <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">HIGHEST WIN RATE</span><strong class="text-emerald-600" id="cardHighestDuration">--</strong></div>
-                                    <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">LEAST PROFITABLE</span><strong class="text-slate-600" id="cardLeastDuration">--</strong></div>
+                                    <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">BEST HOUR (WR)</span><strong class="text-emerald-600" id="cardHighestDuration">--</strong></div>
+                                    <div class="bg-white p-2 rounded border border-slate-200"><span class="text-[10px] text-slate-400 block">WORST HOUR (PnL)</span><strong class="text-slate-600" id="cardLeastDuration">--</strong></div>
                                 </div>
                             </div>
                             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
@@ -1217,7 +1217,7 @@
             currentTab: 'overview',
             currentYear: realNow.getFullYear(),
             currentMonth: realNow.getMonth(),
-            plannerDate: realNow.toISOString().split('T')[0],
+            plannerDate: toLocalISODate(realNow),
             activeAccount: 'Live',
             accounts: { 'Live': { name: 'Live Account', balance: 100000 } },
             trades: [],
@@ -1722,12 +1722,12 @@
         }
 
         function loadAppState() {
-            const todayStr = realNow.toISOString().split('T')[0];
+            const todayStr = toLocalISODate(realNow);
             if (!document.getElementById('filterDateFrom').value) {
                 document.getElementById('filterDateFrom').value = `${appState.currentYear}-${String(appState.currentMonth+1).padStart(2,'0')}-01`;
             }
             if (!document.getElementById('filterDateTo').value) {
-                const lastDay = new Date(appState.currentYear, appState.currentMonth + 1, 0).toISOString().split('T')[0];
+                const lastDay = toLocalISODate(new Date(appState.currentYear, appState.currentMonth + 1, 0));
                 document.getElementById('filterDateTo').value = lastDay;
             }
             document.getElementById('modalDate').value = todayStr;
@@ -1933,6 +1933,18 @@
             return String(hour).replace(/\s*\((AM )?Macro\)/gi, '').trim();
         }
 
+        function toLocalISODate(d) {
+            if (!(d instanceof Date) || isNaN(d.getTime())) return '';
+            return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        }
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return new Date(NaN);
+            if (dateStr instanceof Date) return dateStr;
+            const s = String(dateStr).slice(0, 10);
+            const p = s.split('-').map(Number);
+            if (p.length >= 3 && p[0] > 1900) return new Date(p[0], p[1] - 1, p[2]);
+            return new Date(dateStr);
+        }
         function formatPnlString(amount) {
             const num = Number(amount) || 0;
             const absVal = Math.abs(num).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -2382,10 +2394,10 @@
                     '<div class="flex justify-between font-bold text-slate-800"><span>--</span><span class="text-slate-400">$0</span></div><div class="text-[11px] text-slate-500">No metric</div>';
             }
 
-            // DURATION ANALYSIS
+            // HOUR ANALYSIS (entry time slot) - highest win rate / least profitable
             const durStats = {};
             filteredTrades.forEach(t => {
-                const d = t.duration || 'Unknown';
+                const d = (typeof formatHourLabel === 'function' ? formatHourLabel(t.hour) : (t.hour || '')).replace(/\s*\((AM )?Macro\)/gi, '').trim() || 'Unknown';
                 if (!durStats[d]) durStats[d] = { pnl: 0, count: 0, wins: 0 };
                 durStats[d].pnl += Number(t.pnl) || 0;
                 durStats[d].count += 1;
@@ -2411,7 +2423,7 @@
             document.getElementById('cardLongestLoss').innerText = `${losses} trades`;
             document.getElementById('cardCurrentStreak').innerText = `${wins} wins`;
 
-            const sortedByDate = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const sortedByDate = [...filteredTrades].sort((a,b) => parseLocalDate(a.date) - parseLocalDate(b.date));
             let peak = 0;
             let maxDD = 0;
             let runningSum = 0;
@@ -2528,7 +2540,7 @@
             for (let i = 0; i < 7; i++) {
                 const d = new Date(monday);
                 d.setDate(monday.getDate() + i);
-                const dStr = d.toISOString().split('T')[0];
+                const dStr = toLocalISODate(d);
                 const dTrades = filteredTrades.filter(t => t.date === dStr);
                 const dPnl = dTrades.reduce((sum, t) => sum + Number(t.pnl), 0);
                 weekProfitSum += dPnl;
@@ -2572,7 +2584,7 @@
         function shiftPlannerWeek(dir) {
             const d = new Date(appState.plannerDate);
             d.setDate(d.getDate() + (dir * 7));
-            appState.plannerDate = d.toISOString().split('T')[0];
+            appState.plannerDate = toLocalISODate(d);
             renderPlanner();
         }
 
@@ -2891,7 +2903,7 @@
                 document.getElementById('tradeModalTitle').innerText = '+ THÊM GIAO DỊCH MỚI';
                 document.getElementById('editTradeId').value = '';
                 document.getElementById('modalAccount').value = appState.activeAccount;
-                document.getElementById('modalDate').value = realNow.toISOString().split('T')[0];
+                document.getElementById('modalDate').value = toLocalISODate(realNow);
                 document.getElementById('modalFees').value = '1m'; 
                 document.getElementById('modalDuration').value = '5m'; 
                 document.getElementById('modalEntry').value = '';
@@ -2925,7 +2937,7 @@
 
                 const id = document.getElementById('editTradeId').value || 't-' + Date.now();
                 const account = document.getElementById('modalAccount').value || appState.activeAccount;
-                const date = document.getElementById('modalDate').value || realNow.toISOString().split('T')[0];
+                const date = document.getElementById('modalDate').value || toLocalISODate(realNow);
                 const symbol = document.getElementById('modalSymbol').value || 'NQ';
                 const type = document.getElementById('modalType').value || 'LONG';
                 const entry = Number(document.getElementById('modalEntry').value) || 0;
@@ -3021,7 +3033,7 @@
                     const tradeObj = {
                         id: 'batch-' + Date.now() + '-' + idx,
                         account: appState.activeAccount,
-                        date: date || realNow.toISOString().split('T')[0],
+                        date: date || toLocalISODate(realNow),
                         symbol: (symbol || 'NQ').toUpperCase(),
                         type: (type || 'LONG').toUpperCase(),
                         entry: Number(entry) || 0,
@@ -3244,7 +3256,7 @@
             const ctx = document.getElementById('winrateCumulativeChart').getContext('2d');
             if (chartInstances['wrCumul']) chartInstances['wrCumul'].destroy();
             
-            const sorted = [...filteredTrades].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const sorted = [...filteredTrades].sort((a,b) => parseLocalDate(a.date) - parseLocalDate(b.date));
             let cumSum = 0;
             let labels = ['Bắt đầu'];
             let dataPoints = [0];
@@ -3307,7 +3319,7 @@
             });
 
             weekDates.forEach((d, idx) => {
-                const dIso = d.toISOString().split('T')[0];
+                const dIso = toLocalISODate(d);
                 const dayTrades = filteredTrades.filter(t => t.date === dIso);
                 counts[idx] = dayTrades.length;
                 const dayPnl = dayTrades.reduce((s, t) => s + Number(t.pnl), 0);
@@ -3415,7 +3427,7 @@
                 weekLabels.push(`Tuần ${idx + 1}`);
 
                 let wTrades = filteredTrades.filter(t => {
-                    const tDate = new Date(t.date);
+                    const tDate = parseLocalDate(t.date);
                     return tDate >= w.start && tDate <= w.end;
                 });
 
@@ -3493,7 +3505,7 @@
 
             const filteredTrades = getFilteredTrades();
             filteredTrades.forEach(t => {
-                const m = new Date(t.date).getMonth();
+                const m = parseLocalDate(t.date).getMonth();
                 counts[m]++;
                 profits[m] += Number(t.pnl);
                 volumes[m] += Number(t.volume || 1);
